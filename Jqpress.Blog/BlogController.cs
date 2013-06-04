@@ -86,10 +86,10 @@ namespace Jqpress.Blog
             //主题处理
             _themeName = BlogConfig.GetSetting().Theme;
             string previewThemeName = Jqpress.Framework.Web.PressRequest.GetQueryString("theme", true);
-            if (Jqpress.Framework.Web.PressRequest.IsMobile)
-            {
-                _themeName = BlogConfig.GetSetting().MobileTheme;
-            }
+            //if (Jqpress.Framework.Web.PressRequest.IsMobile)
+            //{
+            //    _themeName = BlogConfig.GetSetting().MobileTheme;
+            //}
             if (!string.IsNullOrEmpty(previewThemeName))
             {
                 _themeName = previewThemeName;
