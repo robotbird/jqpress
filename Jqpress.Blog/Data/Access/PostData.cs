@@ -109,49 +109,6 @@ namespace Jqpress.Blog.Data.Access
         {
             CheckSlug(postinfo);
 
-//            string cmdText = string.Format(@"update [{0}posts] set  
-//                                       [CategoryId]={1},
-//                                       [Title]='{2}',
-//                                       [Summary]='{3}',
-//                                       [PostContent]='{4}',
-//                                       [Slug]='{5}',
-//                                       [UserId]='{6}',
-//                                       [CommentStatus]={7},
-//                                       [CommentCount]={8},
-//                                       [ViewCount]={9},
-//                                       [Tag]='{10}',
-//                                       [UrlFormat]='{11}',
-//                                       [Template]='{12}',
-//                                       [Recommend]={13},
-//                                       [Status]={14},
-//                                       [TopStatus]={15},
-//                                       [HomeStatus]={16},
-//                                       [HideStatus]={17},
-//                                       [PostTime]='{18}',
-//                                       [UpdateTime]='{19}'
-//                                   where [PostId]={20}", ConfigHelper.Tableprefix, 
-//                                                       postinfo.CategoryId, 
-//                                                       postinfo.Title, 
-//                                                       postinfo.Summary, 
-//                                                       postinfo.PostContent,
-//                                                       postinfo.Slug, 
-//                                                       postinfo.UserId, 
-//                                                       postinfo.CommentStatus, 
-//                                                       postinfo.CommentCount, 
-//                                                       postinfo.ViewCount,
-//                                                          postinfo.Tag,
-//                                                          postinfo.UrlFormat,
-//                                                          postinfo.Template,
-//                                                          postinfo.Recommend,
-//                                                          postinfo.Status,
-//                                                          postinfo.TopStatus,
-//                                                          postinfo.HomeStatus,
-//                                                          postinfo.HideStatus,
-//                                                          postinfo.PostTime,
-//                                                          postinfo.UpdateTime,
-//                                                          postinfo.PostId);
-//          return  OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText);
-
             string cmdText = string.Format(@"update [{0}posts] set  
                                        [CategoryId]=@CategoryId,
                                        [Title]=@Title,
@@ -200,11 +157,6 @@ namespace Jqpress.Blog.Data.Access
 							};
            int cnt= OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams);
            return cnt;
-
-            //using (var conn = dapper.OpenConnection())
-            //{
-            //    return conn.Execute(cmdText, postinfo);
-            //}
         }
 
         /// <summary>
