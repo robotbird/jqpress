@@ -2,8 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
 using Jqpress.Blog.Data;
 using Jqpress.Blog.Entity;
+using Jqpress.Blog.Common;
+using Jqpress.Blog.Entity;
+using Jqpress.Framework.Utils;
+using Jqpress.Framework.Web;
+using Jqpress.Framework.Configuration;
+using Jqpress.Blog.Services;
 
 namespace Jqpress.Blog.Services
 {
@@ -191,5 +198,70 @@ namespace Jqpress.Blog.Services
             }
             return null;
         }
+
+        #region 用户COOKIE操作
+        /// <summary>
+        /// 用户COOKIE名
+        /// </summary>
+        private static readonly string CookieUser = ConfigHelper.SitePrefix + "amdin";
+        /// <summary>
+        /// 读当前用户COOKIE
+        /// </summary>
+        /// <returns></returns>
+        public static HttpCookie ReadUserCookie()
+        {
+            return HttpContext.Current.Request.Cookies[CookieUser];
+        }
+
+        /// <summary>
+        /// 移除当前用户COOKIE
+        /// </summary>
+        /// <returns></returns>
+        public static bool RemoveUserCookie()
+        {
+            HttpCookie cookie = new HttpCookie(CookieUser);
+            cookie.Values.Clear();
+            cookie.Expires = DateTime.Now.AddYears(-1);
+
+            HttpContext.Current.Response.AppendCookie(cookie);
+            return true;
+        }
+
+        /// <summary>
+        /// 写/改当前用户COOKIE
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <param name="expires"></param>
+        /// <returns></returns>
+        public static bool WriteUserCookie(int userID, string userName, string password, int expires)
+        {
+            HttpCookie cookie = HttpContext.Current.Request.Cookies[CookieUser];
+            if (cookie == null)
+            {
+                cookie = new HttpCookie(CookieUser);
+            }
+            if (expires > 0)
+            {
+                cookie.Values["expires"] = expires.ToString();
+                cookie.Expires = DateTime.Now.AddMinutes(expires);
+            }
+            else
+            {
+                int temp_expires = Convert.ToInt32(cookie.Values["expires"]);
+                if (temp_expires > 0)
+                {
+                    cookie.Expires = DateTime.Now.AddMinutes(temp_expires);
+                }
+            }
+            cookie.Values["userid"] = userID.ToString();
+            cookie.Values["username"] = HttpContext.Current.Server.UrlEncode(userName);
+            cookie.Values["key"] = Jqpress.Framework.Utils.EncryptHelper.MD5(userID + HttpContext.Current.Server.UrlEncode(userName) + password);
+
+            HttpContext.Current.Response.AppendCookie(cookie);
+            return true;
+        }
+        #endregion
     }
 }
