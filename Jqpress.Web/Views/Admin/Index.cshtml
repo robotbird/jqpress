@@ -1,8 +1,9 @@
 ﻿@{
     ViewBag.Title = "控制台 机器鸟cms";
 }
-
-
+@using Jqpress.Blog.Services
+@using Jqpress.Blog.Entity
+@using Jqpress.Framework.Utils
     <style type="text/css">
 p, dl, dd, dt {
     line-height: 140%;
@@ -216,30 +217,24 @@ a.button, a.button-primary, a.button-secondary {
 <div class="meta-box-sortables ui-sortable" id="normal-sortables">
 <div class="postbox " id="dashboard_right_now">
 <div title="显示/隐藏" class="handlediv"><br></div><h3 class="hndle"><span>概况</span></h3>
-	<div>文章：<%= StatisticsService.GetStatistics().PostCount %> 篇</div>
-	<div>评论：<%=StatisticsService.GetStatistics().CommentCount %> 条</div>
-    <div>标签：<%=StatisticsService.GetStatistics().TagCount %> 个</div>
-    <div>访问量：<%=StatisticsService.GetStatistics().VisitCount %> 次</div>
-    <div style="display:none">
-    <p><asp:Button ID="btnCategory" runat="server" CssClass="button"  onclick="btnCategory_Click"  Text="重新统计分类文章数" Width="180" Font-Bold="false" /></p>
-    <p><asp:Button ID="btnTag" runat="server"  CssClass="button" onclick="btnTag_Click"  Text="重新统计标签文章数"   Width="180" Font-Bold="false"  /></p>
-    <p><asp:Button ID="btnUser" runat="server"  CssClass="button" onclick="btnUser_Click"  Text="重新统计作者文章和评论数" Width="180"   Font-Bold="false" /></p>
-    <p class="notice">小提示:这些操作比较耗时.</p>
-    </div>
+	<div>文章： @StatisticsService.GetStatistics().PostCount 篇</div>
+	<div>评论：@StatisticsService.GetStatistics().CommentCount 条</div>
+    <div>标签：@StatisticsService.GetStatistics().TagCount 个</div>
+    <div>访问量：@StatisticsService.GetStatistics().VisitCount 次</div>
 </div>
 
 <div class="postbox " id="dashboard_systeminfo">
 <div title="显示/隐藏" class="handlediv"><br></div><h3 class="hndle"><span>系统信息</span></h3>
-    <div>数据库： <%=DbPath %> (<%=DbSize%>) </div>
-    <div>附件：<%=UpfilePath %> (共<%=UpfileCount%> 个, <%=UpfileSize%>)</div>
-    <div>程序目录：<%= Request.PhysicalApplicationPath%></div>    
-    <div>程序版本:<%= setting.Version %> <a href="http://www.jqpress.com" target="_blank">去官网查看新版</a></div>
-    <div>CPU：<%=Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER") %> (<%=Environment.ProcessorCount%> 核)</div>
-    <div>缓存数量：<%=Cache.Count.ToString() %></div>
-    <div>操作系统：<%=Environment.OSVersion %></div>
-    <div>.NET 版本：<%=Environment.Version%></div>
-    <div>IIS 版本：<%=Request.ServerVariables["SERVER_SOFTWARE"] %></div>
-    <div>服务器IP：<%=Request.ServerVariables["LOCAl_ADDR"]%></div>
+    <div>数据库： DbPath  (DbSize) </div>
+    <div>附件：UpfilePath  (共UpfileCount 个, UpfileSize)</div>
+    <div>程序目录：@HttpContext.Current.Request.PhysicalApplicationPath</div>    
+    <div>程序版本:setting.Version  <a href="http://www.jqpress.com" target="_blank">去官网查看新版</a></div>
+    <div>CPU：@Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER")  (@Environment.ProcessorCount 核)</div>
+    <div>缓存数量：Cache.Count.ToString() </div>
+    <div>操作系统：@Environment.OSVersion </div>
+    <div>.NET 版本：@Environment.Version</div>
+    <div>IIS 版本：@HttpContext.Current.Request.ServerVariables["SERVER_SOFTWARE"] </div>
+    <div>服务器IP：@HttpContext.Current.Request.ServerVariables["LOCAl_ADDR"]</div>
 
 </div>
 </div>	
@@ -252,14 +247,14 @@ a.button, a.button-primary, a.button-secondary {
 <div title="显示/隐藏" class="handlediv"><br></div><h3 class="hndle"><span>近期评论</h3>
 <div class="inside">
 	      <%foreach (CommentInfo comment in commentlist)
-         { %>
-               <p><a href="comment_list.aspx?operate=update&commentid=<%=comment.CommentId%>">审核</a>
-                    <a href="comment_list.aspx?operate=delete&commentid=<%=comment.CommentId%>" onclick="return confirm('确定要删除吗?')">删除</a>      
-                   [<%=comment.AuthorUrl%>] <span style="cursor:help;" title="<%=comment.Contents%>"><%=StringHelper.CutString(StringHelper.RemoveHtml(comment.Contents), 0, 50)%></span>
+         { 
+               <p><a href="comment_list.aspx?operate=update&commentid=comment.CommentId">审核</a>
+                    <a href="comment_list.aspx?operate=delete&commentid=comment.CommentId" onclick="return confirm('确定要删除吗?')">删除</a>      
+                   [comment.AuthorUrl] <span style="cursor:help;" title="comment.Contents">StringHelper.CutString(StringHelper.RemoveHtml(comment.Contents), 0, 50)</span>
                    
                </p>
-        <%} %>
-        <%if (commentlist.Count == 0){ %> <p> 暂无待审核评论</p> <%} %>
+        <%} 
+        <%if (commentlist.Count == 0){  <p> 暂无待审核评论</p> <%} 
 
 </div>
 </div>
