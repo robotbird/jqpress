@@ -5,7 +5,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Jqpress.Framework.Infrastructure;
 
 namespace Jqpress.Framework.Themes
 {
@@ -152,7 +151,8 @@ namespace Jqpress.Framework.Themes
 
         protected virtual string GetCurrentTheme(bool mobile)
         {
-            var themeContext = EngineContext.Current.Resolve<IThemeContext>();
+           // var themeContext = EngineContext.Current.Resolve<IThemeContext>();
+            IThemeContext themeContext = new ThemeContext();
             if (mobile)
                 //mobile theme
                 return themeContext.WorkingMobileTheme;
@@ -242,7 +242,7 @@ namespace Jqpress.Framework.Themes
 
         public override ViewEngineResult FindView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
         {
-            var mobileDeviceHelper = EngineContext.Current.Resolve<IMobileDeviceHelper>();
+            IMobileDeviceHelper mobileDeviceHelper = new MobileDeviceHelper();
             bool useMobileDevice = mobileDeviceHelper.IsMobileDevice(controllerContext.HttpContext)
                 && mobileDeviceHelper.MobileDevicesSupported()
                 && !mobileDeviceHelper.CustomerDontUseMobileVersion();
@@ -261,7 +261,8 @@ namespace Jqpress.Framework.Themes
 
         public override ViewEngineResult FindPartialView(ControllerContext controllerContext, string partialViewName, bool useCache)
         {
-            var mobileDeviceHelper = EngineContext.Current.Resolve<IMobileDeviceHelper>();
+            IMobileDeviceHelper mobileDeviceHelper = new MobileDeviceHelper();
+
             bool useMobileDevice = mobileDeviceHelper.IsMobileDevice(controllerContext.HttpContext)
                 && mobileDeviceHelper.MobileDevicesSupported()
                 && !mobileDeviceHelper.CustomerDontUseMobileVersion();

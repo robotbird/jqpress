@@ -3,6 +3,7 @@ using System.Web.Mvc;
 
 namespace Jqpress.Framework.Themes
 {
+    //http://weblogs.asp.net/imranbaloch/archive/2011/06/27/view-engine-with-dynamic-view-location.aspx
     public class ThemeableRazorViewEngine : ThemeableBuildManagerViewEngine
     {
         public ThemeableRazorViewEngine()
@@ -10,8 +11,8 @@ namespace Jqpress.Framework.Themes
             AreaViewLocationFormats = new[]
                                           {
                                               //themes
-                                              "~/Areas/{2}/StoreThemes/{3}/Views/{0}.cshtml", 
-                                              "~/Areas/{2}/StoreThemes/{3}/Views/Shared/{0}.cshtml", 
+                                              "~/Areas/{2}/Themes/{3}/Views/{0}.cshtml", 
+                                              "~/Areas/{2}/Themes/{3}/Views/Shared/{0}.cshtml", 
                                               
                                               //default
                                               "~/Areas/{2}/Views/{1}/{0}.cshtml", 
@@ -21,8 +22,8 @@ namespace Jqpress.Framework.Themes
             AreaMasterLocationFormats = new[]
                                             {
                                                 //themes
-                                                "~/Areas/{2}/StoreThemes/{3}/Views/{0}.cshtml", 
-                                                "~/Areas/{2}/StoreThemes/{3}/Views/Shared/{0}.cshtml", 
+                                                "~/Areas/{2}/Themes/{3}/Views/{0}.cshtml", 
+                                                "~/Areas/{2}/Themes/{3}/Views/Shared/{0}.cshtml", 
 
 
                                                 //default
@@ -33,8 +34,8 @@ namespace Jqpress.Framework.Themes
             AreaPartialViewLocationFormats = new[]
                                                  {
                                                      //themes
-                                                    "~/Areas/{2}/StoreThemes/{3}/Views/{0}.cshtml", 
-                                                    "~/Areas/{2}/StoreThemes/{3}/Views/Shared/{0}.cshtml", 
+                                                    "~/Areas/{2}/Themes/{3}/Views/{0}.cshtml", 
+                                                    "~/Areas/{2}/Themes/{3}/Views/Shared/{0}.cshtml", 
                                                     
                                                     //default
                                                     "~/Areas/{2}/Views/{1}/{0}.cshtml", 
@@ -54,15 +55,15 @@ namespace Jqpress.Framework.Themes
                                             "~/Administration/Views/Shared/{0}.cshtml",
 
                                              //themes
-                                            "~/StoreThemes/{2}/Views/{0}.cshtml", 
-                                            "~/StoreThemes/{2}/Views/Shared/{0}.cshtml",
+                                            "~/Themes/{2}/Views/{0}.cshtml", 
+                                            "~/Themes/{2}/Views/Shared/{0}.cshtml",
                                       };
 
             MasterLocationFormats = new[]
                                         {
                                             //themes
-                                            "~/StoreThemes/{2}/Views/{0}.cshtml", 
-                                            "~/StoreThemes/{2}/Views/Shared/{0}.cshtml", 
+                                            "~/Themes/{2}/Views/{0}.cshtml", 
+                                            "~/Themes/{2}/Views/Shared/{0}.cshtml", 
 
                                             //default
                                             "~/Views/{1}/{0}.cshtml", 
@@ -72,8 +73,8 @@ namespace Jqpress.Framework.Themes
             PartialViewLocationFormats = new[]
                                              {
                                                  //themes
-                                                "~/StoreThemes/{2}/Views/{0}.cshtml", 
-                                                "~/StoreThemes/{2}/Views/Shared/{0}.cshtml", 
+                                                "~/Themes/{2}/Views/{0}.cshtml", 
+                                                "~/Themes/{2}/Views/Shared/{0}.cshtml", 
 
                                                 //default
                                                 "~/Views/{1}/{0}.cshtml", 

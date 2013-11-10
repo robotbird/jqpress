@@ -5,7 +5,7 @@ using System.Collections;
 using System.Web;
 using Jqpress.Blog.Entity;
 
-namespace Jqpress.Web.Models.Admin
+namespace Jqpress.Web.Areas.Admin.Models
 {
     public class PostListModel
     {
