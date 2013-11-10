@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Jqpress.Framework.Themes;
 
 namespace Jqpress.Web
 {
@@ -36,6 +37,8 @@ namespace Jqpress.Web
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+            ViewEngines.Engines.Add(new ThemeableRazorViewEngine());
+
         }
     }
 }

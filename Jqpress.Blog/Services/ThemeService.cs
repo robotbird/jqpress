@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using Jqpress.Blog.Entity;
+using Jqpress.Framework.Themes;
 
 namespace Jqpress.Blog.Services
 {
@@ -48,6 +49,27 @@ namespace Jqpress.Blog.Services
 
             }
 
+        }
+
+        //init the blog theme
+        public static void InitTheme(int themeid)
+        {
+            //ThemeInfo themeInfo;
+            IThemeContext themeContext = new ThemeContext();
+            var themeInfo = new ThemeInfo();
+            themeInfo.Name = "prowerV5";
+            if (themeid > 0)
+            {
+                //ThemeInfo = GetStoreThemeById(themeid);
+                themeContext.WorkingDesktopTheme = themeInfo.Name;
+            }
+            else
+            {
+                //默认样式
+                //ThemeInfo = GetStoreThemeById(1);
+                themeContext.WorkingDesktopTheme = themeInfo.Name;
+                //themeContext.WorkingDesktopTheme = "a1";
+            }
         }
     }
 }

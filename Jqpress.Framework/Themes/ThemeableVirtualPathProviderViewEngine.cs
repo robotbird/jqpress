@@ -153,6 +153,8 @@ namespace Jqpress.Framework.Themes
         {
            // var themeContext = EngineContext.Current.Resolve<IThemeContext>();
             IThemeContext themeContext = new ThemeContext();
+
+            themeContext.WorkingDesktopTheme = "prowerV5";
             if (mobile)
                 //mobile theme
                 return themeContext.WorkingMobileTheme;

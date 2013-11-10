@@ -10,7 +10,7 @@ namespace Jqpress.Framework.Themes
         #region Implementation of IThemeContext
 
         /// <summary>
-        /// Get or set current theme for desktops (e.g. darkOrange)
+        /// Get or set current theme for desktops
         /// </summary>
         public string WorkingDesktopTheme { get; set; }
         /// <summary>
