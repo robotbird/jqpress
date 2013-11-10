@@ -70,11 +70,34 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Admin\IndexModel.cs" />
+    <Compile Include="Models\Admin\PostListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Jqpress_blog.mdb" />
     <Content Include="Content\ie-css3.htc" />
+    <Content Include="Content\images\file\chm.gif" />
+    <Content Include="Content\images\file\default.gif" />
+    <Content Include="Content\images\file\doc.gif" />
+    <Content Include="Content\images\file\folder.png" />
+    <Content Include="Content\images\file\jpg.gif" />
+    <Content Include="Content\images\file\pdf.gif" />
+    <Content Include="Content\images\file\ppt.gif" />
+    <Content Include="Content\images\file\psd.gif" />
+    <Content Include="Content\images\file\rar.gif" />
+    <Content Include="Content\images\file\swf.gif" />
+    <Content Include="Content\images\file\txt.gif" />
+    <Content Include="Content\images\file\wma.gif" />
+    <Content Include="Content\images\file\xls.gif" />
+    <Content Include="Content\images\gray-grad.png" />
+    <Content Include="Content\images\loadingAnimation.gif" />
+    <Content Include="Content\images\no.gif" />
+    <Content Include="Content\images\white-grad-active.png" />
+    <Content Include="Content\images\white-grad.png" />
+    <Content Include="Content\images\widgets-arrow-vs.gif" />
+    <Content Include="Content\images\widgets-arrow.gif" />
+    <Content Include="Content\images\yes.gif" />
+    <Content Include="Content\Index.css" />
     <Content Include="Content\layout.css" />
     <Content Include="Content\login.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -147,7 +170,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Themes\prowerV5\Content\" />
-    <Folder Include="Themes\prowerV5\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -167,6 +189,12 @@
       <Project>{24EF6952-D3FD-4C8B-B8FF-5D5E783F68A0}</Project>
       <Name>Jqpress.Framework</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Admin\PostList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Themes\prowerV5\Views\Index.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

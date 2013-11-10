@@ -102,6 +102,7 @@
     <Compile Include="Entity\CategoryInfo.cs" />
     <Compile Include="Entity\CommentInfo.cs" />
     <Compile Include="Entity\Enum\Enums.cs" />
+    <Compile Include="Entity\FeedInfo.cs" />
     <Compile Include="Entity\LinkInfo.cs" />
     <Compile Include="Entity\PostInfo.cs" />
     <Compile Include="Entity\SettingInfo.cs" />
