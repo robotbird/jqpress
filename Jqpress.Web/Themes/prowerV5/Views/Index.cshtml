@@ -1,21 +1,22 @@
-﻿@{
-    Layout = null;
+﻿@model Jqpress.Web.Models.IndexModel
+
+@{
+    Layout = "_Layout.cshtml";
 }
-#parse("_header.html")
 <article id="post_list">
-	#foreach($item in $Model.PostList)
+	@foreach(var item in @Model.PostList){
 	<section class="post">
 
-			<h2><a  href="${item.url}">${item.title}</a></h2>
-			<small class="meta">$item.PostTime.tostring("yyyy-MM-dd")</small>
+			<h2><a  href="">@item.Title</a></h2>
+			<small class="meta">@item.PostTime.ToString("yyyy-MM-dd")</small>
 			
 			<p>
-			${item.detail}
-              <a href="${item.url}">阅读全文 &raquo;</a>
+			@item.Detail
+              <a href="">阅读全文 &raquo;</a>
             </p>
 
 	</section>
-	#end
+     }
 	#if($Model.PostList.count==0)
 		<div id="nopage">也许以前这里有一个页面，但是现在没有了，有可能被强拆了！</div>
 	#end
@@ -23,4 +24,3 @@
 <nav class="navigation">
 ${Model.pager}
 </nav>
-#parse("_footer.html")

@@ -73,6 +73,8 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Areas\Admin\Models\IndexModel.cs" />
     <Compile Include="Areas\Admin\Models\PostListModel.cs" />
+    <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\IndexModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

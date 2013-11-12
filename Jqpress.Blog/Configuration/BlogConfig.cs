@@ -12,7 +12,7 @@ namespace Jqpress.Blog.Configuration
     /// </summary>
     public class BlogConfig
     {
-        static string BlogConfigPath = HttpContext.Current.Server.MapPath("~/common/config/blog.config");
+        static string BlogConfigPath = HttpContext.Current.Server.MapPath("blog.config");
         /// <summary>
         /// 静态变量
         /// </summary>

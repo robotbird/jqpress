@@ -21,6 +21,18 @@ namespace Jqpress.Web
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            #region 忽略静态文件路由
+            routes.IgnoreRoute("{*allaspx}", new { allaspx = @".*\.aspx(/.*)?" });
+            routes.IgnoreRoute("{*jpg}", new { jpg = @".*\.jpg(/.*)?" });
+            routes.IgnoreRoute("{*gif}", new { gif = @".*\.gif(/.*)?" });
+            routes.IgnoreRoute("{*js}", new { js = @".*\.js(/.*)?" });
+            routes.IgnoreRoute("{*css}", new { css = @".*\.css(/.*)?" });
+            routes.IgnoreRoute("{*html}", new { css = @".*\.html(/.*)?" });
+            routes.IgnoreRoute("{*htm}", new { css = @".*\.htm(/.*)?" });
+            routes.IgnoreRoute("{*shtml}", new { css = @".*\.shtml(/.*)?" });
+            routes.IgnoreRoute("{*htc}", new { css = @".*\.htc(/.*)?" });//处理css样式文件
+            #endregion
+
 
             routes.MapRoute(
                 name: "Default",

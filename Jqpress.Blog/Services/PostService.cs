@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Jqpress.Framework.Mvc;
 using Jqpress.Blog.Data;
 using Jqpress.Blog.Entity;
 
@@ -271,6 +272,44 @@ namespace Jqpress.Blog.Services
             }
 
         }
+
+
+        /// <summary>
+        /// 获取文章列表
+        /// </summary>
+        /// <param name="pageSize"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="recordCount"></param>
+        /// <param name="categoryId"></param>
+        /// <param name="userId"></param>
+        /// <param name="status"></param>
+        /// <param name="topstatus"></param>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        public static IPagedList<PostInfo> GetPostPageList(int pageSize, int pageIndex, out int recordCount, int categoryId, int tagId, int userId, int recommend, int status, int topstatus, int hidestatus, string begindate, string enddate, string keyword)
+        {
+            List<PostInfo> list;
+            try
+            {
+                if (pageIndex == 1 && tagId <= 0 && string.IsNullOrEmpty(begindate) && string.IsNullOrEmpty(enddate) && string.IsNullOrEmpty(keyword))
+                {
+                    list = GetPostList(pageSize, categoryId, userId, recommend, status, topstatus, hidestatus);
+                    recordCount = _postcount;
+                }
+                else
+                {
+                    list = DatabaseProvider.Instance.GetPostList(pageSize, pageIndex, out recordCount, categoryId, tagId, userId, recommend, status, topstatus, hidestatus, begindate, enddate, keyword);
+                }
+
+                return new PagedList<PostInfo>(list,pageIndex-1,pageSize);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+        }
+
 
         public static List<PostInfo> GetPostList(int rowCount, int categoryId, int userId, int recommend, int status, int topstatus, int hidestatus)
         {
