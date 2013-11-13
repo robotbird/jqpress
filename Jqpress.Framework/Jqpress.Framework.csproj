@@ -69,6 +69,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -91,6 +92,9 @@
     <Compile Include="Mvc\IPageableModel.cs" />
     <Compile Include="Mvc\IPagedList.cs" />
     <Compile Include="Mvc\PagedList.cs" />
+    <Compile Include="Mvc\Pager.cs" />
+    <Compile Include="Mvc\PagerHtmlExtension.cs" />
+    <Compile Include="Mvc\PagerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduledEvents\ManagedThreadPool.cs" />
     <Compile Include="Themes\IMobileDeviceHelper.cs" />
