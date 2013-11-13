@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Jqpress.Framework.Themes;
 using Jqpress.Framework.Web;
 using Jqpress.Framework.Utils;
+using Jqpress.Framework.Configuration;
 using Jqpress.Blog.Services;
 using Jqpress.Blog.Entity;
 using Jqpress.Blog.Entity.Enum;
@@ -23,8 +24,10 @@ namespace Jqpress.Web.Controllers
             model.SiteName = BlogConfig.GetSetting().SiteName;
             model.ThemeName = "prowerV5";
             model.PageTitle = BlogConfig.GetSetting().SiteName;
+            model.SiteUrl = ConfigHelper.SiteUrl;
             model.MetaKeywords = BlogConfig.GetSetting().MetaKeywords;
             model.MetaDescription = BlogConfig.GetSetting().MetaDescription;
+            model.SiteDescription = BlogConfig.GetSetting().SiteDescription;
             model.NavLinks = LinkService.GetLinkList((int)LinkPosition.Navigation, 1);
             model.RecentTags = TagService.GetTagList(BlogConfig.GetSetting().SidebarTagCount);
             model.FooterHtml = BlogConfig.GetSetting().FooterHtml;
@@ -51,9 +54,10 @@ namespace Jqpress.Web.Controllers
 
             model.SiteName = BlogConfig.GetSetting().SiteName;
             model.ThemeName = "prowerV5";
-            model.PageTitle = BlogConfig.GetSetting().SiteName;
+            model.SiteUrl = ConfigHelper.SiteUrl;
             model.MetaKeywords = BlogConfig.GetSetting().MetaKeywords;
             model.MetaDescription = BlogConfig.GetSetting().MetaDescription;
+            model.SiteDescription = BlogConfig.GetSetting().SiteDescription;
             model.NavLinks = LinkService.GetLinkList((int)LinkPosition.Navigation, 1);
             model.RecentTags = TagService.GetTagList(BlogConfig.GetSetting().SidebarTagCount);
             model.FooterHtml = BlogConfig.GetSetting().FooterHtml;
@@ -134,11 +138,31 @@ namespace Jqpress.Web.Controllers
             return View(model);
         }
 
-        public ActionResult NotFound() 
+        public ActionResult Category(string slug) 
         {
-            return View("404");
+            var model = new PostListModel();
+
+            CategoryInfo cate = CategoryService.GetCategory(slug);
+            if (cate != null)
+            {
+                categoryId = cate.CategoryId;
+                model.MetaKeywords = cate.CateName;
+                model.MetaDescription = cate.Description;
+                model.PageTitle = cate.CateName;
+                model.PostMessage = string.Format("<h2 class=\"post-message\">分类:{0}</h2>", cate.CateName);
+                model.Url = ConfigHelper.SiteUrl + "category/" + HttpContext.Current.Server.UrlEncode(slug) + "/page/{0}" + BlogConfig.GetSetting().RewriteExtension;
+                int recordCount = 0;
+                model.PostList = PostService.GetPostList(BlogConfig.GetSetting().PageSizePostCount, pageindex,
+                                                         out recordCount, categoryId, tagId, userId, -1, 1, -1, 0,
+                                                         begindate, enddate, keyword);
+                model.Pager = Pager.CreateHtml(BlogConfig.GetSetting().PageSizePostCount, recordCount, model.Url);
+
+            }
+            model.IsDefault = 0;
+            model.ThemeName = _themeName;
         }
-        public ActionResult About()
+
+        public ActionResult List() 
         {
             return View();
         }

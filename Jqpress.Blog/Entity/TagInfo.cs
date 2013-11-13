@@ -37,7 +37,7 @@ namespace Jqpress.Blog.Entity
             //get { return _url; }
             get
             {
-                return string.Format("{0}tag/{1}{2}", ConfigHelper.SiteUrl, Jqpress.Framework.Web.HttpHelper.UrlEncode(this.Slug), BlogConfig.GetSetting().RewriteExtension);
+                return string.Format("{0}tag/{1}", ConfigHelper.SiteUrl, Jqpress.Framework.Web.HttpHelper.UrlEncode(this.Slug));
             }
         }
 

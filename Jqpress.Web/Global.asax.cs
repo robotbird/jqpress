@@ -38,7 +38,14 @@ namespace Jqpress.Web
               url: "post/{id}",
               defaults: new { controller = "Home", action = "Post", id = UrlParameter.Optional },
               namespaces: new[] { "Jqpress.Web.Controllers" }
-          );
+             );
+
+            routes.MapRoute(
+             name: "List",
+             url: "tag/{id}",
+             defaults: new { controller = "Home", action = "Post", id = UrlParameter.Optional },
+             namespaces: new[] { "Jqpress.Web.Controllers" }
+            );
 
             routes.MapRoute(
                 name: "Default",
