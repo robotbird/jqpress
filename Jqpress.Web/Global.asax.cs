@@ -33,6 +33,12 @@ namespace Jqpress.Web
             routes.IgnoreRoute("{*htc}", new { css = @".*\.htc(/.*)?" });//处理css样式文件
             #endregion
 
+            routes.MapRoute(
+              name: "Post",
+              url: "post/{id}",
+              defaults: new { controller = "Home", action = "Post", id = UrlParameter.Optional },
+              namespaces: new[] { "Jqpress.Web.Controllers" }
+          );
 
             routes.MapRoute(
                 name: "Default",
@@ -40,6 +46,7 @@ namespace Jqpress.Web
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
                 namespaces: new[] { "Jqpress.Web.Controllers" }
             );
+           
 
         }
 

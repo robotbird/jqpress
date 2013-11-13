@@ -53,8 +53,7 @@ namespace Jqpress.Framework.Configuration
         private static string _siteurl;
 
         /// <summary>
-        /// 程序Url
-        /// 未考虑https://;存在多个域名指向时，有BUG，因为静态变量已存在，如www.blog.com,blog.com
+        /// Url
         /// </summary>
         public static string SiteUrl
         {

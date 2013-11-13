@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Jqpress.Framework.Themes;
 using Jqpress.Framework.Web;
+using Jqpress.Framework.Utils;
 using Jqpress.Blog.Services;
 using Jqpress.Blog.Entity;
 using Jqpress.Blog.Entity.Enum;
@@ -44,6 +45,99 @@ namespace Jqpress.Web.Controllers
             return View(model);
         }
 
+        public ActionResult Post(int id) 
+        {
+            var model = new PostModel();
+
+            model.SiteName = BlogConfig.GetSetting().SiteName;
+            model.ThemeName = "prowerV5";
+            model.PageTitle = BlogConfig.GetSetting().SiteName;
+            model.MetaKeywords = BlogConfig.GetSetting().MetaKeywords;
+            model.MetaDescription = BlogConfig.GetSetting().MetaDescription;
+            model.NavLinks = LinkService.GetLinkList((int)LinkPosition.Navigation, 1);
+            model.RecentTags = TagService.GetTagList(BlogConfig.GetSetting().SidebarTagCount);
+            model.FooterHtml = BlogConfig.GetSetting().FooterHtml;
+            model.GeneralLinks = LinkService.GetLinkList((int)LinkPosition.General, 1);
+
+            int postId = id;
+            PostInfo post = null;
+
+            string name = Jqpress.Framework.Web.PressRequest.GetQueryString("name");
+
+            if (!Jqpress.Framework.Utils.Validate.IsInt(name))
+            {
+                post = PostService.GetPost(StringHelper.SqlEncode(name));
+            }
+            else
+            {
+                post = PostService.GetPost(id);
+            }
+
+            if (post == null)
+            {
+                return View("404",model);
+                //BasePage.ResponseError("文章未找到", "囧！没有找到此文章！", 404);
+            }
+
+            if (post.Status == (int)PostStatus.Draft)
+            {
+               // BasePage.ResponseError("文章未发布", "囧！此文章未发布！");
+            }
+
+            string cookie = "isviewpost" + post.PostId;
+            int isview = Jqpress.Framework.Utils.TypeConverter.StrToInt(Jqpress.Framework.Web.PressRequest.GetCookie(cookie), 0);
+            //未访问或按刷新统计
+            if (isview == 0 || BlogConfig.GetSetting().SiteTotalType == 1)
+            {
+                PostService.UpdatePostViewCount(post.PostId, 1);
+            }
+            //未访问
+            if (isview == 0 && BlogConfig.GetSetting().SiteTotalType == 2)
+            {
+                Jqpress.Framework.Web.PressRequest.WriteCookie(cookie, "1", 1440);
+            }
+
+            model.Post = post;
+            model.PageTitle = post.Title;
+
+            string metaKeywords = string.Empty;
+            foreach (TagInfo tag in post.Tags)
+            {
+                metaKeywords += tag.CateName + ",";
+            }
+            if (metaKeywords.Length > 0)
+            {
+                metaKeywords = metaKeywords.TrimEnd(',');
+            }
+            model.MetaKeywords = metaKeywords;
+
+            string metaDescription = post.Summary;
+            if (string.IsNullOrEmpty(post.Summary))
+            {
+                metaDescription = post.PostContent;
+            }
+            model.MetaDescription = StringHelper.CutString(StringHelper.RemoveHtml(metaDescription), 50).Replace("\n", "");
+
+            int recordCount = 0;
+           // model.Comments = CommentService.GetCommentList(BlogConfig.GetSetting().PageSizeCommentCount, Pager.PageIndex, out recordCount, BlogConfig.GetSetting().CommentOrder, -1, post.PostId, 0, -1, -1, null);
+            //model.Pager = Pager.CreateHtml(BlogConfig.GetSetting().PageSizeCommentCount, recordCount, post.PageUrl + "#comments");
+
+            //同时判断评论数是否一致
+            if (recordCount != post.CommentCount)
+            {
+                post.CommentCount = recordCount;
+                PostService.UpdatePost(post);
+            }
+            model.IsDefault = 0;
+            model.EnableVerifyCode = BlogConfig.GetSetting().EnableVerifyCode;
+
+            return View(model);
+        }
+
+        public ActionResult NotFound() 
+        {
+            return View("404");
+        }
         public ActionResult About()
         {
             return View();

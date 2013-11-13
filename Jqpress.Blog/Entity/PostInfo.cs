@@ -50,12 +50,13 @@ namespace Jqpress.Blog.Entity
                 {
 
                     case PostUrlFormat.Slug:
-                        url = string.Format("{0}post/{1}{2}", ConfigHelper.SiteUrl, !string.IsNullOrEmpty(this.Slug) ? Jqpress.Framework.Web.HttpHelper.UrlEncode(this.Slug) : this.PostId.ToString(), BlogConfig.GetSetting().RewriteExtension);
+                       // url = string.Format("{0}post/{1}", ConfigHelper.SiteUrl, !string.IsNullOrEmpty(this.Slug) ? Jqpress.Framework.Web.HttpHelper.UrlEncode(this.Slug) : this.PostId.ToString());
+                        url = string.Format("{0}post/{1}", ConfigHelper.SiteUrl, this.PostId.ToString());
                         break;
 
                     case PostUrlFormat.Date:
                     default:
-                        url = string.Format("{0}post/{1}/{2}{3}", ConfigHelper.SiteUrl, this.PostTime.ToString(@"yyyy\/MM\/dd"), !string.IsNullOrEmpty(this.Slug) ? Jqpress.Framework.Web.HttpHelper.UrlEncode(this.Slug) : this.PostId.ToString(), BlogConfig.GetSetting().RewriteExtension);
+                        url = string.Format("{0}post/{1}/{2}", ConfigHelper.SiteUrl, this.PostTime.ToString(@"yyyy\/MM\/dd"), !string.IsNullOrEmpty(this.Slug) ? Jqpress.Framework.Web.HttpHelper.UrlEncode(this.Slug) : this.PostId.ToString());
                         break;
                 }
                 return url;
