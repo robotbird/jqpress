@@ -224,7 +224,7 @@ namespace Jqpress.Blog.Entity
             get
             {
                 List<PostInfo> list = PostService.GetPostList();
-                PostInfo post = list.Find(p => p.HideStatus == 0 && p.Status == 1 && p.PostId > this.PostId);
+                PostInfo post = list.Find(p => p.PostStatus == 0 && p.Status == 1 && p.PostId > this.PostId);
                 return post != null ? post : new PostInfo();
             }
         }
@@ -239,7 +239,7 @@ namespace Jqpress.Blog.Entity
                 
                 List<PostInfo> list = PostService.GetPostList();
 
-                PostInfo post = list.Find(p => p.HideStatus == 0 && p.Status == 1 && p.PostId < this.PostId);
+                PostInfo post = list.Find(p => p.PostStatus == 0 && p.Status == 1 && p.PostId < this.PostId);
 
                 return post != null ? post : new PostInfo();
             }
@@ -257,7 +257,7 @@ namespace Jqpress.Blog.Entity
                     return new List<PostInfo>();
                 }
 
-                List<PostInfo> list = PostService.GetPostList().FindAll(p => p.HideStatus == 0 && p.Status == 1);
+                List<PostInfo> list = PostService.GetPostList().FindAll(p => p.PostStatus == 0 && p.Status == 1);
                 string tags = this.Tag.Replace("}", "},");
                 tags = tags.TrimEnd(',');
 
@@ -390,7 +390,7 @@ namespace Jqpress.Blog.Entity
         /// <summary>
         /// 隐藏于列表
         /// </summary>
-        public int HideStatus { get; set; }
+        public int PostStatus { get; set; }
         /// <summary>
         /// 添加时间
         /// </summary>

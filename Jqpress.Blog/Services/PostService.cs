@@ -230,12 +230,12 @@ namespace Jqpress.Blog.Services
         /// <param name="tagId"></param>
         /// <param name="userId"></param>
         /// <param name="status"></param>
-        /// <param name="hidestatus"></param>
+        /// <param name="PostStatus"></param>
         /// <returns></returns>
-        public static int GetPostCount(int categoryId, int tagId, int userId,int status,int hidestatus)
+        public static int GetPostCount(int categoryId, int tagId, int userId,int status,int PostStatus)
         {
             int recordCount = 0;
-            GetPostList(1, 1, out recordCount, categoryId, tagId, userId, -1, status, -1, hidestatus,  string.Empty, string.Empty, string.Empty);
+            GetPostList(1, 1, out recordCount, categoryId, tagId, userId, -1, status, -1, PostStatus,  string.Empty, string.Empty, string.Empty);
 
             return recordCount;
         }
@@ -252,18 +252,18 @@ namespace Jqpress.Blog.Services
         /// <param name="topstatus"></param>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public static List<PostInfo> GetPostList(int pageSize, int pageIndex, out int recordCount, int categoryId, int tagId, int userId, int recommend, int status, int topstatus, int hidestatus, string begindate, string enddate, string keyword)
+        public static List<PostInfo> GetPostList(int pageSize, int pageIndex, out int recordCount, int categoryId, int tagId, int userId, int recommend, int status, int topstatus, int PostStatus, string begindate, string enddate, string keyword)
         {
             List<PostInfo> list;
             try {
                 if (pageIndex == 1 && tagId <= 0 && string.IsNullOrEmpty(begindate)&& string.IsNullOrEmpty(enddate) && string.IsNullOrEmpty(keyword))
                 {
-                    list = GetPostList(pageSize, categoryId, userId, recommend, status, topstatus, hidestatus);
+                    list = GetPostList(pageSize, categoryId, userId, recommend, status, topstatus, PostStatus);
                     recordCount = _postcount;
                 }
                 else
                 {
-                    list = DatabaseProvider.Instance.GetPostList(pageSize, pageIndex, out recordCount, categoryId, tagId, userId, recommend, status, topstatus, hidestatus, begindate, enddate, keyword);
+                    list = DatabaseProvider.Instance.GetPostList(pageSize, pageIndex, out recordCount, categoryId, tagId, userId, recommend, status, topstatus, PostStatus, begindate, enddate, keyword);
                 }
 
                 return list;
@@ -286,19 +286,19 @@ namespace Jqpress.Blog.Services
         /// <param name="topstatus"></param>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public static IPagedList<PostInfo> GetPostPageList(int pageSize, int pageIndex, out int recordCount, int categoryId, int tagId, int userId, int recommend, int status, int topstatus, int hidestatus, string begindate, string enddate, string keyword)
+        public static IPagedList<PostInfo> GetPostPageList(int pageSize, int pageIndex, out int recordCount, int categoryId, int tagId, int userId, int recommend, int status, int topstatus, int PostStatus, string begindate, string enddate, string keyword)
         {
             List<PostInfo> list;
             try
             {
                 if (pageIndex == 1 && tagId <= 0 && string.IsNullOrEmpty(begindate) && string.IsNullOrEmpty(enddate) && string.IsNullOrEmpty(keyword))
                 {
-                    list = GetPostList(pageSize, categoryId, userId, recommend, status, topstatus, hidestatus);
+                    list = GetPostList(pageSize, categoryId, userId, recommend, status, topstatus, PostStatus);
                     recordCount = _postcount;
                 }
                 else
                 {
-                    list = DatabaseProvider.Instance.GetPostList(pageSize, pageIndex, out recordCount, categoryId, tagId, userId, recommend, status, topstatus, hidestatus, begindate, enddate, keyword);
+                    list = DatabaseProvider.Instance.GetPostList(pageSize, pageIndex, out recordCount, categoryId, tagId, userId, recommend, status, topstatus, PostStatus, begindate, enddate, keyword);
                 }
 
                 return new PagedList<PostInfo>(list,pageIndex-1,pageSize);
@@ -311,7 +311,7 @@ namespace Jqpress.Blog.Services
         }
 
 
-        public static List<PostInfo> GetPostList(int rowCount, int categoryId, int userId, int recommend, int status, int topstatus, int hidestatus)
+        public static List<PostInfo> GetPostList(int rowCount, int categoryId, int userId, int recommend, int status, int topstatus, int PostStatus)
         {
             try{
                      List<PostInfo> list = _posts;
@@ -336,9 +336,9 @@ namespace Jqpress.Blog.Services
                     {
                         list = list.FindAll(post => post.TopStatus == topstatus);
                     }
-                    if (hidestatus != -1)
+                    if (PostStatus != -1)
                     {
-                        list = list.FindAll(post => post.HideStatus == hidestatus);
+                        list = list.FindAll(post => post.PostStatus == PostStatus);
                     }
                     _postcount = list.Count;
                     if (rowCount > list.Count)

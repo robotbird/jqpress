@@ -68,7 +68,7 @@ namespace Jqpress.Blog.Data.IData
         /// <param name="enddate"></param>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        List<PostInfo> GetPostList(int pageSize, int pageIndex, out int recordCount, int categoryId, int tagId, int userId, int recommend, int status, int topstatus, int hidestatus, string begindate, string enddate, string keyword);
+        List<PostInfo> GetPostList(int pageSize, int pageIndex, out int recordCount, int categoryId, int tagId, int userId, int recommend, int status, int topstatus, int PostStatus, string begindate, string enddate, string keyword);
 
         /// <summary>
         /// 获取相关文章

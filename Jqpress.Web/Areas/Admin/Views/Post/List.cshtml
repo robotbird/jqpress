@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Jqpress.Framework.Mvc
+@model Jqpress.Web.Models.PostListModel
+@{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";   
  }
 @{
@@ -62,18 +64,19 @@
 			
 		  </tr>
           		  
-		 <asp:Repeater ID="rptPost" runat="server">
-            <ItemTemplate>
+		 
+	@foreach (var item in Model.PostList)
+ {
             
 		  <tr id="post<%#DataBinder.Eval(Container.DataItem, "postid")%>">
 			<td><input type="checkbox" name="chkid" value="<%#DataBinder.Eval(Container.DataItem, "postid")%>" /> </td>
 			<td>
 			[<%# DataBinder.Eval(Container.DataItem, "Author.Link")%>]
-			<%# DataBinder.Eval(Container.DataItem, "Link")%>
+			@item.Link
 			<%# DataBinder.Eval(Container.DataItem, "TopStatus").ToString()=="1" ?"[置顶]" : ""%>
 			<%# DataBinder.Eval(Container.DataItem, "Recommend").ToString() == "1" ? "[推荐]" : ""%>
 			<%# DataBinder.Eval(Container.DataItem, "Status").ToString()=="1" ?"" : "[草稿]"%>
-			<%# DataBinder.Eval(Container.DataItem, "HideStatus").ToString() == "1" ? "[隐藏]" : ""%>
+			<%# DataBinder.Eval(Container.DataItem, "PostStatus").ToString() == "1" ? "[私有]" : ""%>
 			</td>
 			<td><%# DataBinder.Eval(Container.DataItem, "CommentCount")%>/<%# DataBinder.Eval(Container.DataItem, "ViewCount")%></td>
 			<td><%# Convert.ToDateTime( DataBinder.Eval(Container.DataItem, "PostTime")).ToString("yyyy-MM-dd")%></td>
@@ -82,10 +85,8 @@
 				<span>[<%#GetDeleteLink(DataBinder.Eval(Container.DataItem, "postid"), DataBinder.Eval(Container.DataItem, "userid"))%>]</span>
 		    </td>
 		  </tr>
-		  
-             </ItemTemplate>
-        </asp:Repeater>
+ }
           
 </table>
 		  		
-<jqpress:PagerControl id="Pager1" runat="server" PageSize="10"  CssClass="pager"></jqpress:PagerControl>
+@Html.Pager(Model.PageList)

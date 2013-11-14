@@ -203,7 +203,7 @@ namespace Jqpress.Blog.XmlRpc
             post.Template = string.Empty;
             post.Recommend = 0;
             post.TopStatus = 0;
-            post.HideStatus = 0;
+            post.PostStatus = 0;
             post.UpdateTime = DateTime.Now;
 
             if (sentPost.commentPolicy != "")

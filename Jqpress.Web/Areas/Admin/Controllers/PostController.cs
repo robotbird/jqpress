@@ -55,10 +55,16 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             //  chkRecommend.Checked = recommend == 1 ? true : false; 暂时注释
             //chkHideStatus.Checked = hide == 1 ? true : false; 暂时注释
 
-            int totalRecord = 0;
-
-            // List<PostInfo> list = PostService.GetPostList(Pager1.PageSize, Pager1.PageIndex, out totalRecord, categoryId, -1, userId, recommend, -1, -1, hide, string.Empty, string.Empty, keyword);
-
+            const int pageSize = 10;
+            int count = 0;
+            int pageIndex = PressRequest.GetInt("page", 1);
+            int cateid = PressRequest.GetQueryInt("cateid", -1);
+            int tagid = PressRequest.GetQueryInt("tagid", -1);
+            if (cateid > 0)
+                pageIndex = pageIndex + 1;
+            var postlist = PostService.GetPostPageList(pageSize, pageIndex, out count, categoryId, tagid, -1, -1, -1, -1, -1, "", "", "");
+            model.PageList.LoadPagedList(postlist);
+            model.PostList = (List<PostInfo>)postlist;
             return View(model);
         }
         #endregion

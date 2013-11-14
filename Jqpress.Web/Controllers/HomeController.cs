@@ -171,7 +171,7 @@ namespace Jqpress.Web.Controllers
                 int tagid = PressRequest.GetQueryInt("tagid", -1);
                 if (cateid > 0)
                     pageIndex = pageIndex + 1;
-                var postlist = PostService.GetPostPageList(pageSize, pageIndex, out count, cateid, tagid, -1, -1, -1, -1, -1, "", "", "");
+                var postlist = PostService.GetPostPageList(pageSize, pageIndex, out count, categoryId, tagid, -1, -1, -1, -1, -1, "", "", "");
                 model.PageList.LoadPagedList(postlist);
                 model.PostList = (List<PostInfo>)postlist;
             }
@@ -212,7 +212,7 @@ namespace Jqpress.Web.Controllers
                 int tagid = PressRequest.GetQueryInt("tagid", -1);
                 if (cateid > 0)
                     pageIndex = pageIndex + 1;
-                var postlist = PostService.GetPostPageList(pageSize, pageIndex, out count, cateid, tagid, -1, -1, -1, -1, -1, "", "", "");
+                var postlist = PostService.GetPostPageList(pageSize, pageIndex, out count, cateid, tagId, -1, -1, -1, -1, -1, "", "", "");
                 model.PageList.LoadPagedList(postlist);
                 model.PostList = (List<PostInfo>)postlist;
 

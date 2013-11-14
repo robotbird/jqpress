@@ -61,11 +61,11 @@ namespace Jqpress.Blog.Data.Access
             CheckSlug(postinfo);
             string cmdText = string.Format(@"insert into [{0}posts]
                                 (
-                               [CategoryId],[Title],[Summary],[PostContent],[Slug],[UserId],[CommentStatus],[CommentCount],[ViewCount],[Tag],[UrlFormat],[Template],[Recommend],[Status],[TopStatus],[HomeStatus],[HideStatus],[PostTime],[UpdateTime]
+                               [CategoryId],[Title],[Summary],[PostContent],[Slug],[UserId],[CommentStatus],[CommentCount],[ViewCount],[Tag],[UrlFormat],[Template],[Recommend],[Status],[TopStatus],[HomeStatus],[PostStatus],[PostTime],[UpdateTime]
                                 )
                                 values
                                 (
-                                @CategoryId,@Title,@Summary,@PostContent,@Slug,@UserId,@CommentStatus,@CommentCount,@ViewCount,@Tag,@UrlFormat,@Template,@Recommend,@Status,@TopStatus,@HomeStatus,@HideStatus,@PostTime,@UpdateTime
+                                @CategoryId,@Title,@Summary,@PostContent,@Slug,@UserId,@CommentStatus,@CommentCount,@ViewCount,@Tag,@UrlFormat,@Template,@Recommend,@Status,@TopStatus,@HomeStatus,@PostStatus,@PostTime,@UpdateTime
                                 )",ConfigHelper.Tableprefix);
             OleDbParameter[] prams = { 
 								
@@ -85,7 +85,7 @@ namespace Jqpress.Blog.Data.Access
 								OleDbHelper.MakeInParam("@Status",OleDbType.Integer,1,postinfo.Status),
                                 OleDbHelper.MakeInParam("@TopStatus",OleDbType.Integer,1,postinfo.TopStatus),
                                 OleDbHelper.MakeInParam("@HomeStatus",OleDbType.Integer,1,postinfo.HomeStatus),
-                                OleDbHelper.MakeInParam("@HideStatus",OleDbType.Integer,1,postinfo.HideStatus),
+                                OleDbHelper.MakeInParam("@PostStatus",OleDbType.Integer,1,postinfo.PostStatus),
 								OleDbHelper.MakeInParam("@PostTime",OleDbType.Date,8,postinfo.PostTime),
 								OleDbHelper.MakeInParam("@UpdateTime",OleDbType.Date,8,postinfo.UpdateTime)
 							};
@@ -126,7 +126,7 @@ namespace Jqpress.Blog.Data.Access
                                        [Status]={14},
                                        [TopStatus]={15},
                                        [HomeStatus]={16},
-                                       [HideStatus]={17},
+                                       [PostStatus]={17},
                                        [PostTime]='{18}',
                                        [UpdateTime]='{19}'
                                    where [PostId]={20}", ConfigHelper.Tableprefix, 
@@ -146,7 +146,7 @@ namespace Jqpress.Blog.Data.Access
                                                           postinfo.Status,
                                                           postinfo.TopStatus,
                                                           postinfo.HomeStatus,
-                                                          postinfo.HideStatus,
+                                                          postinfo.PostStatus,
                                                           postinfo.PostTime,
                                                           postinfo.UpdateTime,
                                                           postinfo.PostId);
@@ -210,7 +210,7 @@ namespace Jqpress.Blog.Data.Access
             }
         }
 
-        public List<PostInfo> GetPostList(int pageSize, int pageIndex, out int recordCount, int categoryId, int tagId, int userId, int recommend, int status, int topstatus, int hidestatus, string begindate, string enddate, string keyword)
+        public List<PostInfo> GetPostList(int pageSize, int pageIndex, out int recordCount, int categoryId, int tagId, int userId, int recommend, int status, int topstatus, int PostStatus, string begindate, string enddate, string keyword)
         {
             string condition = " 1=1 ";
 
@@ -240,9 +240,9 @@ namespace Jqpress.Blog.Data.Access
                 condition += " and topstatus=" + topstatus;
             }
 
-            if (hidestatus != -1)
+            if (PostStatus != -1)
             {
-                condition += " and hidestatus=" + hidestatus;
+                condition += " and PostStatus=" + PostStatus;
             }
 
             if (!string.IsNullOrEmpty(begindate))
@@ -323,7 +323,7 @@ namespace Jqpress.Blog.Data.Access
 
         public List<ArchiveInfo> GetArchive()
         {
-            string cmdText = string.Format("select format(PostTime, 'yyyymm') as [date] ,  count(*) as [count] from [{0}posts] where [status]=1 and [hidestatus]=0  group by  format(PostTime, 'yyyymm')  order by format(PostTime, 'yyyymm') desc",ConfigHelper.Tableprefix);
+            string cmdText = string.Format("select format(PostTime, 'yyyymm') as [date] ,  count(*) as [count] from [{0}posts] where [status]=1 and [PostStatus]=0  group by  format(PostTime, 'yyyymm')  order by format(PostTime, 'yyyymm') desc",ConfigHelper.Tableprefix);
 
             var list = new List<ArchiveInfo>();
             using (OleDbDataReader read = OleDbHelper.ExecuteReader(cmdText))
