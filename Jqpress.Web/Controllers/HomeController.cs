@@ -142,29 +142,83 @@ namespace Jqpress.Web.Controllers
         {
             var model = new PostListModel();
 
+            model.SiteName = BlogConfig.GetSetting().SiteName;
+            model.ThemeName = "prowerV5";
+            model.PageTitle = BlogConfig.GetSetting().SiteName;
+            model.SiteUrl = ConfigHelper.SiteUrl;
+            model.MetaKeywords = BlogConfig.GetSetting().MetaKeywords;
+            model.MetaDescription = BlogConfig.GetSetting().MetaDescription;
+            model.SiteDescription = BlogConfig.GetSetting().SiteDescription;
+            model.NavLinks = LinkService.GetLinkList((int)LinkPosition.Navigation, 1);
+            model.RecentTags = TagService.GetTagList(BlogConfig.GetSetting().SidebarTagCount);
+            model.FooterHtml = BlogConfig.GetSetting().FooterHtml;
+            model.GeneralLinks = LinkService.GetLinkList((int)LinkPosition.General, 1);
+
             CategoryInfo cate = CategoryService.GetCategory(slug);
             if (cate != null)
             {
-                categoryId = cate.CategoryId;
+                int categoryId = cate.CategoryId;
                 model.MetaKeywords = cate.CateName;
                 model.MetaDescription = cate.Description;
                 model.PageTitle = cate.CateName;
                 model.PostMessage = string.Format("<h2 class=\"post-message\">分类:{0}</h2>", cate.CateName);
-                model.Url = ConfigHelper.SiteUrl + "category/" + HttpContext.Current.Server.UrlEncode(slug) + "/page/{0}" + BlogConfig.GetSetting().RewriteExtension;
-                int recordCount = 0;
-                model.PostList = PostService.GetPostList(BlogConfig.GetSetting().PageSizePostCount, pageindex,
-                                                         out recordCount, categoryId, tagId, userId, -1, 1, -1, 0,
-                                                         begindate, enddate, keyword);
-                model.Pager = Pager.CreateHtml(BlogConfig.GetSetting().PageSizePostCount, recordCount, model.Url);
+                model.Url = ConfigHelper.SiteUrl + "category/" + Jqpress.Framework.Utils.StringHelper.SqlEncode(slug) + "/page/{0}";
+
+                const int pageSize = 10;
+                int count = 0;
+                int pageIndex = PressRequest.GetInt("page", 1);
+                int cateid = PressRequest.GetQueryInt("cateid", -1);
+                int tagid = PressRequest.GetQueryInt("tagid", -1);
+                if (cateid > 0)
+                    pageIndex = pageIndex + 1;
+                var postlist = PostService.GetPostPageList(pageSize, pageIndex, out count, cateid, tagid, -1, -1, -1, -1, -1, "", "", "");
+                model.PageList.LoadPagedList(postlist);
+                model.PostList = (List<PostInfo>)postlist;
+            }
+            model.IsDefault = 0;
+            return View("List",model);
+        }
+
+        /// <summary>
+        /// 标签
+        /// </summary>
+        public ActionResult Tag(string slug)
+        {
+            var model = new PostListModel();
+            model.SiteName = BlogConfig.GetSetting().SiteName;
+            model.ThemeName = "prowerV5";
+            model.PageTitle = BlogConfig.GetSetting().SiteName;
+            model.SiteUrl = ConfigHelper.SiteUrl;
+            model.MetaKeywords = BlogConfig.GetSetting().MetaKeywords;
+            model.MetaDescription = BlogConfig.GetSetting().MetaDescription;
+            model.SiteDescription = BlogConfig.GetSetting().SiteDescription;
+            model.NavLinks = LinkService.GetLinkList((int)LinkPosition.Navigation, 1);
+            model.RecentTags = TagService.GetTagList(BlogConfig.GetSetting().SidebarTagCount);
+            model.FooterHtml = BlogConfig.GetSetting().FooterHtml;
+            model.GeneralLinks = LinkService.GetLinkList((int)LinkPosition.General, 1);
+            TagInfo tag = TagService.GetTagBySlug(slug);
+            if (tag != null)
+            {
+                int tagId = tag.TagId;
+                model.MetaKeywords = tag.CateName;
+                model.MetaDescription = tag.Description;
+                model.PageTitle = tag.CateName;
+                model.PostMessage = string.Format("<h2 class=\"post-message\">标签:{0}</h2>", tag.CateName);
+                model.Url = ConfigHelper.SiteUrl + "tag/" + Jqpress.Framework.Utils.StringHelper.SqlEncode(slug) + "/page/{0}";
+                const int pageSize = 10;
+                int count = 0;
+                int pageIndex = PressRequest.GetInt("page", 1);
+                int cateid = PressRequest.GetQueryInt("cateid", -1);
+                int tagid = PressRequest.GetQueryInt("tagid", -1);
+                if (cateid > 0)
+                    pageIndex = pageIndex + 1;
+                var postlist = PostService.GetPostPageList(pageSize, pageIndex, out count, cateid, tagid, -1, -1, -1, -1, -1, "", "", "");
+                model.PageList.LoadPagedList(postlist);
+                model.PostList = (List<PostInfo>)postlist;
 
             }
             model.IsDefault = 0;
-            model.ThemeName = _themeName;
-        }
-
-        public ActionResult List() 
-        {
-            return View();
+            return View("List",model);
         }
     }
 }

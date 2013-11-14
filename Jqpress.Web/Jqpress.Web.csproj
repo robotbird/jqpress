@@ -81,6 +81,7 @@
     <Compile Include="Areas\Admin\Models\PostListModel.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\IndexModel.cs" />
+    <Compile Include="Models\PostListModel.cs" />
     <Compile Include="Models\PostModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -652,6 +653,7 @@
     <None Include="common\syntaxhighlighter\tests\.rvmrc" />
     <None Include="common\syntaxhighlighter\tests\webrick.rb" />
     <None Include="common\syntaxhighlighter\tests\webrick.sh" />
+    <Content Include="Themes\prowerV5\Views\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
