@@ -64,6 +64,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\PostController.cs" />
     <Compile Include="Areas\Admin\Models\BaseModel.cs" />
+    <Compile Include="Areas\Admin\Models\PostModel.cs" />
     <Compile Include="common\ajax\comment.ashx.cs">
       <DependentUpon>comment.ashx</DependentUpon>
     </Compile>
@@ -618,6 +619,7 @@
     <Content Include="common\config\blog.config" />
     <Content Include="common\config\feed.config" />
     <Content Include="common\config\rewrite.config" />
+    <Content Include="Areas\Admin\Views\Post\Edit.cshtml" />
     <None Include="common\editors\tiny_mce\plugins\syntaxhl\README" />
     <None Include="common\editors\tiny_mce\themes\advanced\img\Thumbs.db" />
     <None Include="common\images\admin\Thumbs.db" />

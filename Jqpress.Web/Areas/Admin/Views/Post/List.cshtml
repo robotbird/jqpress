@@ -1,5 +1,5 @@
 ﻿@using Jqpress.Framework.Mvc
-@model Jqpress.Web.Models.PostListModel
+@model Jqpress.Web.Areas.Admin.Models.PostListModel
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";   
  }
@@ -68,21 +68,19 @@
 	@foreach (var item in Model.PostList)
  {
             
-		  <tr id="post<%#DataBinder.Eval(Container.DataItem, "postid")%>">
-			<td><input type="checkbox" name="chkid" value="<%#DataBinder.Eval(Container.DataItem, "postid")%>" /> </td>
+		  <tr id="post @item.PostId">
+			<td><input type="checkbox" name="chkid" value="@item.PostId" /> </td>
 			<td>
-			[<%# DataBinder.Eval(Container.DataItem, "Author.Link")%>]
-			@item.Link
-			<%# DataBinder.Eval(Container.DataItem, "TopStatus").ToString()=="1" ?"[置顶]" : ""%>
-			<%# DataBinder.Eval(Container.DataItem, "Recommend").ToString() == "1" ? "[推荐]" : ""%>
-			<%# DataBinder.Eval(Container.DataItem, "Status").ToString()=="1" ?"" : "[草稿]"%>
-			<%# DataBinder.Eval(Container.DataItem, "PostStatus").ToString() == "1" ? "[私有]" : ""%>
+			@(new HtmlString(item.Author.Link))
+			@(new HtmlString(item.Link))
+            @item.Status 
+            @item.PostStatus
 			</td>
-			<td><%# DataBinder.Eval(Container.DataItem, "CommentCount")%>/<%# DataBinder.Eval(Container.DataItem, "ViewCount")%></td>
-			<td><%# Convert.ToDateTime( DataBinder.Eval(Container.DataItem, "PostTime")).ToString("yyyy-MM-dd")%></td>
+			<td>@item.CommentCount/@item.ViewCount</td>
+			<td>@item.PostTime.ToString("yyyy-MM-dd")</td>
 			<td>
-			  	<span>[<%#GetEditLink(DataBinder.Eval(Container.DataItem, "postid"), DataBinder.Eval(Container.DataItem, "userid"))%>]</span>
-				<span>[<%#GetDeleteLink(DataBinder.Eval(Container.DataItem, "postid"), DataBinder.Eval(Container.DataItem, "userid"))%>]</span>
+			  	<span>编辑</span>
+				<span>删除</span>
 		    </td>
 		  </tr>
  }

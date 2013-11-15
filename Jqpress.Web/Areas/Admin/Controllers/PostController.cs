@@ -43,12 +43,6 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             int recommend = PressRequest.GetQueryInt("recommend", -1);
             int hide = PressRequest.GetQueryInt("hide", -1);
 
-            int pageindex = 0;
-            const int pagesize = 20;
-            pageindex = PressRequest.GetInt("page", 1);
-            ViewBag.Page = pageindex;
-            int count = 0;
-
             // txtKeyword.Text = keyword; 暂时注释
             // ddlCategory.SelectedValue = categoryId.ToString();
             //ddlAuthor.SelectedValue = userId.ToString();
