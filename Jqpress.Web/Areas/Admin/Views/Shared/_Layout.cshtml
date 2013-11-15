@@ -37,8 +37,8 @@
 	<div class="body_left">
 		<div class="menu_title1"><a href="@Url.Action("list", "post", new { area ="admin" })">文章</a></div>
 		<div class="menu_title2"><a href="@Url.Action("list","post")">文章列表</a></div>
-		<div class="menu_title2"><a href="post_list.aspx?hide=1">隐藏列表</a></div>
-		<div class="menu_title2"><a href="post_edit.aspx">添加新文章</a></div>
+		<div class="menu_title2"><a href="@Url.Action("list", "post", new { poststatus = 1 })">私有文章</a></div>
+		<div class="menu_title2"><a href="@Url.Action("edit","post")">添加新文章</a></div>
 		<div class="menu_title2"><a href="category_list.aspx">分类目录</a></div>
 		<div class="menu_title2"><a href="tag_list.aspx">文章标签</a></div>
 		<div class="menu_title2"><a href="comment_list.aspx">文章评论</a></div>
