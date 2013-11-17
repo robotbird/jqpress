@@ -70,7 +70,6 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         {
             int pages = PressRequest.GetFormInt("page", 1);
 
-
             p.UpdateTime = DateTime.Now;
             p.Slug = StringHelper.FilterSlug(p.Slug, "post", true);
             p.Tag = TagService.GetTagIdList(p.Tag);
@@ -79,13 +78,14 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             //   p.PostContent = SaveRemoteImage(p.PostContent);
             //}
 
-            if (1 < 0)
+            if (p.PostId>0)
             {
+                p = PostService.GetPost(p.PostId);
                 PostService.UpdatePost(p);
-                Response.Redirect("post_list.aspx");
             }
             else
             {
+                p.PostTime = DateTime.Now;
                 p.PostId = PostService.InsertPost(p);
 
                 // SendEmail(p);

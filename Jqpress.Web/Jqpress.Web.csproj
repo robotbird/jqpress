@@ -594,7 +594,7 @@
     <Content Include="Content\themes\base\jquery.ui.tabs.css" />
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\jquery-1.5.1.min.js" />
+    <Content Include="Scripts\jquery.js" />
     <Content Include="Themes\prowerV5\Content\images\404.png" />
     <Content Include="Themes\prowerV5\Content\images\bg.png" />
     <Content Include="Themes\prowerV5\Content\images\faq_side.png" />
