@@ -2,15 +2,15 @@
     ViewBag.Title = "Edit";
 }
 @using Jqpress.Framework.Mvc
-@model Jqpress.Web.Areas.Admin.Models.PostListModel
+@model Jqpress.Web.Areas.Admin.Models.PostModel
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";   
  }
 
 
- <link rel="stylesheet" href="../../common/styles/thickbox.css" type="text/css" media="screen" />
-<script type="text/javascript" src="../../common/scripts/jquery.tagto.js"></script>
-<script type="text/javascript" src="../../common/scripts/thickbox.js"></script>
+ <link rel="stylesheet" href="/common/styles/thickbox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="/common/scripts/jquery.tagto.js"></script>
+<script type="text/javascript" src="/common/scripts/thickbox.js"></script>
 
 <style type="text/css">
 /*tag choose*/
@@ -20,17 +20,17 @@
 <script type="text/javascript">
     (function ($) {
         $(document).ready(function () {
-            $("#taglist").tagTo("#<%=txtTags.ClientID %>", ",", "selected");
+            $("#taglist").tagTo("#txtTags", ",", "selected");
         });
     })(jQuery);
 </script>
 <!-- TinyMCE -->
-<script type="text/javascript" src="../../common/editors/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="/common/editors/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript">
     tinyMCE.init({
         // General options
         mode: "exact",
-        elements: "<%=txtContents.ClientID%>",
+        elements: "PostContent",
         theme: "advanced",
         language: "zh-cn",
 
@@ -47,13 +47,13 @@
 
 
         // Example content CSS (should be your site CSS)
-        content_css: "../../common/editors/css/content.css",
+        content_css: "/common/editors/css/content.css",
 
         // Drop lists for link/image/media/template dialogs
-        template_external_list_url: "../../common/editors/lists/template_list.js",
-        external_link_list_url: "../../common/editors/lists/link_list.js",
-        external_image_list_url: "../../common/editors/lists/image_list.js",
-        media_external_list_url: "../../common/editors/lists/media_list.js",
+        template_external_list_url: "/common/editors/lists/template_list.js",
+        external_link_list_url: "/common/editors/lists/link_list.js",
+        external_image_list_url: "/common/editors/lists/image_list.js",
+        media_external_list_url: "/common/editors/lists/media_list.js",
 
         // Style formats
         style_formats: [
@@ -91,7 +91,7 @@
 
     function createSummary(type) {
         var postContent = tinyMCE.activeEditor.getContent();
-        var postSummary = $("#<%=txtSummary.ClientID %>");
+        var postSummary = $("#Summary");
 
         var iLength = postSummary.text().length;
 
@@ -116,8 +116,8 @@
 </script>
 <script type="text/javascript">
     function checkForm() {
-        var title = $("#<%=txtTitle.ClientID%>");
-        var content = $("#<%=txtContents.ClientID%>");
+        var title = $("#Title");
+        var content = $("#PostContent");
 
         if (title.text() == "") {
             //$("#lableTitle").css("color","red");
@@ -139,45 +139,33 @@
         
 		
 <div class="formzone">
-<form name="form" action="" method="post">
+<form name="form1" method="post" action="@Url.Action("List", "Post", new { area = "admin" })"  >
 
 <div id="titlewrap">
-	<asp:TextBox ID="txtTitle"   maxlength="200"  Width="60%" runat="server" CssClass="solid-text"></asp:TextBox>
-	<label id="lableTitle" for="txtTitle"  >标题不能为空</label>
+    <input type="text" id="Title" name="Title" value="@Model.Post.Title" class="solid-text" style="width:60%;" />
+	<label id="lableTitle" for="Title"  >标题不能为空</label>
 </div>
 <div id="contentswrap">
-     
-     <a href="upfilebyeditor.aspx?keepThis=true&getfile=1&TB_iframe=true&height=420&width=620" title="插入图片/文件" class="thickbox" target="_blank">插入图片/文件</a>
-	<asp:TextBox ID="txtContents" runat="server" Height="400" TextMode="MultiLine"    Width="95%"></asp:TextBox>
-</div>
+    <a href="upfilebyeditor.aspx?keepThis=true&getfile=1&TB_iframe=true&height=420&width=620" title="插入图片/文件" class="thickbox" target="_blank">插入图片/文件</a>
+    <textarea name="PostContent" rows="2" cols="20" id="PostContent" style="height:400px;width:95%;">@Model.Post.PostContent</textarea></div>
 <div id="summarywrap">
-	 <label  class="label" for="<%=txtSummary.ClientID %>">摘要: <a href="javascript:void(0);" onclick="createSummary('part');">从正文提取部分</a>/<a href="javascript:void(0);" onclick="createSummary('full');">全部</a></label>
-        <asp:TextBox ID="txtSummary" runat="server" Height="120px" TextMode="MultiLine"    Width="95%"></asp:TextBox>
-</div>
+	 <label  class="label" for="Summary">摘要: <a href="javascript:void(0);" onclick="createSummary('part');">从正文提取部分</a>/<a href="javascript:void(0);" onclick="createSummary('full');">全部</a></label>
+        <textarea name="Summary" rows="2" cols="20" id="Summary" style="height:100px;width:95%;">@Model.Post.Summary</textarea></div>
 <div id="categorywrap">
-	<label for="ddlCategory"  >分类&nbsp;</label>
-	<asp:DropDownList ID="ddlCategory" runat="server" CssClass="select" ></asp:DropDownList>
+	<label for="CategoryId">分类&nbsp;</label>
+    @Html.DropDownList("CategoryId", Model.CateSelectItem)
+
 </div>
 <div id="tagwrap">
      <label for="txtTags">标签&nbsp;</label>
-	<asp:TextBox ID="txtTags"  runat="server" Width="49%" CssClass="solid-text"></asp:TextBox> 多个TAG请用逗号隔开!
+    <input name="txtTags" type="text" id="txtTags" class="solid-text" style="width:49%;" />
+    多个TAG请用逗号隔开!
         <a  href="###" onclick="showTag();" >查看常用标签↓</a>
         <div id="taglist" style=" border:2px solid #ccc;display:none;  line-height:135%; padding:3px ;  ">
-            
-            <%
-                System.Collections.Generic.List<TagInfo> tagList = TagService.GetTagList(20);
-                foreach (TagInfo tag in  tagList)
-              { %>
-              
-                  <a href="###" style="padding-left:3px;"><%=tag.CateName %></a><span class="gray small">(<%=tag.PostCount %>)</span>
-                   
-            <%} %>
-            
-            <%if (tagList.Count == 0)
-              { %>
-              暂无
-            <%} %>
-            
+              @foreach (var  item in  Model.TagList)
+              { 
+                 <a href="###" style="padding-left:3px;">@item.CateName</a><span class="gray small">(@item.PostCount)</span>
+              }
         </div>
                  
 <script type="text/javascript">
@@ -192,29 +180,20 @@
         
 </div>
 <div id="slugwrap">
-	<label for="title" id="title-prompt-text" >链接&nbsp;</label>
-	<asp:TextBox ID="txtCustomUrl"    runat="server" Width="49%" CssClass="solid-text"></asp:TextBox>
-</div>
+	<label for="Url" id="title-prompt-text" >链接&nbsp;</label>
+    <input name="Url" type="text" id="Url" class="solid-text" value="@Model.Post.Url" style="width:49%;" />
+</div><div id="propertywrap">
 
-<div id="templatewrap">
-	<label for="title" id="title-prompt-text" >模板</label>
-	<asp:DropDownList ID="ddlTemplate" runat="server"  CssClass="select"></asp:DropDownList>
-        <span  class="gray small"> 
-          (位于<%=ConfigHelper.SitePath %>themes/<%=setting.Theme %>/template/下,当然,您也可以自己制作,文件名必须以"post"开头)</span>
-</div>
-<div id="propertywrap">
-        <asp:CheckBox ID="chkStatus" runat="server" Text="发布" Checked="true" />
-        <asp:CheckBox ID="chkCommentStatus" runat="server" Text="允许评论" Checked="true" />
-        <asp:CheckBox ID="chkRecommend" runat="server" Text="推荐"  />
-        <asp:CheckBox ID="chkTopStatus" runat="server" Text="置顶"  />
-         <asp:CheckBox ID="chkHomeStatus" runat="server" Text="首页"  />
-        <asp:CheckBox ID="chkHideStatus" runat="server" Text="列表隐藏" ToolTip="不会出现在文章列表,常用于留言本,关于我的页面!"  />
-        <asp:CheckBox ID="chkSaveImage" runat="server" Text="保存远程图片" ToolTip="自动将远程图片保存到本地，仅保存静态地址图片" />
+ <input id="chkStatus" type="checkbox" name="chkStatus" @(Model.Post.Status == 1 ? "checked" : "") /><label for="chkStatus">发布</label>
+        <input id="chkCommentStatus" type="checkbox" name="chkCommentStatus" @(Model.Post.CommentStatus == 1 ? "checked" : "") /><label for="chkCommentStatus">允许评论</label>
+        <input id="chkRecommend" type="checkbox" name="chkRecommend" @(Model.Post.Recommend == 1 ? "checked" : "") /><label for="chkRecommend">推荐</label>
+        <input id="chkTopStatus" type="checkbox" name="chkTopStatus" @(Model.Post.TopStatus == 1 ? "checked" : "") /><label for="chkTopStatus">置顶</label>
+         <input id="chkHomeStatus" type="checkbox" name="chkHomeStatus" @(Model.Post.HomeStatus == 1 ? "checked" : "") /><label for="chkHomeStatus">首页</label>
+        <span title="不会出现在文章列表,常用于留言本,关于我的页面!"><input id="chkHideStatus" type="checkbox" name="chkHideStatus" @(Model.Post.PostStatus == 1 ? "checked" : "") /><label for="chkHideStatus">私有</label></span>
+        <span title="自动将远程图片保存到本地"><input id="chkSaveImage" type="checkbox" name="chkSaveImage"  /><label for="chkSaveImage">保存远程图片</label></span>
 </div>
 <div id="buttonwrap">
- <asp:Button ID="btnEdit" runat="server" Text="添加" onclick="btnEdit_Click"  CssClass="button" OnClientClick="return checkForm();" />
- <input class="button" type="button" value="返回" onClick="history.go(-1)"> 
-
+ <input type="submit" name="btnEdit" value="添加" onclick="return checkForm();" id="btnEdit" class="button" /> <input class="button" type="button" value="返回" onclick="history.go(-1)" /> 
 </div>
 
 </form>

@@ -26,7 +26,7 @@ using Jqpress.Web.Areas.Admin.Models;
 
 namespace Jqpress.Web.Areas.Admin.Controllers
 {
-    public class PostController : Controller
+    public class PostController : BaseAdminController
     {
         public ActionResult Index()
         {
@@ -84,45 +84,55 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         #endregion
 
 
-        public ActionResult Edit(int? id) 
+        public ActionResult SavePost(PostInfo p)
         {
-            return View();
-        }
-        protected void Page_Load(object sender, EventArgs e)
-        {
+            int pages = PressRequest.GetFormInt("page", 1);
 
 
-            //if (!IsPostBack)
+            p.UpdateTime = DateTime.Now;
+
+            //if (chkSaveImage.Checked)
             //{
-            //    LoadDefault();
-
-            //    if (Operate == OperateType.Update)
-            //    {
-            //        BindPost();
-            //        headerTitle = "修改文章";
-            //        btnEdit.Text = "修改";
-            //        SetPageTitle("修改文章");
-            //        switch (message)
-            //        {
-            //            case 1:
-            //                ShowMessage(string.Format("添加成功! <a href=\"{0}\">{0}</a>", PostService.GetPost(postId).Url));
-            //                break;
-            //            case 2:
-            //                ShowMessage(string.Format("修改成功! <a href=\"{0}\">{0}</a>", PostService.GetPost(postId).Url));
-            //                break;
-            //        }
-
-            //    }
-                //else if (Action == "delete")
-                //{
-                //    DeleteArticle();
-                //}
-                //else
-                //{
-                //    ddlCategory.SelectedValue = CategoryID.ToString();
-                //}
+            //   p.PostContent = SaveRemoteImage(p.PostContent);
             //}
+
+            if (1 < 0)
+            {
+                PostService.UpdatePost(p);
+                Response.Redirect("post_list.aspx");
+            }
+            else
+            {
+                p.PostId = PostService.InsertPost(p);
+
+                // SendEmail(p);
+            }
+
+
+            //SuccessNotification("保存成功");
+            return RedirectToAction("postlist", new { page = pages });
         }
+
+        public ActionResult Edit() 
+        {
+            int postid = PressRequest.GetInt("id", 0);
+            var model = new PostModel();
+            var catelist = CategoryService.GetCategoryList();
+            model.TagList = TagService.GetTagList();
+
+            if (postid > 0)
+            {
+                model.Post = PostService.GetPost(postid);
+                model.CateSelectItem = catelist.ConvertAll(c => new SelectListItem { Text = c.CateName, Value = c.CategoryId.ToString(), Selected = c.CategoryId == model.Post.CategoryId });
+            }
+            else 
+            {
+                model.CateSelectItem = catelist.ConvertAll(c => new SelectListItem { Text = c.CateName, Value = c.CategoryId.ToString() });            
+            }
+            return View(model);
+        }
+
+      
 
         /// <summary>
         /// 加载默认数据
