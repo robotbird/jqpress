@@ -670,6 +670,7 @@ namespace Jqpress.Framework.Utils
         /// <returns></returns>
         public static string FilterSlug(string slug, string prefix, bool allowEmpty)
         {
+            if (slug==null) slug ="";
             slug = System.Text.RegularExpressions.Regex.Replace(slug, "[^A-Za-z0-9\u4e00-\u9fa5-]", "");
 
             if (string.IsNullOrEmpty(slug) && allowEmpty == true)

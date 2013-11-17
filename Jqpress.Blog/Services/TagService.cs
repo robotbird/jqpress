@@ -5,6 +5,7 @@ using System.Text;
 using Jqpress.Blog.Data;
 using Jqpress.Blog.Entity;
 using Jqpress.Framework.Utils;
+using Jqpress.Framework.Web;
 
 namespace Jqpress.Blog.Services
 {
@@ -274,7 +275,46 @@ namespace Jqpress.Blog.Services
             }
             return list2;
         }
+        /// <summary>
+        /// 由标签名称列表返回标签ID列表,带{},新标签自动添加
+        /// </summary>
+        /// <param name="tagNameList"></param>
+        /// <returns></returns>
+        public static string GetTagIdList(string tagNames)
+        {
+            if (string.IsNullOrEmpty(tagNames))
+            {
+                return string.Empty;
+            }
+            string tagIds = string.Empty;
+            tagNames = tagNames.Replace("，", ",");
 
+            string[] names = tagNames.Split(',');
+
+            foreach (string n in names)
+            {
+                if (!string.IsNullOrEmpty(n))
+                {
+                    TagInfo t = TagService.GetTag(n);
+
+                    if (t == null)
+                    {
+                        t = new TagInfo();
+
+                        t.PostCount = 0;
+                        t.CreateTime = DateTime.Now;
+                        t.Description = n;
+                        t.SortNum = 1000;
+                        t.CateName = n;
+                        t.Slug = HttpHelper.HtmlEncode(StringHelper.FilterSlug(n, "tag"));
+
+                        t.TagId = TagService.InsertTag(t);
+                    }
+                    tagIds += "{" + t.TagId + "}";
+                }
+            }
+            return tagIds;
+        }
         /// <summary>
         /// 更新标签对应文章数
         /// </summary>

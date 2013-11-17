@@ -64,33 +64,16 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         #endregion
 
         #region 文章编辑
-        #region 变量
-        /// <summary>
-        /// ID
-        /// </summary>
-        protected int postId = PressRequest.GetQueryInt("postid", 0);
 
-        /// <summary>
-        /// 默认分类ID
-        /// </summary>
-        protected int categoryId = PressRequest.GetQueryInt("categoryid", 0);
-
-        protected string headerTitle = "添加文章";
-
-        /// <summary>
-        /// 提示
-        /// </summary>
-        protected int message = PressRequest.GetQueryInt("message", 0);
-        #endregion
-
-
+       [HttpPost, ActionName("SavePost"), ValidateInput(false)]
         public ActionResult SavePost(PostInfo p)
         {
             int pages = PressRequest.GetFormInt("page", 1);
 
 
             p.UpdateTime = DateTime.Now;
-
+            p.Slug = StringHelper.FilterSlug(p.Slug, "post", true);
+            p.Tag = TagService.GetTagIdList(p.Tag);
             //if (chkSaveImage.Checked)
             //{
             //   p.PostContent = SaveRemoteImage(p.PostContent);
@@ -110,7 +93,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 
 
             //SuccessNotification("保存成功");
-            return RedirectToAction("postlist", new { page = pages });
+            return RedirectToAction("list", new { page = pages });
         }
 
         public ActionResult Edit() 
@@ -180,7 +163,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         /// </summary>
         protected void BindPost()
         {
-            PostInfo p = PostService.GetPost(postId);
+            PostInfo p = PostService.GetPost(1);
             if (p != null)
             {
                 //txtTitle.Text = HttpHelper.HtmlDecode(p.Title);
@@ -339,46 +322,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             }
         }
 
-        /// <summary>
-        /// 由标签名称列表返回标签ID列表,带{},新标签自动添加
-        /// </summary>
-        /// <param name="tagNameList"></param>
-        /// <returns></returns>
-        protected string GetTagIdList(string tagNames)
-        {
-            if (string.IsNullOrEmpty(tagNames))
-            {
-                return string.Empty;
-            }
-            string tagIds = string.Empty;
-            tagNames = tagNames.Replace("，", ",");
 
-            string[] names = tagNames.Split(',');
-
-            foreach (string n in names)
-            {
-                if (!string.IsNullOrEmpty(n))
-                {
-                    TagInfo t = TagService.GetTag(n);
-
-                    if (t == null)
-                    {
-                        t = new TagInfo();
-
-                        t.PostCount = 0;
-                        t.CreateTime = DateTime.Now;
-                        t.Description = n;
-                        t.SortNum = 1000;
-                        t.CateName = n;
-                        t.Slug = HttpHelper.HtmlEncode(StringHelper.FilterSlug(n, "tag"));
-
-                        t.TagId = TagService.InsertTag(t);
-                    }
-                    tagIds += "{" + t.TagId + "}";
-                }
-            }
-            return tagIds;
-        }
 
         /// <summary>
         /// 保存远程图片

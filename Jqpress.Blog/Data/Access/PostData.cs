@@ -61,12 +61,12 @@ namespace Jqpress.Blog.Data.Access
             CheckSlug(postinfo);
             string cmdText = string.Format(@"insert into [{0}posts]
                                 (
-                               [CategoryId],[Title],[Summary],[PostContent],[Slug],[UserId],[CommentStatus],[CommentCount],[ViewCount],[Tag],[UrlFormat],[Template],[Recommend],[Status],[TopStatus],[HomeStatus],[PostStatus],[PostTime],[UpdateTime]
+                               [CategoryId],[Title],[Summary],[PostContent],[Slug],[UserId],[CommentStatus],[CommentCount],[ViewCount],[Tag],[UrlFormat],[Template],[Recommend],[Status],[TopStatus],[HomeStatus],[HideStatus],[PostTime],[UpdateTime]
                                 )
                                 values
                                 (
-                                @CategoryId,@Title,@Summary,@PostContent,@Slug,@UserId,@CommentStatus,@CommentCount,@ViewCount,@Tag,@UrlFormat,@Template,@Recommend,@Status,@TopStatus,@HomeStatus,@PostStatus,@PostTime,@UpdateTime
-                                )",ConfigHelper.Tableprefix);
+                                @CategoryId,@Title,@Summary,@PostContent,@Slug,@UserId,@CommentStatus,@CommentCount,@ViewCount,@Tag,@UrlFormat,@Template,@Recommend,@Status,@TopStatus,@HomeStatus,@HideStatus,@PostTime,@UpdateTime
+                                )", ConfigHelper.Tableprefix);
             OleDbParameter[] prams = { 
 								
                                 OleDbHelper.MakeInParam("@CategoryId",OleDbType.Integer,4,postinfo.CategoryId),
@@ -85,7 +85,7 @@ namespace Jqpress.Blog.Data.Access
 								OleDbHelper.MakeInParam("@Status",OleDbType.Integer,1,postinfo.Status),
                                 OleDbHelper.MakeInParam("@TopStatus",OleDbType.Integer,1,postinfo.TopStatus),
                                 OleDbHelper.MakeInParam("@HomeStatus",OleDbType.Integer,1,postinfo.HomeStatus),
-                                OleDbHelper.MakeInParam("@PostStatus",OleDbType.Integer,1,postinfo.PostStatus),
+                                OleDbHelper.MakeInParam("@HideStatus",OleDbType.Integer,1,postinfo.PostStatus),
 								OleDbHelper.MakeInParam("@PostTime",OleDbType.Date,8,postinfo.PostTime),
 								OleDbHelper.MakeInParam("@UpdateTime",OleDbType.Date,8,postinfo.UpdateTime)
 							};
