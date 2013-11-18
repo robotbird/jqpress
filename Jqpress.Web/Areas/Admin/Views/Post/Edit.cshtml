@@ -20,7 +20,7 @@
 <script type="text/javascript">
     (function ($) {
         $(document).ready(function () {
-            $("#taglist").tagTo("#txtTags", ",", "selected");
+            $("#taglist").tagTo("#Tag", ",", "selected");
         });
     })(jQuery);
 </script>
@@ -148,10 +148,12 @@
 </div>
 <div id="contentswrap">
     <a href="upfilebyeditor.aspx?keepThis=true&getfile=1&TB_iframe=true&height=420&width=620" title="插入图片/文件" class="thickbox" target="_blank">插入图片/文件</a>
-    <textarea name="PostContent" rows="2" cols="20" id="PostContent" style="height:400px;width:95%;">@Model.Post.PostContent</textarea></div>
+    <textarea name="PostContent" rows="2" cols="20" id="PostContent" style="height:400px;width:95%;">@Model.Post.PostContent</textarea>
+</div>
 <div id="summarywrap">
 	 <label  class="label" for="Summary">摘要: <a href="javascript:void(0);" onclick="createSummary('part');">从正文提取部分</a>/<a href="javascript:void(0);" onclick="createSummary('full');">全部</a></label>
-        <textarea name="Summary" rows="2" cols="20" id="Summary" style="height:100px;width:95%;">@Model.Post.Summary</textarea></div>
+        <textarea name="Summary" rows="2" cols="20" id="Summary" style="height:100px;width:95%;">@Model.Post.Summary</textarea>
+</div>
 <div id="categorywrap">
 	<label for="CategoryId">分类&nbsp;</label>
     @Html.DropDownList("CategoryId", Model.CateSelectItem)
@@ -159,7 +161,7 @@
 </div>
 <div id="tagwrap">
      <label for="txtTags">标签&nbsp;</label>
-    <input name="txtTags" type="text" id="txtTags" class="solid-text" style="width:49%;" />
+    <input name="Tag" type="text" id="Tag" class="solid-text" style="width:49%;" />
     多个TAG请用逗号隔开!
         <a  href="###" onclick="showTag();" >查看常用标签↓</a>
         <div id="taglist" style=" border:2px solid #ccc;display:none;  line-height:135%; padding:3px ;  ">
@@ -183,7 +185,8 @@
 <div id="slugwrap">
 	<label for="Url" id="title-prompt-text" >链接&nbsp;</label>
     <input name="Url" type="text" id="Url" class="solid-text" value="@Model.Post.Url" style="width:49%;" />
-</div><div id="propertywrap">
+</div>
+<div id="propertywrap">
 
  <input id="chkStatus" type="checkbox" name="chkStatus" @(Model.Post.Status == 1 ? "checked" : "") /><label for="chkStatus">发布</label>
         <input id="chkCommentStatus" type="checkbox" name="chkCommentStatus" @(Model.Post.CommentStatus == 1 ? "checked" : "") /><label for="chkCommentStatus">允许评论</label>
@@ -191,10 +194,12 @@
         <input id="chkTopStatus" type="checkbox" name="chkTopStatus" @(Model.Post.TopStatus == 1 ? "checked" : "") /><label for="chkTopStatus">置顶</label>
          <input id="chkHomeStatus" type="checkbox" name="chkHomeStatus" @(Model.Post.HomeStatus == 1 ? "checked" : "") /><label for="chkHomeStatus">首页</label>
         <span title="不会出现在文章列表,常用于留言本,关于我的页面!"><input id="chkHideStatus" type="checkbox" name="chkHideStatus" @(Model.Post.PostStatus == 1 ? "checked" : "") /><label for="chkHideStatus">私有</label></span>
-        <span title="自动将远程图片保存到本地"><input id="chkSaveImage" type="checkbox" name="chkSaveImage"  /><label for="chkSaveImage">保存远程图片</label></span>
+        <span title="自动将远程图片保存到本地"><input id="chkSaveImage" type="checkbox" name="chkSaveImage"  /><label for="chkSaveImage">保存远程图片</label></span>
+
 </div>
 <div id="buttonwrap">
- <input type="submit" name="btnEdit" value="添加" onclick="return checkForm();" id="btnEdit" class="button" /> <input class="button" type="button" value="返回" onclick="history.go(-1)" /> 
+ <input type="submit" name="btnEdit" value="添加" onclick="return checkForm();" id="btnEdit" class="button" />
+ <input class="button" type="button" value="返回" onclick="history.go(-1)" /> 
 </div>
 
 </form>

@@ -73,6 +73,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             p.UpdateTime = DateTime.Now;
             p.Slug = StringHelper.FilterSlug(p.Slug, "post", true);
             p.Tag = TagService.GetTagIdList(p.Tag);
+            p.UserId = CurrentUserId;
             //if (chkSaveImage.Checked)
             //{
             //   p.PostContent = SaveRemoteImage(p.PostContent);
@@ -80,7 +81,9 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 
             if (p.PostId>0)
             {
-                p = PostService.GetPost(p.PostId);
+               var  post = PostService.GetPost(p.PostId);
+                p.ViewCount = post.ViewCount;
+                p.CommentCount = post.CommentCount;
                 PostService.UpdatePost(p);
             }
             else

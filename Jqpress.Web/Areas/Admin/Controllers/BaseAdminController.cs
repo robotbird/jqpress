@@ -4,6 +4,8 @@ using System.Linq;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
+using Jqpress.Framework.Configuration;
+using Jqpress.Framework.Utils;
 using Jqpress.Framework.Web;
 
 
@@ -11,6 +13,19 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 {
     public class BaseAdminController : Controller
     {
+        /// <summary>
+        /// 是否登陆
+        /// </summary>
+        public static bool IsLogin;
+        /// <summary>
+        /// 
+        /// 用户COOKIE名
+        /// </summary>
+        private static readonly string CookieUser = ConfigHelper.SitePrefix + "amdin";
+        /// <summary>
+        /// 登陆用户ID
+        /// </summary>
+        public int CurrentUserId;
         public enum NotifyType
         {
             Success,
@@ -24,11 +39,14 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         {
             base.Initialize(requestContext);
             string url = PressRequest.GetRawUrl();
+            CurrentUserId = TypeConverter.ObjectToInt(requestContext.HttpContext.Request.Cookies[CookieUser]["userid"]);
+            if (CurrentUserId == 0) 
+            {
+                System.Web.HttpContext.Current.Response.Write("<script>window.location.href='/admin/login'</script>");            
+            }
         }
-
         protected BaseAdminController()
         {
-
         }
 
         /// <summary>
