@@ -110,47 +110,52 @@ namespace Jqpress.Blog.Data.Access
             CheckSlug(postinfo);
 
             string cmdText = string.Format(@"update [{0}posts] set  
-                                       [CategoryId]={1},
-                                       [Title]='{2}',
-                                       [Summary]='{3}',
-                                       [PostContent]='{4}',
-                                       [Slug]='{5}',
-                                       [UserId]='{6}',
-                                       [CommentStatus]={7},
-                                       [CommentCount]={8},
-                                       [ViewCount]={9},
-                                       [Tag]='{10}',
-                                       [UrlFormat]='{11}',
-                                       [Template]='{12}',
-                                       [Recommend]={13},
-                                       [Status]={14},
-                                       [TopStatus]={15},
-                                       [HomeStatus]={16},
-                                       [PostStatus]={17},
-                                       [PostTime]='{18}',
-                                       [UpdateTime]='{19}'
-                                   where [PostId]={20}", ConfigHelper.Tableprefix, 
-                                                       postinfo.CategoryId, 
-                                                       postinfo.Title, 
-                                                       postinfo.Summary, 
-                                                       postinfo.PostContent,
-                                                       postinfo.Slug, 
-                                                       postinfo.UserId, 
-                                                       postinfo.CommentStatus, 
-                                                       postinfo.CommentCount, 
-                                                       postinfo.ViewCount,
-                                                          postinfo.Tag,
-                                                          postinfo.UrlFormat,
-                                                          postinfo.Template,
-                                                          postinfo.Recommend,
-                                                          postinfo.Status,
-                                                          postinfo.TopStatus,
-                                                          postinfo.HomeStatus,
-                                                          postinfo.PostStatus,
-                                                          postinfo.PostTime,
-                                                          postinfo.UpdateTime,
-                                                          postinfo.PostId);
-          return  OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText);
+                                       [CategoryId]=@CategoryId,
+                                       [Title]=@Title,
+                                      [Summary]=@Summary,
+                                       [PostContent]=@PostContent,
+                                       [Slug]=@Slug,
+                                       [UserId]=@UserId,
+                                       [CommentStatus]=@CommentStatus,
+                                       [CommentCount]=@CommentCount,
+                                       [ViewCount]=@ViewCount,
+                                       [Tag]=@Tag,
+                                       [UrlFormat]=@UrlFormat,
+                                       [Template]=@Template,
+                                       [Recommend]=@Recommend,
+                                       [Status]=@Status,
+                                       [TopStatus]=@TopStatus,
+                                       [HomeStatus]=@HomeStatus,
+                                       [HideStatus]=@HideStatus,
+                                       [PostTime]=@PostTime,
+                                       [UpdateTime]=@UpdateTime
+                                   where [PostId]=@PostId", ConfigHelper.Tableprefix);
+
+            OleDbParameter[] prams = { 
+                                                                
+                                OleDbHelper.MakeInParam("@CategoryId",OleDbType.Integer,4,postinfo.CategoryId),
+                                OleDbHelper.MakeInParam("@Title",OleDbType.VarWChar,255,postinfo.Title),
+                                OleDbHelper.MakeInParam("@Summary",OleDbType.VarWChar,0,postinfo.Summary),
+                                OleDbHelper.MakeInParam("@PostContent",OleDbType.VarWChar,0,postinfo.PostContent),
+                                OleDbHelper.MakeInParam("@Slug",OleDbType.VarWChar,255,postinfo.Slug),
+                                OleDbHelper.MakeInParam("@UserId",OleDbType.Integer,4,postinfo.UserId),
+                                OleDbHelper.MakeInParam("@CommentStatus",OleDbType.Integer,1,postinfo.CommentStatus),
+                                OleDbHelper.MakeInParam("@CommentCount",OleDbType.Integer,4,postinfo.CommentCount),
+                                OleDbHelper.MakeInParam("@ViewCount",OleDbType.Integer,4,postinfo.ViewCount),
+                                OleDbHelper.MakeInParam("@Tag",OleDbType.VarWChar,255,postinfo.Tag),
+                                OleDbHelper.MakeInParam("@UrlFormat",OleDbType.Integer,1,postinfo.UrlFormat),
+                                OleDbHelper.MakeInParam("@Template",OleDbType.VarChar,50,postinfo.Template ),
+                                OleDbHelper.MakeInParam("@Recommend",OleDbType.Integer,1,postinfo.Recommend),
+                                OleDbHelper.MakeInParam("@Status",OleDbType.Integer,1,postinfo.Status),
+                                OleDbHelper.MakeInParam("@TopStatus",OleDbType.Integer,1,postinfo.TopStatus),
+                                OleDbHelper.MakeInParam("@HomeStatus",OleDbType.Integer,1,postinfo.HomeStatus),
+                                OleDbHelper.MakeInParam("@HideStatus",OleDbType.Integer,1,postinfo.PostStatus),
+                                OleDbHelper.MakeInParam("@PostTime",OleDbType.Date,8,postinfo.PostTime),
+                                OleDbHelper.MakeInParam("@UpdateTime",OleDbType.Date,8,postinfo.UpdateTime),
+                                OleDbHelper.MakeInParam("@PostId",OleDbType.Integer,4,postinfo.PostId)
+                                                        };
+            int cnt = OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams);
+            return cnt;
         }
 
         /// <summary>

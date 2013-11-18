@@ -205,7 +205,7 @@ namespace Jqpress.Blog.Services
         /// <returns></returns>
         public static List<PostInfo> GetPostList()
         {
-            return _posts;
+            return DatabaseProvider.Instance.GetPostList();
         }
 
         /// <summary>
@@ -314,7 +314,7 @@ namespace Jqpress.Blog.Services
         public static List<PostInfo> GetPostList(int rowCount, int categoryId, int userId, int recommend, int status, int topstatus, int PostStatus)
         {
             try{
-                     List<PostInfo> list = _posts;
+                     List<PostInfo> list = GetPostList();
                     if (categoryId != -1)
                     {
                         list = list.FindAll(post => post.CategoryId == categoryId);

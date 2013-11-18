@@ -79,8 +79,8 @@
 			<td>@item.CommentCount/@item.ViewCount</td>
 			<td>@item.PostTime.ToString("yyyy-MM-dd")</td>
 			<td>
-			  	<span>编辑</span>
-				<span>删除</span>
+			  	<span><a href="edit?id=@item.PostId"> 编辑 </a></span>
+				<span><a href="delete?id=@item.PostId"> 删除</a></span>
 		    </td>
 		  </tr>
  }
