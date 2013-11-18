@@ -14,19 +14,14 @@ namespace Jqpress.Web.Areas.Admin.Controllers
     public class BaseAdminController : Controller
     {
         /// <summary>
-        /// 是否登陆
-        /// </summary>
-        public static bool IsLogin;
-        /// <summary>
         /// 
         /// 用户COOKIE名
         /// </summary>
-        private static readonly string CookieUser = ConfigHelper.SitePrefix + "amdin";
+        private static readonly string CookieUser = ConfigHelper.SitePrefix + "admin";
         /// <summary>
         /// 登陆用户ID
         /// </summary>
         public int CurrentUserId;
-        HttpCookieCollection cookie;
         public enum NotifyType
         {
             Success,
@@ -40,22 +35,21 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         {
             base.Initialize(requestContext);
             string url = PressRequest.GetRawUrl();
-            var cookie = requestContext.HttpContext.Request.Cookies[CookieUser];
         }
         protected virtual void ValidateLogin(ActionExecutingContext filterContext)
         {
-            
+            var cookie = System.Web.HttpContext.Current.Request.Cookies[CookieUser];
             if (cookie != null)
             {
                 CurrentUserId = TypeConverter.ObjectToInt(cookie["userid"]);
                 if (CurrentUserId == 0)
                 {
-                    filterContext.Result = RedirectToAction("login", "admin");
+                    filterContext.Result = RedirectToAction("login", "home", new { area = "admin" });
                 }
             }
             else
             {
-                filterContext.Result = RedirectToAction("login","admin");            
+                filterContext.Result = RedirectToAction("login", "home", new { area = "admin" });            
             }
 
         }

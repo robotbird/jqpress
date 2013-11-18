@@ -203,7 +203,7 @@ namespace Jqpress.Blog.Services
         /// <summary>
         /// 用户COOKIE名
         /// </summary>
-        private static readonly string CookieUser = ConfigHelper.SitePrefix + "amdin";
+        private static readonly string CookieUser = ConfigHelper.SitePrefix + "admin";
         /// <summary>
         /// 读当前用户COOKIE
         /// </summary>
