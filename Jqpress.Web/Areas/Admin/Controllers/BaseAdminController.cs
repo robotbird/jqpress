@@ -7,12 +7,14 @@ using System.Web.Mvc;
 using Jqpress.Framework.Configuration;
 using Jqpress.Framework.Utils;
 using Jqpress.Framework.Web;
-
+using Jqpress.Blog.Entity;
+using Jqpress.Blog.Services;
 
 namespace Jqpress.Web.Areas.Admin.Controllers
 {
     public class BaseAdminController : Controller
     {
+
         /// <summary>
         /// 
         /// 用户COOKIE名
@@ -28,6 +30,10 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             Error
         }
         /// <summary>
+        /// 当前用户
+        /// </summary>
+        public static UserInfo CurrentUser;
+        /// <summary>
         /// Initialize controller
         /// </summary>
         /// <param name="requestContext">Request context</param>
@@ -42,6 +48,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             if (cookie != null)
             {
                 CurrentUserId = TypeConverter.ObjectToInt(cookie["userid"]);
+                CurrentUser = UserService.GetUser(CurrentUserId);
                 if (CurrentUserId == 0)
                 {
                     filterContext.Result = RedirectToAction("login", "home", new { area = "admin" });

@@ -65,7 +65,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 
         #region 文章编辑
 
-       [HttpPost, ActionName("SavePost"), ValidateInput(false)]
+        [HttpPost, ActionName("SavePost"), ValidateInput(false)]
         public ActionResult SavePost(PostInfo p)
         {
             int pages = PressRequest.GetFormInt("page", 1);
@@ -118,7 +118,27 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        
+        /// <summary>
+        /// delete article
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Delete() 
+        {
+            int postId = PressRequest.GetQueryInt("id");
+            PostInfo post = PostService.GetPost(postId);
+            if (post == null)
+            {
+                return RedirectToAction("list");
+            }
+            if (CurrentUser.UserType != (int)UserType.Administrator && CurrentUser.UserId != post.UserId)
+            {
+                return RedirectToAction("list");
+            }
+
+            PostService.DeletePost(postId);
+
+            return RedirectToAction("list");
+        }
 
         /// <summary>
         /// 加载默认数据
