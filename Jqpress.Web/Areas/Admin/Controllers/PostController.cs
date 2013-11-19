@@ -73,29 +73,34 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             p.UpdateTime = DateTime.Now;
             p.Tag = TagService.GetTagIdList(p.Tag);
             p.UserId = CurrentUserId;
+            p.Slug = TypeConverter.ObjectToString(p.Slug);
+            p.Summary = TypeConverter.ObjectToString(p.Summary);
+            if (string.IsNullOrEmpty(p.Title)) ErrorNotification("标题不能为空");
+            if (string.IsNullOrEmpty(p.PostContent)) ErrorNotification("内容不能为空");
+       
             //if (chkSaveImage.Checked)
             //{
             //   p.PostContent = SaveRemoteImage(p.PostContent);
             //}
-
             if (p.PostId>0)
             {
                var  post = PostService.GetPost(p.PostId);
                 p.ViewCount = post.ViewCount;
                 p.CommentCount = post.CommentCount;
                 PostService.UpdatePost(p);
+                string url = "http://" + PressRequest.GetCurrentFullHost() + "/post/" + (!string.IsNullOrEmpty(p.Slug) ? p.Slug : p.PostId.ToString());
+                SuccessNotification("修改成功。<a href=\"" + url + "\">查看文章</a> ");
             }
             else
             {
                 p.PostTime = DateTime.Now;
                 p.PostId = PostService.InsertPost(p);
+                string url = "http://" + PressRequest.GetCurrentFullHost() + "/post/" + (!string.IsNullOrEmpty(p.Slug) ? p.Slug : p.PostId.ToString());
+                SuccessNotification("发布成功。<a href=\"" + url + "\">查看文章</a> ");
 
                 // SendEmail(p);
             }
-
-
-            //SuccessNotification("保存成功");
-            return RedirectToAction("list", new { page = pages });
+            return Redirect("edit?id="+p.PostId);
         }
 
         public ActionResult Edit() 

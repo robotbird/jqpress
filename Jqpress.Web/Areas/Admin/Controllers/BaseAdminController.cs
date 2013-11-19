@@ -8,6 +8,7 @@ using Jqpress.Framework.Configuration;
 using Jqpress.Framework.Utils;
 using Jqpress.Framework.Web;
 using Jqpress.Blog.Entity;
+using Jqpress.Blog.Entity.Enum;
 using Jqpress.Blog.Services;
 
 namespace Jqpress.Web.Areas.Admin.Controllers
@@ -27,11 +28,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         /// 登陆用户ID
         /// </summary>
         public int CurrentUserId;
-        public enum NotifyType
-        {
-            Success,
-            Error
-        }
+
         /// <summary>
         /// 当前用户
         /// </summary>
@@ -137,7 +134,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         /// <param name="persistForTheNextRequest">A value indicating whether a message should be persisted for the next request</param>
         protected virtual void AddNotification(NotifyType type, string message, bool persistForTheNextRequest)
         {
-            string dataKey = string.Format("syw.notifications.{0}", type);
+            string dataKey = string.Format("jqpress.notifications.{0}", type);
             if (persistForTheNextRequest)
             {
                 if (TempData[dataKey] == null)

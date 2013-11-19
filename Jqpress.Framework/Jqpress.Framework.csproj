@@ -89,6 +89,7 @@
     <Compile Include="DbProvider\DapperHelper.cs" />
     <Compile Include="DbProvider\SqlMapper.cs" />
     <Compile Include="Mvc\BasePageableModel.cs" />
+    <Compile Include="Mvc\HtmlExtensions.cs" />
     <Compile Include="Mvc\IPageableModel.cs" />
     <Compile Include="Mvc\IPagedList.cs" />
     <Compile Include="Mvc\PagedList.cs" />

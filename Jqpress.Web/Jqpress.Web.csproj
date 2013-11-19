@@ -621,6 +621,7 @@
     <Content Include="common\config\feed.config" />
     <Content Include="common\config\rewrite.config" />
     <Content Include="Areas\Admin\Views\Post\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Notifications.cshtml" />
     <None Include="common\editors\tiny_mce\plugins\syntaxhl\README" />
     <None Include="common\editors\tiny_mce\themes\advanced\img\Thumbs.db" />
     <None Include="common\images\admin\Thumbs.db" />

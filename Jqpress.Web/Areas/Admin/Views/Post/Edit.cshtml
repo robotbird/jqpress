@@ -133,8 +133,7 @@
 		<div class="left">文章管理 <span style="font-size:9px;">&gt;&gt;</span>@(Model.Post.PostId > 0 ? "修改" : "添加")文章</div>
 			<div class="clr"></div>
 </div>
-        
-		
+ @Html.JPartial("_Notifications")
 <div class="formzone">
 <form name="form1" method="post" action="@Url.Action("SavePost", "Post")"  >
 <input type="hidden"  id="PostId" name="PostId" value="@Model.Post.PostId" />

@@ -154,4 +154,9 @@ namespace Jqpress.Blog.Entity.Enum
         /// </summary>
         Delete = 2,
     }
+    public enum NotifyType
+    {
+        Success,
+        Error
+    }
 }

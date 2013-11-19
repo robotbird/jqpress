@@ -163,22 +163,19 @@ table.tbl1{border:solid 1px #EAEBEE;-moz-border-radius:4px;-webkit-border-radius
 .tbl1 tr.header td.h_l{text-align:left;width:15px;background:#EAEBEE 0 0 no-repeat;padding:0;}
 .tbl1 tr.header td.h_r{text-align:left;width:15px;background:#EAEBEE right 0 no-repeat;padding:0;}
 .tbl1 td.nopadding{padding:0;}
-/*中间表格end*/
 
- /*post form*/
-.p_error { margin: 10px 0;border: #FFD259 1px solid;	padding:5px;	font: bold 14px Red  ;color:Red;	background:  #FBFFE1;}
-.p_message {    margin: 10px 0;	border: #49BA1E 1px solid;	padding:5px;	font: bold 14px green ;	color:green;	 background:  #FBFFE1; }
+ /*message*/
+.msgerror { margin: 5px 5px 2px;border: #e6db55 1px solid;	padding:5px;	font: bold 14px Red  ;color:Red;-webkit-border-radius: 3px;border-radius: 3px;	background-color: #ffffe0;}
+.msgsuccess { margin: 5px 5px 2px;	border: #e6db55 1px solid;padding:5px; background-color: #ffffe0; -webkit-border-radius: 3px;border-radius: 3px;}
 
-/*表单部分 begin*/
+
 div .formzone {border:solid 1px #EAEBEE; margin:2px; padding:2px;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;PADDING-BOTTOM: 10px; MARGIN: 5px;PADDING-TOP: 10px;  PADDING-RIGHT: 10px;}
 .formzone div{ margin:10px;}
-/*表单部分 end*/
 
-/*底部信息*/
 #footer, #footer a, #footer p {font-size: 13px; font-style: normal;}
 #footer { text-align:center; background: #E4E4E4;border-color: #D1D1D1;color: #777777;line-height:30px;border-style: solid;border-top: 1px solid; margin-top:46px; height:30px;clear: both; position: relative;}
 
-/*page 分页控件*/
+/*page*/
 .pager{ line-height: 30px; margin: 20px auto 0; padding: 5px; width: 400px;}
 .pager a,.pager span {border: 1px solid #ccc;color: #666; margin-right: 5px; padding: 3px 5px 3px 5px; text-align:center; }
 .pager a:hover{ text-decoration:none; border-color:#ccc;}
