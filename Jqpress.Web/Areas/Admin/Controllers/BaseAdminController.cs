@@ -14,7 +14,10 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 {
     public class BaseAdminController : Controller
     {
-
+        /// <summary>
+        /// web site path
+        /// </summary>
+        public string SiteUrl;
         /// <summary>
         /// 
         /// 用户COOKIE名
@@ -40,7 +43,9 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         protected override void Initialize(System.Web.Routing.RequestContext requestContext)
         {
             base.Initialize(requestContext);
+            SiteUrl = PressRequest.GetCurrentFullHost();
             string url = PressRequest.GetRawUrl();
+
         }
         protected virtual void ValidateLogin(ActionExecutingContext filterContext)
         {

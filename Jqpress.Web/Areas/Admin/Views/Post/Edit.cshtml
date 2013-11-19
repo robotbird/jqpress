@@ -1,11 +1,10 @@
-﻿@{
-    ViewBag.Title = "Edit";
-}
-@using Jqpress.Framework.Mvc
+﻿@using Jqpress.Framework.Mvc
+@using Jqpress.Framework.Web;
 @model Jqpress.Web.Areas.Admin.Models.PostModel
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";   
- }
+    ViewBag.Title = Model.Post.PostId > 0 ? "修改文章 - 管理中心 - Powered by Jqpress" : "添加文章 - 管理中心 - Powered by Jqpress";
+}
 
 
  <link rel="stylesheet" href="/common/styles/thickbox.css" type="text/css" media="screen" />
@@ -131,9 +130,7 @@
 
 
 <div class="body_nav">
-		<div class="left">文章管理 <span style="font-size:9px;">&gt;&gt;</span>添加文章</div>
-			<div class="right" style="padding-top:6px;">
-			  <a class="addbtn" href="#">创建新文章</a>			</div>
+		<div class="left">文章管理 <span style="font-size:9px;">&gt;&gt;</span>@(Model.Post.PostId > 0 ? "修改" : "添加")文章</div>
 			<div class="clr"></div>
 </div>
         
@@ -183,8 +180,8 @@
         
 </div>
 <div id="slugwrap">
-	<label for="Url" id="title-prompt-text" >链接&nbsp;</label>
-    <input name="Url" type="text" id="Url" class="solid-text" value="@Model.Post.Url" style="width:49%;" />
+	<label for="Url" id="title-prompt-text" >自定义地址&nbsp;</label>
+     http://@(PressRequest.GetCurrentFullHost())/post/<input name="Slug" type="text" id="Slug" class="solid-text" value="@(Model.Post.Slug)" style="width:49%;" />
 </div>
 <div id="propertywrap">
 
@@ -198,7 +195,7 @@
 
 </div>
 <div id="buttonwrap">
- <input type="submit" name="btnEdit" value="添加" onclick="return checkForm();" id="btnEdit" class="button" />
+ <input type="submit" name="btnEdit" value="@(Model.Post.PostId > 0 ? "修改" : "添加")" onclick="return checkForm();" id="btnEdit" class="button" />
  <input class="button" type="button" value="返回" onclick="history.go(-1)" /> 
 </div>
 

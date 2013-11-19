@@ -71,7 +71,6 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             int pages = PressRequest.GetFormInt("page", 1);
 
             p.UpdateTime = DateTime.Now;
-            p.Slug = StringHelper.FilterSlug(p.Slug, "post", true);
             p.Tag = TagService.GetTagIdList(p.Tag);
             p.UserId = CurrentUserId;
             //if (chkSaveImage.Checked)
