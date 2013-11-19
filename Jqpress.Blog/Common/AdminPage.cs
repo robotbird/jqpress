@@ -48,7 +48,7 @@ namespace Jqpress.Blog.Common
         {
             if (!IsLogin)
             {
-                HttpContext.Current.Response.Redirect("~/admin/login.aspx?returnurl=" + HttpContext.Current.Server.UrlEncode(Jqpress.Framework.Web.PressRequest.CurrentUrl));
+                HttpContext.Current.Response.Redirect("/admin/login?returnurl=" + HttpContext.Current.Server.UrlEncode(Jqpress.Framework.Web.PressRequest.CurrentUrl));
                 HttpContext.Current.Response.End();
             }
             else
@@ -58,14 +58,14 @@ namespace Jqpress.Blog.Common
                 if (user == null)       //删除已登陆用户时有效
                 {
                     RemoveUserCookie();
-                    HttpContext.Current.Response.Redirect("~/admin/login.aspx?returnurl=" + HttpContext.Current.Server.UrlEncode(Jqpress.Framework.Web.PressRequest.CurrentUrl));
+                    HttpContext.Current.Response.Redirect("/admin/login?returnurl=" + HttpContext.Current.Server.UrlEncode(Jqpress.Framework.Web.PressRequest.CurrentUrl));
 
                 }
 
                 if (Jqpress.Framework.Utils.EncryptHelper.MD5(user.UserId + HttpContext.Current.Server.UrlEncode(user.UserName) + user.Password) != CurrentKey)
                 {
                     RemoveUserCookie();
-                    HttpContext.Current.Response.Redirect("login.aspx?returnurl=" + HttpContext.Current.Server.UrlEncode(Jqpress.Framework.Web.PressRequest.CurrentUrl));
+                    HttpContext.Current.Response.Redirect("/admin/login?returnurl=" + HttpContext.Current.Server.UrlEncode(Jqpress.Framework.Web.PressRequest.CurrentUrl));
                 }
 
                 if (CurrentUser.Status == 0)
@@ -73,7 +73,7 @@ namespace Jqpress.Blog.Common
                     ResponseError("您的用户名已停用", "您的用户名已停用,请与管理员联系!");
                 }
 
-                string[] plist = new string[] { "themelist.aspx", "themeedit.aspx", "linklist.aspx", "userlist.aspx", "setting.aspx", "categorylist.aspx", "taglist.aspx", "commentlist.aspx" };
+                string[] plist = new string[] { "theme/list", "theme/edit", "link/list", "user/list", "setting", "category/list", "tag/list", "comment" };
                 if (CurrentUser.UserType == (int)UserType.Author)
                 {
                     string pageName = System.IO.Path.GetFileName(HttpContext.Current.Request.Url.ToString()).ToLower();

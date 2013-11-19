@@ -13,7 +13,7 @@
 <div class="clr" >
 <div id="adm_header">
 	   <div class="right">
-		 <div class="top_account">@ViewBag.UserName</div>
+		 <div class="top_account">@Jqpress.Blog.Common.AdminPage.CurrentUser.UserName</div>
 		 <div class="top_link"><a onClick="return confirm('确定要退出吗？')" href="../login.aspx?act=logout" class="link2">退出</a></div>
        </div>
 
@@ -22,7 +22,7 @@
 	   </div>
        
 	   <div  class="sitetitle">
-		 <h1><span>@ViewBag.SiteName</span></h1>
+		 <h1><span>@Jqpress.Blog.Configuration.BlogConfig.GetSetting().SiteName</span></h1>
 	   </div>
          
        <div id="topmenu" >
