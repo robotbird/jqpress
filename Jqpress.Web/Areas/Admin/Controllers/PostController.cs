@@ -24,7 +24,6 @@ using Jqpress.Web.Areas.Admin.Models;
 
 namespace Jqpress.Web.Areas.Admin.Controllers
 {
-    //TODO: 远程下载图片，需要验证
     //TODO: 标签tab的保存是否正确验证
     //TODO: 发送邮件
 
@@ -76,8 +75,18 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             p.UserId = CurrentUserId;
             p.Slug = TypeConverter.ObjectToString(p.Slug);
             p.Summary = TypeConverter.ObjectToString(p.Summary);
-            if (string.IsNullOrEmpty(p.Title)) ErrorNotification("标题不能为空");
-            if (string.IsNullOrEmpty(p.PostContent)) ErrorNotification("内容不能为空");
+            var action = "edit";
+            if (p.PostId > 0) action += "?id="+p.PostId;
+            if (string.IsNullOrEmpty(p.Title))
+            {
+                ErrorNotification("标题不能为空");
+                return Redirect(action);
+            }
+            if (string.IsNullOrEmpty(p.PostContent))
+            {
+                ErrorNotification("内容不能为空");
+                return Redirect(action);
+            }
 
             var isSaveMsg = PressRequest.GetFormInt("chkSaveImage",0);
             if (isSaveMsg>0)

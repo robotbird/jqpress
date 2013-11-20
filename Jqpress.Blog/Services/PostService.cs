@@ -10,7 +10,7 @@ using Jqpress.Framework.Mvc;
 using Jqpress.Framework.Configuration;
 using Jqpress.Blog.Data;
 using Jqpress.Blog.Entity;
-using Jqpress.Blog.Configuration
+using Jqpress.Blog.Configuration;
 
 namespace Jqpress.Blog.Services
 {
@@ -413,16 +413,13 @@ namespace Jqpress.Blog.Services
         {
             string Reg = @"<img.*src=.?(http|https).+>";
             string currentHost = HttpContext.Current.Request.Url.Host;
-            // <img.*?src="(?<url>.*?)".*?>
             List<Uri> urlList = new List<Uri>();
 
             //获取图片URL地址
             foreach (Match m in Regex.Matches(html, Reg, RegexOptions.IgnoreCase | RegexOptions.Compiled))
             {
-                //  Response.Write(m.Value + "||<br>");
-                Regex reg = new Regex(@"src=('|"")?(http|https).+?('|""|>| )+?", RegexOptions.IgnoreCase); //空格的未考虑
+                Regex reg = new Regex(@"src=('|"")?(http|https).+?('|""|>| )+?", RegexOptions.IgnoreCase);
                 string imgUrl = reg.Match(m.Value).Value.Replace("src=", "").Replace("'", "").Replace("\"", "").Replace(@">", "");
-                //  Response.Write(imgUrl +"<br>");
                 Uri u = new Uri(imgUrl);
                 if (u.Host != currentHost)
                 {
@@ -488,7 +485,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        private bool IsImage(string filePath)
+        private static bool IsImage(string filePath)
         {
             bool ret = false;
 
