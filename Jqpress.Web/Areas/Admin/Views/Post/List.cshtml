@@ -71,7 +71,7 @@
 		  <tr id="post @item.PostId">
 			<td><input type="checkbox" name="chkid" value="@item.PostId" /> </td>
 			<td>
-			@(new HtmlString(item.Author.Link))
+			[@(new HtmlString(item.Author.Link))]
 			@(new HtmlString(item.Link))
             @item.Status 
             @item.PostStatus

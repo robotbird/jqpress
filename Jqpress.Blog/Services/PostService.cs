@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Net;
+using System.IO;
+using System.Web;
+using System.Text.RegularExpressions;
 using Jqpress.Framework.Mvc;
+using Jqpress.Framework.Configuration;
 using Jqpress.Blog.Data;
 using Jqpress.Blog.Entity;
+using Jqpress.Blog.Configuration
 
 namespace Jqpress.Blog.Services
 {
@@ -72,7 +78,7 @@ namespace Jqpress.Blog.Services
             TagService.UpdateTagUseCount(post.Tag, 1);
 
             //   RemovePostsCache();
-
+            SendEmail(post);
             return post.PostId;
         }
 
@@ -397,6 +403,172 @@ namespace Jqpress.Blog.Services
             }
             return 0;
 
+        }
+        /// <summary>
+        /// 保存远程图片
+        /// </summary>
+        /// <param name="html"></param>
+        /// <returns></returns>
+        public static string SaveRemoteImage(string html)
+        {
+            string Reg = @"<img.*src=.?(http|https).+>";
+            string currentHost = HttpContext.Current.Request.Url.Host;
+            // <img.*?src="(?<url>.*?)".*?>
+            List<Uri> urlList = new List<Uri>();
+
+            //获取图片URL地址
+            foreach (Match m in Regex.Matches(html, Reg, RegexOptions.IgnoreCase | RegexOptions.Compiled))
+            {
+                //  Response.Write(m.Value + "||<br>");
+                Regex reg = new Regex(@"src=('|"")?(http|https).+?('|""|>| )+?", RegexOptions.IgnoreCase); //空格的未考虑
+                string imgUrl = reg.Match(m.Value).Value.Replace("src=", "").Replace("'", "").Replace("\"", "").Replace(@">", "");
+                //  Response.Write(imgUrl +"<br>");
+                Uri u = new Uri(imgUrl);
+                if (u.Host != currentHost)
+                {
+                    urlList.Add(u);
+                }
+            }
+
+            //去掉重复
+            List<Uri> urlList2 = new List<Uri>();
+            foreach (Uri u2 in urlList)
+            {
+                if (!urlList2.Contains(u2))
+                {
+                    urlList2.Add(u2);
+                }
+            }
+
+            //保存
+            WebClient wc = new WebClient();
+            int i = 0;
+            foreach (Uri u2 in urlList2)
+            {
+                i++;
+                string extName = ".jpg";
+                if (System.IO.Path.HasExtension(u2.AbsoluteUri))
+                {
+                    extName = System.IO.Path.GetExtension(u2.AbsoluteUri);
+                    if (extName.IndexOf('?') >= 0)
+                    {
+                        extName = extName.Substring(0, extName.IndexOf('?'));
+                    }
+                }
+
+                string path = ConfigHelper.SitePath + "upfiles/" + DateTime.Now.ToString("yyyyMM") + "/";
+
+
+                if (!System.IO.Directory.Exists(HttpContext.Current.Server.MapPath(path)))
+                {
+                    System.IO.Directory.CreateDirectory(HttpContext.Current.Server.MapPath(path));
+                }
+                //  Response.Write(newDir);
+
+                string newFileName = path + "auto_" + DateTime.Now.ToString("ddHHmmss") + i + extName;
+
+                wc.DownloadFile(u2, HttpContext.Current.Server.MapPath(newFileName)); //非图片后缀要改成图片后缀
+                //  Response.Write(u2.AbsoluteUri + "||<br>");
+
+                //是否合法
+                if (IsImage(HttpContext.Current.Server.MapPath(newFileName)))
+                {
+                    html = html.Replace(u2.AbsoluteUri, newFileName);
+                }
+                else
+                {
+                    System.IO.File.Delete(HttpContext.Current.Server.MapPath(newFileName));
+                }
+            }
+            return html;
+        }
+
+        /// <summary>
+        /// 检查是否为允许的图片格式
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        private bool IsImage(string filePath)
+        {
+            bool ret = false;
+
+            System.IO.FileStream fs = new System.IO.FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            System.IO.BinaryReader r = new System.IO.BinaryReader(fs);
+            string fileclass = "";
+            byte buffer;
+            try
+            {
+                buffer = r.ReadByte();
+                fileclass = buffer.ToString();
+                buffer = r.ReadByte();
+                fileclass += buffer.ToString();
+            }
+            catch
+            {
+                return false;
+            }
+            r.Close();
+            fs.Close();
+            // String[] fileType = { "255216", "7173", "6677", "13780", "8297", "5549", "870", "87111", "8075" };
+            string[] fileType = { "255216", "7173", "6677", "13780" };
+
+            for (int i = 0; i < fileType.Length; i++)
+            {
+                if (fileclass == fileType[i])
+                {
+                    ret = true;
+                    break;
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// 发邮件
+        /// </summary>
+        /// <param name="post"></param>
+        public static void SendEmail(PostInfo post)
+        {
+            if (BlogConfig.GetSetting().SendMailAuthorByPost == 1)
+            {
+                List<UserInfo> list = UserService.GetUserList();
+                List<string> emailList = new List<string>();
+
+                foreach (UserInfo user in list)
+                {
+                    if (!Jqpress.Framework.Utils.Validate.IsEmail(user.Email))
+                    {
+                        continue;
+                    }
+                    //自己不用发
+                    //if (CurrentUser.Email == user.Email)
+                    //{
+                    //    continue;
+                    //}
+                    ////不重复发送
+                    //if (emailList.Contains(user.Email))
+                    //{
+                    //    continue;
+                    //}
+                    //emailList.Add(user.Email);
+
+                    //string subject = string.Empty;
+                    //string body = string.Empty;
+
+                    //subject = string.Format("[新文章通知]{0}", post.Title);
+                    //body += string.Format("{0}有新文章了:<br/>", BlogConfig.GetSetting().SiteName);
+                    //body += "<hr/>";
+                    //body += "<br />标题: " + post.Link;
+                    //body += post.Detail;
+                    //body += "<hr/>";
+                    //body += "<br />作者: " + CurrentUser.Link;
+                    //body += "<br />时间: " + post.PostTime;
+                    //body += "<br />文章连接: " + post.Link;
+                    //body += "<br />注:系统自动通知邮件,不要回复。";
+
+                    // EmailHelper.SendAsync(user.Email, subject, body);
+                }
+            }
         }
     }
 }
