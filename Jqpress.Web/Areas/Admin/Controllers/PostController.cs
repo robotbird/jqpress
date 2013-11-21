@@ -12,11 +12,11 @@ using System.Xml.Schema;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
-using Jqpress.Blog.Common;
-using Jqpress.Blog.Entity;
 using Jqpress.Framework.Utils;
 using Jqpress.Framework.Web;
 using Jqpress.Framework.Configuration;
+using Jqpress.Blog.Common;
+using Jqpress.Blog.Entity;
 using Jqpress.Blog.Services;
 using Jqpress.Blog.Entity.Enum;
 using Jqpress.Blog.Configuration;
@@ -24,17 +24,8 @@ using Jqpress.Web.Areas.Admin.Models;
 
 namespace Jqpress.Web.Areas.Admin.Controllers
 {
-    //TODO: 标签tab的保存是否正确验证
-    //TODO: 发送邮件
-
     public class PostController : BaseAdminController
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        #region 文章列表
         public ActionResult List()
         {
             var model = new PostListModel();
@@ -62,9 +53,57 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             model.PostList = (List<PostInfo>)postlist;
             return View(model);
         }
-        #endregion
 
-        #region 文章编辑
+        /// <summary>
+        /// delete article
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Delete()
+        {
+            int postId = PressRequest.GetQueryInt("id");
+            PostInfo post = PostService.GetPost(postId);
+            if (post == null)
+            {
+                return RedirectToAction("list");
+            }
+            if (CurrentUser.UserType != (int)UserType.Administrator && CurrentUser.UserId != post.UserId)
+            {
+                return RedirectToAction("list");
+            }
+
+            PostService.DeletePost(postId);
+
+            return RedirectToAction("list");
+        }
+        /// <summary>
+        /// get article
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Edit()
+        {
+            int postid = PressRequest.GetInt("id", 0);
+            var model = new PostModel();
+            var catelist = CategoryService.GetCategoryList();
+            model.TagList = TagService.GetTagList();
+
+            if (postid > 0)
+            {
+                model.Post = PostService.GetPost(postid);
+                model.Post.Tag = model.Post.Tags.Aggregate(string.Empty, (current, t) => current + (t.CateName + ",")).TrimEnd(',');
+                model.CateSelectItem = catelist.ConvertAll(c => new SelectListItem { Text = c.CateName, Value = c.CategoryId.ToString(), Selected = c.CategoryId == model.Post.CategoryId });
+            }
+            else
+            {
+                model.CateSelectItem = catelist.ConvertAll(c => new SelectListItem { Text = c.CateName, Value = c.CategoryId.ToString() });
+            }
+            return View(model);
+        }
+
+        /// <summary>
+        /// save add or modify article
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         [HttpPost, ActionName("SavePost"), ValidateInput(false)]
         public ActionResult SavePost(PostInfo p)
         {
@@ -108,54 +147,9 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                 p.PostId = PostService.InsertPost(p);
                 string url = "http://" + PressRequest.GetCurrentFullHost() + "/post/" + (!string.IsNullOrEmpty(p.Slug) ? p.Slug : p.PostId.ToString());
                 SuccessNotification("发布成功。<a href=\"" + url + "\">查看文章</a> ");
-
-                // SendEmail(p);
             }
             return Redirect("edit?id="+p.PostId);
         }
-
-        public ActionResult Edit() 
-        {
-            int postid = PressRequest.GetInt("id", 0);
-            var model = new PostModel();
-            var catelist = CategoryService.GetCategoryList();
-            model.TagList = TagService.GetTagList();
-
-            if (postid > 0)
-            {
-                model.Post = PostService.GetPost(postid);
-                model.Post.Tag = model.Post.Tags.Aggregate(string.Empty, (current, t) => current + (t.CateName + ",")).TrimEnd(',');
-                model.CateSelectItem = catelist.ConvertAll(c => new SelectListItem { Text = c.CateName, Value = c.CategoryId.ToString(), Selected = c.CategoryId == model.Post.CategoryId });
-            }
-            else 
-            {
-                model.CateSelectItem = catelist.ConvertAll(c => new SelectListItem { Text = c.CateName, Value = c.CategoryId.ToString() });            
-            }
-            return View(model);
-        }
-
-        /// <summary>
-        /// delete article
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult Delete() 
-        {
-            int postId = PressRequest.GetQueryInt("id");
-            PostInfo post = PostService.GetPost(postId);
-            if (post == null)
-            {
-                return RedirectToAction("list");
-            }
-            if (CurrentUser.UserType != (int)UserType.Administrator && CurrentUser.UserId != post.UserId)
-            {
-                return RedirectToAction("list");
-            }
-
-            PostService.DeletePost(postId);
-
-            return RedirectToAction("list");
-        }
-        #endregion
 
     }
 }
