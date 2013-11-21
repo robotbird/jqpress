@@ -57,7 +57,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 
             if (cateid > 0)
                 pageIndex = pageIndex + 1;
-            var postlist = PostService.GetPostPageList(pageSize, pageIndex, out count, categoryId, tagid, -1, -1, -1, -1, -1, "", "", "");
+            var postlist = PostService.GetPostPageList(pageSize, pageIndex, out count, categoryId, tagid, -1, -1, -1, -1, -1, "", "", keyword);
             model.PageList.LoadPagedList(postlist);
             model.PostList = (List<PostInfo>)postlist;
             return View(model);
