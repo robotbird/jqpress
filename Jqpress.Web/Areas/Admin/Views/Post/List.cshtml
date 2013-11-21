@@ -43,7 +43,7 @@
    <input type="button" name="" id="doaction" class="button" value="应用" />
    
    <input type="text" value="" id="txtKeyword" runat="server" class="solid-text" size="10" /> 关键字 
-   @Html.DropDownList("CategoryId", Model.CateSelectItem)
+   @Html.DropDownList("CategoryId", Model.CateSelectItem, new { @class = "select" })
    <input type="submit" name="btnFilter" value="过滤" id="btnFilter" class="button" />
 </div>
 
@@ -60,8 +60,7 @@
           		  
 		 
 	@foreach (var item in Model.PostList)
- {
-            
+    {
 		  <tr id="post @item.PostId">
 			<td><input type="checkbox" name="chkid" value="@item.PostId" /> </td>
 			<td>
@@ -77,7 +76,7 @@
 				<span><a onclick="return confirm('删除文章同时会删除该文章的相关评论,确定要删除吗?');" href="delete?id=@item.PostId"> 删除</a></span>
 		    </td>
 		  </tr>
- }
+   }
           
 </table>
 		  		

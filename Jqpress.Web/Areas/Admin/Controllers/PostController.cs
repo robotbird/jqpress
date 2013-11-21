@@ -36,7 +36,6 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             string keyword = StringHelper.SqlEncode(PressRequest.GetQueryString("keyword"));
             int categoryId = PressRequest.GetQueryInt("categoryid", -1);
             int userId = PressRequest.GetQueryInt("userid", -1);
-            int recommend = PressRequest.GetQueryInt("recommend", -1);
             int hide = PressRequest.GetQueryInt("hide", -1);
 
             // txtKeyword.Text = keyword; 暂时注释
@@ -45,11 +44,17 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             //  chkRecommend.Checked = recommend == 1 ? true : false; 暂时注释
             //chkHideStatus.Checked = hide == 1 ? true : false; 暂时注释
 
+            var catelist = CategoryService.GetCategoryList();
+
             const int pageSize = 10;
             int count = 0;
             int pageIndex = PressRequest.GetInt("page", 1);
             int cateid = PressRequest.GetQueryInt("cateid", -1);
             int tagid = PressRequest.GetQueryInt("tagid", -1);
+
+            catelist.Add(new CategoryInfo() { CateName="全部",CategoryId=-1});
+            model.CateSelectItem = catelist.ConvertAll(c => new SelectListItem { Text = c.CateName, Value = c.CategoryId.ToString(), Selected = c.CategoryId == cateid });
+
             if (cateid > 0)
                 pageIndex = pageIndex + 1;
             var postlist = PostService.GetPostPageList(pageSize, pageIndex, out count, categoryId, tagid, -1, -1, -1, -1, -1, "", "", "");
