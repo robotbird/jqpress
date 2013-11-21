@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
 using System.Web;
+using System.Web.Mvc;
 using Jqpress.Blog.Entity;
 
 namespace Jqpress.Web.Areas.Admin.Models
@@ -13,6 +14,7 @@ namespace Jqpress.Web.Areas.Admin.Models
         {
             PostList = new List<PostInfo>();
             PageList = new PostPageList();
+            CateSelectItem = new List<SelectListItem>();
         }
         /// <summary>
         /// post list
@@ -20,6 +22,11 @@ namespace Jqpress.Web.Areas.Admin.Models
         public List<PostInfo> PostList { get;set;}
 
         public PostPageList PageList { get; set; }
+
+        /// <summary>
+        /// post's category selectitem
+        /// </summary>
+        public List<SelectListItem> CateSelectItem { get; set; }
 
         /// <summary>
         /// 文章列表信息(作者,分类等)

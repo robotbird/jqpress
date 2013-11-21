@@ -24,6 +24,10 @@ using Jqpress.Web.Areas.Admin.Models;
 
 namespace Jqpress.Web.Areas.Admin.Controllers
 {
+    //TODO: 文章搜索，分类
+    //TODO: 文章状态
+    //TODO: 删除提示
+    //TODO: 参考wordpress列表改造
     public class PostController : BaseAdminController
     {
         public ActionResult List()

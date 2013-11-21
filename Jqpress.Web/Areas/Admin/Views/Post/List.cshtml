@@ -1,10 +1,8 @@
 ﻿@using Jqpress.Framework.Mvc
 @model Jqpress.Web.Areas.Admin.Models.PostListModel
 @{
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";   
- }
-@{
-    ViewBag.Title = "PostList";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "文章列表 - 管理中心 - Powered by Jqpress";
 }
 <script type="text/javascript">
     $(document).ready(function () {
@@ -34,11 +32,7 @@
     });
 </script>
    <div class="body_nav">
-			<div class="left">文章管理 <span style="font-size:9px;">&gt;&gt;</span>添加文章</div>
-			<div class="right" style="padding-top:6px;">
-			  <a class="addbtn" href="post_edit.aspx">创建新文章</a></div>
-			<div class="clr"></div>
-		</div>
+			<div class="left">文章管理 <span style="font-size:9px;">&gt;&gt;</span>列表</div> </div>
         
         
 <div class="table-top">
@@ -49,8 +43,8 @@
    <input type="button" name="" id="doaction" class="button" value="应用" />
    
    <input type="text" value="" id="txtKeyword" runat="server" class="solid-text" size="10" /> 关键字 
-   <asp:DropDownList ID="ddlCategory" runat="server" CssClass="select" ></asp:DropDownList>
-   <asp:Button ID="btnFilter" runat="server" CssClass="button" Text="过滤" OnClick="btnSearch_Click" />
+   @Html.DropDownList("CategoryId", Model.CateSelectItem)
+   <input type="submit" name="btnFilter" value="过滤" id="btnFilter" class="button" />
 </div>
 
 <table class="tbl1" width="100%" border="0" cellspacing="0" cellpadding="0">
