@@ -335,7 +335,14 @@ namespace Jqpress.Blog.Entity
         /// 正文
         /// </summary>
         public string PostContent { get; set; }
-        public string Template { get; set; }
+        /// <summary>
+        /// 模板
+        /// </summary>
+        public string Template
+        {
+            get { return _template; }
+            set { _template = value; }
+        }
         /// <summary>
         /// 用户ID
         /// </summary>

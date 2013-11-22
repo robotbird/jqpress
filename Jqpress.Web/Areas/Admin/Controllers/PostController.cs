@@ -123,6 +123,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             p.UserId = CurrentUserId;
             p.Slug = TypeConverter.ObjectToString(p.Slug);
             p.Summary = TypeConverter.ObjectToString(p.Summary);
+            p.Status = PressRequest.GetFormInt("chkStatus", 1);
             var action = "edit";
             if (p.PostId > 0) action += "?id="+p.PostId;
             if (string.IsNullOrEmpty(p.Title))
