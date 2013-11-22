@@ -25,8 +25,6 @@ namespace Jqpress.Blog.Entity
  
         private int _urltype;
         private int _commentstatus;
-        private string _template = "post.html";
-
 
         #region 非字段
 
@@ -103,7 +101,7 @@ namespace Jqpress.Blog.Entity
         {
             get
             {
-                return string.Format("{0}feed/comment/postid/{1}{2}", ConfigHelper.SiteUrl, this.PostId, BlogConfig.GetSetting().RewriteExtension);
+                return string.Format("{0}feed/comment/postid/{1}{2}", ConfigHelper.SiteUrl, this.PostId);
             }
         }
 
@@ -361,15 +359,6 @@ namespace Jqpress.Blog.Entity
         }
 
         /// <summary>
-        /// 模板
-        /// </summary>
-        public string Template 
-        {
-            get { return _template; }
-            set { _template = value; } 
-        }
-
-        /// <summary>
         /// 推荐
         /// </summary>
         public int Recommend { get; set; }
@@ -378,15 +367,6 @@ namespace Jqpress.Blog.Entity
         /// 状态
         /// </summary>
         public int Status { get; set; }
-
-        /// <summary>
-        /// 置顶
-        /// </summary>
-        public int TopStatus { get; set; }
-        /// <summary>
-        /// 是否首页显示
-        /// </summary>
-        public int HomeStatus { get; set; }
         /// <summary>
         /// 隐藏于列表
         /// </summary>
