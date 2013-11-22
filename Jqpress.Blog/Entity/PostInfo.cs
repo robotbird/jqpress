@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +22,7 @@ namespace Jqpress.Blog.Entity
 
             return other.PostId.CompareTo(this.PostId);
         }
- 
+
         private int _urltype;
         private int _commentstatus;
 
@@ -48,7 +48,7 @@ namespace Jqpress.Blog.Entity
                 {
 
                     case PostUrlFormat.Slug:
-                       // url = string.Format("{0}post/{1}", ConfigHelper.SiteUrl, !string.IsNullOrEmpty(this.Slug) ? Jqpress.Framework.Web.HttpHelper.UrlEncode(this.Slug) : this.PostId.ToString());
+                        // url = string.Format("{0}post/{1}", ConfigHelper.SiteUrl, !string.IsNullOrEmpty(this.Slug) ? Jqpress.Framework.Web.HttpHelper.UrlEncode(this.Slug) : this.PostId.ToString());
                         url = string.Format("{0}post/{1}", ConfigHelper.SiteUrl, this.PostId.ToString());
                         break;
 
@@ -101,7 +101,7 @@ namespace Jqpress.Blog.Entity
         {
             get
             {
-                return string.Format("{0}feed/comment/postid/{1}", ConfigHelper.SiteUrl, this.PostId);
+                return string.Format("{0}feed/comment/postid/{1}{2}", ConfigHelper.SiteUrl, this.PostId);
             }
         }
 
@@ -234,7 +234,7 @@ namespace Jqpress.Blog.Entity
         {
             get
             {
-                
+
                 List<PostInfo> list = PostService.GetPostList();
 
                 PostInfo post = list.Find(p => p.PostStatus == 0 && p.Status == 1 && p.PostId < this.PostId);
@@ -285,16 +285,7 @@ namespace Jqpress.Blog.Entity
                 return list2;
             }
         }
-        /// <summary>
-        /// draft
-        /// </summary>
-        public string StatusStr 
-        {
-            get 
-            {
-                return Status==0?"草稿":"";
-            }
-        }
+
 
         #endregion
 
