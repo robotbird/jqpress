@@ -285,7 +285,16 @@ namespace Jqpress.Blog.Entity
                 return list2;
             }
         }
-
+        /// <summary>
+        /// draft
+        /// </summary>
+        public string StatusStr 
+        {
+            get 
+            {
+                return Status==0?"草稿":"";
+            }
+        }
 
         #endregion
 
