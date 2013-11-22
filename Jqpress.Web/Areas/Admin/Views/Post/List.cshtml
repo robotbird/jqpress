@@ -66,8 +66,8 @@
 			<td>
 			[@(new HtmlString(item.Author.Link))]
 			@(new HtmlString(item.Link))
-            @item.Status 
-            @item.PostStatus
+            @item.StatusStr 
+            @item.HideStr
 			</td>
 			<td>@item.CommentCount/@item.ViewCount</td>
 			<td>@item.PostTime.ToString("yyyy-MM-dd")</td>

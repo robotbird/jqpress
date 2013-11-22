@@ -25,7 +25,7 @@ namespace Jqpress.Blog.Entity
 
         private int _urltype;
         private int _commentstatus;
-
+        private string _template = "post.cshtml";
         #region 非字段
 
         private string _url;
@@ -286,6 +286,27 @@ namespace Jqpress.Blog.Entity
             }
         }
 
+        /// <summary>
+        /// draft
+        /// </summary>
+        public string StatusStr
+        {
+            get
+            {
+                return Status == 0 ? "[草稿]" : "";
+            }
+        }
+
+        /// <summary>
+        /// description of PostStatus
+        /// </summary>
+        public string HideStr
+        {
+            get
+            {
+                return PostStatus == 1 ? "[私密]" : "";
+            }
+        }
 
         #endregion
 
@@ -314,7 +335,7 @@ namespace Jqpress.Blog.Entity
         /// 正文
         /// </summary>
         public string PostContent { get; set; }
-
+        public string Template { get; set; }
         /// <summary>
         /// 用户ID
         /// </summary>
@@ -363,6 +384,14 @@ namespace Jqpress.Blog.Entity
         /// </summary>
         public int Recommend { get; set; }
 
+        /// <summary>
+        /// 置顶
+        /// </summary>
+        public int TopStatus { get; set; }
+        /// <summary>
+        /// 是否首页显示
+        /// </summary>
+        public int HomeStatus { get; set; }
         /// <summary>
         /// 状态
         /// </summary>
