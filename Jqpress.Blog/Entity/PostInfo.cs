@@ -101,7 +101,7 @@ namespace Jqpress.Blog.Entity
         {
             get
             {
-                return string.Format("{0}feed/comment/postid/{1}{2}", ConfigHelper.SiteUrl, this.PostId);
+                return string.Format("{0}feed/comment/postid/{1}", ConfigHelper.SiteUrl, this.PostId);
             }
         }
 
