@@ -92,24 +92,12 @@
         var postContent = tinyMCE.activeEditor.getContent();
         var postSummary = $("#Summary");
 
-        var iLength = postSummary.text().length;
-
-        var r = true;
-        if (iLength > 0) {
-            if (!confirm('提取将会覆盖已有摘要,要继续吗?')) {
-                r = false;
-            }
-        }
-        if (r) {
-            var tmpcotent = postContent;
-            if (type == 'full') {
-
-                postSummary.text(tmpcotent);
-            }
-            else {
-                postSummary.text(tmpcotent.replace(/<[^>]+>/g, "").substring(0, 300));
-            }
-        }
+         if (type == 'full') {
+             postSummary.text(postContent);
+         }
+         else {
+             postSummary.text(postContent.replace(/<[^>]+>/g, "").substring(0, 300));
+         }
         return false;
     }
 </script>
@@ -184,7 +172,7 @@
 </div>
 <div id="propertywrap">
 
- <input id="chkStatus" type="checkbox" name="chkStatus" value="1"  @(Model.Post.Status == 0 ? "checked" : "") /><label for="chkStatus">草稿</label>
+ <input id="chkStatus" type="checkbox" name="chkStatus" value="1"   @(Model.Post.Status == 0 && Model.Post.PostId>0 ? "checked" : "") /><label for="chkStatus">草稿</label>
     <input id="chkCommentStatus" type="checkbox" value="1"  name="chkCommentStatus" @(Model.Post.CommentStatus == 1 ? "checked" : "") /><label for="chkCommentStatus">允许评论</label>
   <span title="不会出现在文章列表,常用于留言本,关于我的页面!"><input id="chkHideStatus" type="checkbox" name="chkHideStatus" @(Model.Post.PostStatus == 1 ? "checked" : "") /><label for="chkHideStatus">私有</label></span>
   <span title="自动将远程图片保存到本地"><input id="chkSaveImage" type="checkbox" name="chkSaveImage" value="1"  /><label for="chkSaveImage">保存远程图片</label></span>
