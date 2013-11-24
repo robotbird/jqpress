@@ -307,7 +307,7 @@ namespace Jqpress.Blog.Services
                     list = DatabaseProvider.Instance.GetPostList(pageSize, pageIndex, out recordCount, categoryId, tagId, userId, recommend, status, topstatus, PostStatus, begindate, enddate, keyword);
                 }
 
-                return new PagedList<PostInfo>(list,pageIndex-1,pageSize);
+                return new PagedList<PostInfo>(list, pageIndex - 1, pageSize, recordCount);
             }
             catch (Exception e)
             {

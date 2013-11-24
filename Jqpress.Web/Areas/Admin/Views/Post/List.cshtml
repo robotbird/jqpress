@@ -82,4 +82,4 @@
           
 </table>
 </form>		  		
-@Html.Pager(Model.PageList)
+<div id="pager" class= "pager">@Html.Pager(Model.PageList).ShowTotalSummary(true).ShowIndividualPages(true)</div>

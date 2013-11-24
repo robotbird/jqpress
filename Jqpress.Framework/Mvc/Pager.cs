@@ -111,8 +111,11 @@ namespace Jqpress.Framework.Mvc
 
             if (showTotalSummary && (model.TotalPages > 0))
             {
-                links.Append(string.Format("页 {0} of {1} (共 {2}页)", model.PageIndex + 1, model.TotalPages, model.TotalItems));
-                links.Append("&nbsp;");
+                //<span class="total">共有<strong>1</strong>条</span><span class="current">1</span>
+                //links.Append(string.Format("页 {0} of {1} (共{2}记录)", model.PageIndex + 1, model.TotalPages, model.TotalItems));
+                links.Append(string.Format("<span class=\"total\">共<strong>{0}</strong>记录</span>", model.TotalItems));
+
+                //links.Append("&nbsp;");
             }
             if (showPagerItems && (model.TotalPages > 1))
             {
@@ -120,17 +123,17 @@ namespace Jqpress.Framework.Mvc
                 {
                     if ((model.PageIndex >= 3) && (model.TotalPages > individualPagesDisplayedCount))
                     {
-                        if (showIndividualPages)
-                        {
-                            links.Append("&nbsp;");
-                        }
+                        //if (showIndividualPages)
+                        //{
+                        //    links.Append("&nbsp;");
+                        //}
 
                         links.Append(CreatePageLink(1, "第一页"));
 
-                        if ((showIndividualPages || (showPrevious && (model.PageIndex > 0))) || showLast)
-                        {
-                            links.Append("&nbsp;...&nbsp;");
-                        }
+                        //if ((showIndividualPages || (showPrevious && (model.PageIndex > 0))) || showLast)
+                        //{
+                        //    links.Append("&nbsp;...&nbsp;");
+                        //}
                     }
                 }
                 if (showPrevious)
@@ -139,10 +142,10 @@ namespace Jqpress.Framework.Mvc
                     {
                         links.Append(CreatePageLink(model.PageIndex, "上一页"));
 
-                        if ((showIndividualPages || showLast) || (showNext && ((model.PageIndex + 1) < model.TotalPages)))
-                        {
-                            links.Append("&nbsp;");
-                        }
+                        //if ((showIndividualPages || showLast) || (showNext && ((model.PageIndex + 1) < model.TotalPages)))
+                        //{
+                        //    links.Append("&nbsp;");
+                        //}
                     }
                 }
                 if (showIndividualPages)
@@ -153,26 +156,26 @@ namespace Jqpress.Framework.Mvc
                     {
                         if (model.PageIndex == i)
                         {
-                            links.AppendFormat("<span>{0}</span>", (i + 1));
+                            links.AppendFormat("<span class=\"current\">{0}</span>", (i + 1));
                         }
                         else
                         {
                             links.Append(CreatePageLink(i + 1, (i + 1).ToString()));
                         }
-                        if (i < lastIndividualPageIndex)
-                        {
-                            links.Append("&nbsp;");
-                        }
+                        //if (i < lastIndividualPageIndex)
+                        //{
+                        //    links.Append("&nbsp;");
+                        //}
                     }
                 }
                 if (showNext)
                 {
                     if ((model.PageIndex + 1) < model.TotalPages)
                     {
-                        if (showIndividualPages)
-                        {
-                            links.Append("&nbsp;");
-                        }
+                        //if (showIndividualPages)
+                        //{
+                        //    links.Append("&nbsp;");
+                        //}
 
                         links.Append(CreatePageLink(model.PageIndex + 2, "下一页"));
                     }
@@ -183,14 +186,14 @@ namespace Jqpress.Framework.Mvc
                     {
                         if (showIndividualPages || (showNext && ((model.PageIndex + 1) < model.TotalPages)))
                         {
-                            links.Append("&nbsp;...&nbsp;");
+                            //links.Append("&nbsp;...&nbsp;");
+                            links.Append("...");
                         }
 
                         links.Append(CreatePageLink(model.TotalPages, "末页"));
                     }
                 }
             }
-
 			return links.ToString();
 		}
 
