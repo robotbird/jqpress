@@ -5,6 +5,7 @@ using System.Data.OleDb;
 using System.Data;
 using Jqpress.Framework.DbProvider.Access;
 using Jqpress.Framework.Configuration;
+using Jqpress.Framework.Utils;
 using Jqpress.Blog.Entity.Enum;
 
 namespace Jqpress.Blog.Data.Access
@@ -78,7 +79,7 @@ namespace Jqpress.Blog.Data.Access
                                 OleDbHelper.MakeInParam("@Type",OleDbType.Integer,1,(int)CategoryType.Category),
                                 OleDbHelper.MakeInParam("@ParentId",OleDbType.Integer,4,category.ParentId),
 								OleDbHelper.MakeInParam("@CateName",OleDbType.VarWChar,255,category.CateName),
-                                OleDbHelper.MakeInParam("@Slug",OleDbType.VarWChar,255,category.Slug),
+                                OleDbHelper.MakeInParam("@Slug",OleDbType.VarWChar,255,TypeConverter.ObjectToString(category.Slug)),
 								OleDbHelper.MakeInParam("@Description",OleDbType.VarWChar,255,category.Description),
                                 OleDbHelper.MakeInParam("@SortNum",OleDbType.Integer,4,category.SortNum),
 								OleDbHelper.MakeInParam("@PostCount",OleDbType.Integer,4,category.PostCount),
