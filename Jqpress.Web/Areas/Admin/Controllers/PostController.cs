@@ -27,7 +27,8 @@ namespace Jqpress.Web.Areas.Admin.Controllers
     //TODO: 文章搜索，增加时间
     //TODO: 文章状态
     //TODO: 参考wordpress列表改造
-    //TODO: post 的model重构
+    //TODO: post 的model重构，参照nopcommerce
+    //TODO: post 编辑状态的草稿和私有状态的选中状态不正确，参照wordpress
     public class PostController : BaseAdminController
     {
         public ActionResult List()
