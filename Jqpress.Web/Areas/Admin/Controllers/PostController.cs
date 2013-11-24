@@ -26,9 +26,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 {
     //TODO: 文章搜索，增加时间
     //TODO: 文章状态
-    //TODO: 删除提示
     //TODO: 参考wordpress列表改造
-    //TODO: 列表分页样式
     //TODO: post 的model重构
     public class PostController : BaseAdminController
     {
@@ -85,6 +83,31 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             PostService.DeletePost(postId);
 
             return RedirectToAction("list");
+        }
+        /// <summary>
+        /// batch delete post
+        /// </summary>
+        public ActionResult Deletes()
+        {
+            if (CurrentUser.UserType != (int)UserType.Administrator)
+            {
+                return Content("没有权限");
+            }
+            else
+            {
+                string strid = PressRequest.GetQueryString("strid");
+                if (strid.Length > 0)
+                {
+                    foreach (string id in strid.Split(','))
+                    {
+                        if (id != "")
+                        {
+                            PostService.DeletePost(Convert.ToInt32(id));
+                        }
+                    }
+                }
+                return Content("success");
+            }
         }
         /// <summary>
         /// get article

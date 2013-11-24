@@ -80,7 +80,7 @@ namespace Jqpress.Blog.Data.Access
                                 OleDbHelper.MakeInParam("@ParentId",OleDbType.Integer,4,category.ParentId),
 								OleDbHelper.MakeInParam("@CateName",OleDbType.VarWChar,255,category.CateName),
                                 OleDbHelper.MakeInParam("@Slug",OleDbType.VarWChar,255,TypeConverter.ObjectToString(category.Slug)),
-								OleDbHelper.MakeInParam("@Description",OleDbType.VarWChar,255,category.Description),
+								OleDbHelper.MakeInParam("@Description",OleDbType.VarWChar,255,TypeConverter.ObjectToString(category.Description)),
                                 OleDbHelper.MakeInParam("@SortNum",OleDbType.Integer,4,category.SortNum),
 								OleDbHelper.MakeInParam("@PostCount",OleDbType.Integer,4,category.PostCount),
 								OleDbHelper.MakeInParam("@CreateTime",OleDbType.Date,8,category.CreateTime),

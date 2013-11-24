@@ -22,9 +22,9 @@
             if (strid != "") {
                 $.ajax({
                     type: "GET",
-                    url: '@Url.Action("Delete", "Post")',
+                    url: '@Url.Action("Deletes", "Post")',
                     data: "action=" + $("#selectact").val() + "&strid=" + strid,
-                    success: function (msg) { $.each(chkid, function (i, n) { if (n.checked) { $("#post" + n.value).hide(); } }); }
+                    success: function (msg) { $.each(chkid, function (i, n) { if (n.checked) { $("#post" + n.value).hide(600); } }); }
                 });
             }
         });
@@ -61,7 +61,7 @@
 		 
 	@foreach (var item in Model.PostList)
  {
-		  <tr id="post @item.PostId">
+		  <tr id="post@(item.PostId)">
 			<td><input type="checkbox" name="chkid" value="@item.PostId" /> </td>
 			<td>
 			[@(new HtmlString(item.Author.Link))]
