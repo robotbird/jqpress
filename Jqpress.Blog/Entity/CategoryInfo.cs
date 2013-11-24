@@ -36,10 +36,10 @@ namespace Jqpress.Blog.Entity
             //get { return _url; }
             get
             {
-                string url = string.Format("{0}category/{1}{2}", ConfigHelper.SiteUrl, this.CategoryId, BlogConfig.GetSetting().RewriteExtension);
+                string url = string.Format("{0}category/{1}", ConfigHelper.SiteUrl, this.CategoryId);
                 if (!string.IsNullOrEmpty(this.Slug))
                 {
-                    url = string.Format("{0}category/{1}{2}", ConfigHelper.SiteUrl, Jqpress.Framework.Web.HttpHelper.UrlEncode(this.Slug), BlogConfig.GetSetting().RewriteExtension);
+                    url = string.Format("{0}category/{1}", ConfigHelper.SiteUrl, Jqpress.Framework.Web.HttpHelper.UrlEncode(this.Slug));
                 }
                 return url;
             }
