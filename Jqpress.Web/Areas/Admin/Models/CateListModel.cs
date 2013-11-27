@@ -7,17 +7,22 @@ using Jqpress.Blog.Entity;
 
 namespace Jqpress.Web.Areas.Admin.Models
 {
+    //TODO:列表
+    //TODO:增
+    //TODO:删
+    //TODO:改
     public class CateListModel
     {
         public CateListModel() 
         {
             CateSelectItem = new List<SelectListItem>();
+            CateList = new List<CategoryInfo>();
         }
         /// <summary>
         /// post's category selectitem
         /// </summary>
         public List<SelectListItem> CateSelectItem { get; set; }
 
-        public List<CategoryInfo>
+        public List<CategoryInfo> CateList { get; set; }
     }
 }

@@ -155,8 +155,7 @@
             <td>创建日期</td>
             <td>操作</td>
         </tr>
-        <asp:Repeater ID="rptCategory" runat="server">
-            <ItemTemplate>
+        @foreach(var item in Model.CateList)
                 <tr class="row" id="row<%# DataBinder.Eval(Container.DataItem, "categoryid")%>">
                     <td><%# DataBinder.Eval(Container.DataItem, "SortNum")%></td>
                     <td><%#  DataBinder.Eval(Container.DataItem,"TreeChar")%> <a href="<%# DataBinder.Eval(Container.DataItem, "Url")%>" ><%# DataBinder.Eval(Container.DataItem, "CateName")%></a></td>
