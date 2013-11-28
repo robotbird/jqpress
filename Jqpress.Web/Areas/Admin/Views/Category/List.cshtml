@@ -7,14 +7,14 @@
 <script type="text/javascript">
     //修改操作
     function getJsonData(id) {
-        $.getJSON("category_list.aspx?act=getjson&id=" + id + "&r=" + Math.random(), function (json) {
+        $.getJSON('@Url.Action("Edit", "Category",new{dt=DateTime.Now})',{id:id}, function (json) {
             $("#Name").val(json.CateName);
             $("#Slug").val(json.Slug);
             $("#Description").val(json.Description);
             $("#DisplayOrder").val(json.SortNum);
 
 
-            $("select#<%=ddlCategory.ClientID%> option[value='" + json.ParentId + "']").attr('selected', 'true');
+            $("select#CategoryId option[value='" + json.ParentId + "']").attr('selected', 'true');
             $("#hidCategoryId").val(json.CategoryId);
             $("#submit").val("修改");
             $(".formzone").show("slow");
@@ -24,7 +24,8 @@
     function deleteRow(id) {
         if (confirm('删除分类不会删除所属的文章,确定要删除吗?')) {
             $.ajax({
-                url: "category_list.aspx?act=delete&id=" + id + "&r=" + Math.random(),
+                url: '@Url.Action("Delete", "Category",new{dt=DateTime.Now})',
+                data:{id:id},
                 success: function (msg) {
                     $("#row" + id).fadeOut(500);
                 }
@@ -37,7 +38,7 @@
         //初始化表单
         function InitForm() {
             $(':text').each(function (i, n) { n.value = ''; });
-            $("select#<%=ddlCategory.ClientID%> option[value='0']").attr('selected', 'true');
+            $("select#CategoryId option[value='0']").attr('selected', 'true');
 
             $('#hidCategoryId').each(function (i, n) { n.value = ''; });
             $("#submit").val("添加");
@@ -74,7 +75,7 @@
 
             jQuery.ajax({
                 type: 'POST', // 设置请求类型为 ‘POST’，默认为 ‘GET’
-                url: 'category_list.aspx?act=' + act, //
+                url: '@Url.Action("Save", "Category",new{dt=DateTime.Now})', //
                 data: $('#aspnetForm').serialize(), // 从表单中获取数据  
                 beforeSend: function () { },
                 error: function (XMLHttpRequest, textStatus, errorThrown) { alert(textStatus); },
@@ -119,25 +120,25 @@
 		</div>
 <div class="formzone" style="display:none;">
     <input type="hidden" id="hidCategoryId" name="hidCategoryId" value="" />
-    <div><label class="label" for="<%=Name.ClientID %>">名称:</label>
-    <asp:TextBox ID="Name" runat="server"  Width="150"  CssClass="solid-text"></asp:TextBox>
+    <div><label class="label" for="Name">名称:</label>
+    <input id="Name" name="Name"   width="150"  class="solid-text"/>
     <span>这将是它在站点上显示的名字</span>
     </div>
-    <div><label class="label" for="<%=ddlCategory.ClientID %>">父类:</label>
-    <asp:DropDownList ID="ddlCategory" CssClass="select" runat="server"></asp:DropDownList>
+    <div><label class="label" for="CategoryId">父类:</label>
+    @Html.DropDownList("CategoryId", Model.CateSelectItem, new { @class = "select" })
     <span>你可以在一个分类下创建很多子类，这样便于管理和分类</span>
     </div>
     
-    <div><label class="label"  for="<%=Slug.ClientID %>">别名:<span  class="gray small"  ></span></label>
-    <asp:TextBox ID="Slug" runat="server"  Width="150"  CssClass="solid-text"></asp:TextBox>
+    <div><label class="label"  for="Slug">别名:<span  class="gray small"  ></span></label>
+    <input id="Slug" name="Slug"   width="150"  class="solid-text"/>
     <span>“别名”是对于 URL 友好的一个别称。它通常为小写并且只能包含字母，中文，数字和连字符（-）。</span>
     </div>
-    <div><label class="label"  for="<%=Description.ClientID %>">描述:</label>
-    <asp:TextBox ID="Description" runat="server"  Width="300"  CssClass="solid-text"></asp:TextBox>
+    <div><label class="label"  for="Description">描述:</label>
+    <input id="Description" name="Description"   width="300"  class="solid-text"/>
     <span>描述不一定会显示，但是他是很友好的提示。</span>
     </div>
-    <div><label class="label" for="<%=DisplayOrder.ClientID %>">排序:</label>
-    <asp:TextBox ID="DisplayOrder" runat="server" Width="30" CssClass="solid-text"></asp:TextBox>
+    <div><label class="label" for="DisplayOrder">排序:</label>
+    <input id="DisplayOrder" name="DisplayOrder"  width="30" class="solid-text"/>
     <span class="m_desc">越小越靠前</span>
     </div>
     <div>
@@ -155,15 +156,14 @@
             <td>创建日期</td>
             <td>操作</td>
         </tr>
-        @foreach(var item in Model.CateList)
-                <tr class="row" id="row<%# DataBinder.Eval(Container.DataItem, "categoryid")%>">
-                    <td><%# DataBinder.Eval(Container.DataItem, "SortNum")%></td>
-                    <td><%#  DataBinder.Eval(Container.DataItem,"TreeChar")%> <a href="<%# DataBinder.Eval(Container.DataItem, "Url")%>" ><%# DataBinder.Eval(Container.DataItem, "CateName")%></a></td>
-                    <td><%# DataBinder.Eval(Container.DataItem, "Description")%></td>
-                    <td><%#  DataBinder.Eval(Container.DataItem,"PostCount")%></td>
-                    <td><%# Convert.ToDateTime( DataBinder.Eval(Container.DataItem, "CreateTime")).ToString("yyyy-MM-dd")%></td>            
-                    <td><a class="edit" href="javascript:void(0)" id="<%# DataBinder.Eval(Container.DataItem, "categoryid")%>">编辑</a> <a class="delete" href="javascript:void(0)" id="<%# DataBinder.Eval(Container.DataItem, "categoryid")%>">删除</a></td>
+        @foreach(var item in Model.CateList){
+                <tr class="row" id="row@(item.CategoryId)">
+                    <td>@item.SortNum</td>
+                    <td>@item.TreeChar <a href="@item.Url" > @item.CateName</a></td>
+                    <td>@item.Description</td>
+                    <td>@item.PostCount</td>
+                    <td>@item.CreateTime.ToString("yyyy-MM-dd")</td>            
+                    <td><a class="edit" href="javascript:void(0)" id="@item.CategoryId">编辑</a> <a class="delete" href="javascript:void(0)" id="@item.CategoryId">删除</a></td>
                 </tr>
-            </ItemTemplate>
-        </asp:Repeater>
+         }
     </table>
