@@ -29,7 +29,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// ajax获取json值
+        /// get category by id
         /// </summary>
         public JsonResult Edit(int? id)
         {
@@ -38,7 +38,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             return Json(term, JsonRequestBehavior.AllowGet);
         }
         /// <summary>
-        /// ajax删除操作
+        /// delete categroy by id
         /// </summary>
         public ContentResult Delete(int? id)
         {
@@ -51,9 +51,22 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         /// </summary>
         /// <param name="cat"></param>
         /// <returns></returns>
-        public ContentResult Save(CategoryInfo cat)
+        [HttpPost, ActionName("Save"), ValidateInput(false)]        
+        public JsonResult Save(CategoryInfo cat)
         {
-             return Content("");
+            if (cat.CategoryId > 0)
+            {
+                cat = CategoryService.GetCategory(PressRequest.GetFormInt("hidCategoryId", 0));
+                CategoryService.UpdateCategory(cat);
+            }
+            else 
+            {
+                cat.CreateTime = DateTime.Now;
+                cat.PostCount = 0;
+                CategoryService.InsertCategory(cat);
+            }
+
+            return Json(cat, JsonRequestBehavior.AllowGet);
         }
 
     }

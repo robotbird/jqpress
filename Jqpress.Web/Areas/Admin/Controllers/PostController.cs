@@ -39,12 +39,6 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             int userId = PressRequest.GetQueryInt("userid", -1);
             int hide = PressRequest.GetQueryInt("hide", -1);
 
-            // txtKeyword.Text = keyword; 暂时注释
-            // ddlCategory.SelectedValue = categoryId.ToString();
-            //ddlAuthor.SelectedValue = userId.ToString();
-            //  chkRecommend.Checked = recommend == 1 ? true : false; 暂时注释
-            //chkHideStatus.Checked = hide == 1 ? true : false; 暂时注释
-
             var catelist = CategoryService.GetCategoryList();
 
             const int pageSize = 10;
