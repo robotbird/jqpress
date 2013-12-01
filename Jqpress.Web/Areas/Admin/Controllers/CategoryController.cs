@@ -4,12 +4,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Jqpress.Framework.Web;
+using Jqpress.Framework.Utils;
 using Jqpress.Blog.Services;
 using Jqpress.Blog.Entity;
 using Jqpress.Web.Areas.Admin.Models;
 
 namespace Jqpress.Web.Areas.Admin.Controllers
 {
+    //TODO: 保持分类
     public class CategoryController : Controller
     {
 
@@ -34,8 +36,8 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         public JsonResult Edit(int? id)
         {
             var cid = id??0;
-            CategoryInfo term = CategoryService.GetCategory(cid);
-            return Json(term, JsonRequestBehavior.AllowGet);
+            CategoryInfo cat = CategoryService.GetCategory(cid);
+            return Json(cat, JsonRequestBehavior.AllowGet);
         }
         /// <summary>
         /// delete categroy by id
@@ -54,9 +56,17 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         [HttpPost, ActionName("Save"), ValidateInput(false)]        
         public JsonResult Save(CategoryInfo cat)
         {
+
+            if (string.IsNullOrEmpty(cat.Slug))
+            {
+                cat.Slug = cat.CateName;
+            }
+
+            cat.Slug = HttpHelper.HtmlEncode(StringHelper.FilterSlug(cat.Slug, "cate"));
+            cat.SortNum = TypeConverter.StrToInt(cat.SortNum, 1000);
             if (cat.CategoryId > 0)
             {
-                cat = CategoryService.GetCategory(PressRequest.GetFormInt("hidCategoryId", 0));
+                cat = CategoryService.GetCategory(cat.CategoryId);
                 CategoryService.UpdateCategory(cat);
             }
             else 
@@ -65,6 +75,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                 cat.PostCount = 0;
                 CategoryService.InsertCategory(cat);
             }
+            cat.TreeChar = CategoryService.GetCategoryTreeList().Find(c => c.CategoryId == cat.CategoryId).TreeChar;
 
             return Json(cat, JsonRequestBehavior.AllowGet);
         }

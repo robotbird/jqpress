@@ -8,14 +8,14 @@
     //修改操作
     function getJsonData(id) {
         $.getJSON('@Url.Action("Edit", "Category",new{dt=DateTime.Now})',{id:id}, function (json) {
-            $("#Name").val(json.CateName);
+            $("#CateName").val(json.CateName);
             $("#Slug").val(json.Slug);
             $("#Description").val(json.Description);
-            $("#DisplayOrder").val(json.SortNum);
+            $("#SortNum").val(json.SortNum);
 
 
-            $("select#CategoryId option[value='" + json.ParentId + "']").attr('selected', 'true');
-            $("#hidCategoryId").val(json.CategoryId);
+            $("select#ParentId option[value='" + json.ParentId + "']").attr('selected', 'true');
+            $("#CategoryId").val(json.CategoryId);
             $("#submit").val("修改");
             $(".formzone").show("slow");
         });
@@ -38,9 +38,9 @@
         //初始化表单
         function InitForm() {
             $(':text').each(function (i, n) { n.value = ''; });
-            $("select#CategoryId option[value='0']").attr('selected', 'true');
+            $("select#ParentId option[value='0']").attr('selected', 'true');
 
-            $('#hidCategoryId').each(function (i, n) { n.value = ''; });
+            $('#CategoryId').each(function (i, n) { n.value = ''; });
             $("#submit").val("添加");
         }
 
@@ -68,15 +68,15 @@
             }
         });
         //保存事件
-        $('#aspnetForm').submit(function () {
-            if ($("#Name").val() == '') { return; }
+        $('#form1').submit(function () {
+            if ($("#CateName").val() == '') { return; }
             var act = "add";
-            if ($("#hidCategoryId").val() != '') { act = "update"; }
+            if ($("#CategoryId").val() != '') { act = "update"; }
 
             jQuery.ajax({
                 type: 'POST', // 设置请求类型为 ‘POST’，默认为 ‘GET’
                 url: '@Url.Action("Save", "Category",new{dt=DateTime.Now})', //
-                data: $('#aspnetForm').serialize(), // 从表单中获取数据  
+                data: $('#form1').serialize(), // 从表单中获取数据  
                 beforeSend: function () { },
                 error: function (XMLHttpRequest, textStatus, errorThrown) { alert(textStatus); },
                 dataType: 'json',
@@ -86,7 +86,6 @@
                     _tr += " <td>" + data.TreeChar + "<a href='" + data.Url + "' >" + data.CateName + "</a></td>";
                     _tr += " <td>" + data.Description + "</td>";
                     _tr += " <td>" + data.PostCount + "</td>";
-                    _tr += " <td>" + data.CreateTime + "</td>";
                     _tr += "<td><a class='edit' href='javascript:getJsonData(" + data.CategoryId + ")' id='" + data.CategoryId + "'>编辑</a> <a class='delete' href='javascript:deleteRow(" + data.CategoryId + ")'  id='" + data.CategoryId + "'>删除</a></td>";
                     _tr += "</tr>";
                     InitForm();
@@ -117,15 +116,17 @@
 			<div class="right" style="padding-top:6px;">
 			  <a class="addbtn" href="javascript:void(0)" id="addbtn">添加分类</a></div>
 			<div class="clr"></div>
-		</div>
+ </div>
+
+ <form id="form1" action="">
 <div class="formzone" style="display:none;">
-    <input type="hidden" id="hidCategoryId" name="hidCategoryId" value="" />
-    <div><label class="label" for="Name">名称:</label>
-    <input id="Name" name="Name"   width="150"  class="solid-text"/>
+    <input type="hidden" id="CategoryId" name="CategoryId" value="" />
+    <div><label class="label" for="CateName">名称:</label>
+    <input id="CateName" name="CateName"   width="150"  class="solid-text"/>
     <span>这将是它在站点上显示的名字</span>
     </div>
-    <div><label class="label" for="CategoryId">父类:</label>
-    @Html.DropDownList("CategoryId", Model.CateSelectItem, new { @class = "select" })
+    <div><label class="label" for="ParentId">父类:</label>
+    @Html.DropDownList("ParentId", Model.CateSelectItem, new { @class = "select" })
     <span>你可以在一个分类下创建很多子类，这样便于管理和分类</span>
     </div>
     
@@ -137,8 +138,8 @@
     <input id="Description" name="Description"   width="300"  class="solid-text"/>
     <span>描述不一定会显示，但是他是很友好的提示。</span>
     </div>
-    <div><label class="label" for="DisplayOrder">排序:</label>
-    <input id="DisplayOrder" name="DisplayOrder"  width="30" class="solid-text"/>
+    <div><label class="label" for="SortNum">排序:</label>
+    <input id="SortNum" name="SortNum"  width="30" class="solid-text"/>
     <span class="m_desc">越小越靠前</span>
     </div>
     <div>
@@ -153,7 +154,6 @@
             <td>名称</td>
             <td style="width:40%;">描述</td>
             <td>文章</td>
-            <td>创建日期</td>
             <td>操作</td>
         </tr>
         @foreach(var item in Model.CateList){
@@ -162,8 +162,9 @@
                     <td>@item.TreeChar <a href="@item.Url" > @item.CateName</a></td>
                     <td>@item.Description</td>
                     <td>@item.PostCount</td>
-                    <td>@item.CreateTime.ToString("yyyy-MM-dd")</td>            
                     <td><a class="edit" href="javascript:void(0)" id="@item.CategoryId">编辑</a> <a class="delete" href="javascript:void(0)" id="@item.CategoryId">删除</a></td>
                 </tr>
          }
     </table>
+
+</form>
