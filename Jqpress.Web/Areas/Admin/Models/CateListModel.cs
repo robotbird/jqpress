@@ -7,10 +7,6 @@ using Jqpress.Blog.Entity;
 
 namespace Jqpress.Web.Areas.Admin.Models
 {
-    //TODO:列表
-    //TODO:增
-    //TODO:删
-    //TODO:改
     public class CateListModel
     {
         public CateListModel() 
