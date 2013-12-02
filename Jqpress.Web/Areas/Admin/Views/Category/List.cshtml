@@ -90,9 +90,13 @@
                     _tr += "</tr>";
                     InitForm();
                     $(".formzone").hide("slow");
-
                     if (act == "update") {
-                        $("#row" + data.CategoryId).replaceWith(_tr);
+                        if (data.ParentId > 0) {
+                            $("#row" + data.CategoryId).remove();
+                            $("#row" + data.ParentId).after(_tr); 
+                        } else {
+                            $("#row" + data.CategoryId).replaceWith(_tr);                                                     
+                        }
                     } else {
                         if (data.ParentId > 0) {
                             $("#row" + data.ParentId).after(_tr);
@@ -122,7 +126,7 @@
 <div class="formzone" style="display:none;">
     <input type="hidden" id="CategoryId" name="CategoryId" value="" />
     <div><label class="label" for="CateName">名称:</label>
-    <input id="CateName" name="CateName"   width="150"  class="solid-text"/>
+    <input type="text" id="CateName" name="CateName"   width="150"  class="solid-text"/>
     <span>这将是它在站点上显示的名字</span>
     </div>
     <div><label class="label" for="ParentId">父类:</label>
@@ -131,15 +135,15 @@
     </div>
     
     <div><label class="label"  for="Slug">别名:<span  class="gray small"  ></span></label>
-    <input id="Slug" name="Slug"   width="150"  class="solid-text"/>
+    <input type="text" id="Slug" name="Slug"   width="150"  class="solid-text"/>
     <span>“别名”是对于 URL 友好的一个别称。它通常为小写并且只能包含字母，中文，数字和连字符（-）。</span>
     </div>
     <div><label class="label"  for="Description">描述:</label>
-    <input id="Description" name="Description"   width="300"  class="solid-text"/>
+    <input type="text" id="Description" name="Description"   width="300"  class="solid-text"/>
     <span>描述不一定会显示，但是他是很友好的提示。</span>
     </div>
     <div><label class="label" for="SortNum">排序:</label>
-    <input id="SortNum" name="SortNum"  width="30" class="solid-text"/>
+    <input type="text" id="SortNum" name="SortNum"  width="30" class="solid-text"/>
     <span class="m_desc">越小越靠前</span>
     </div>
     <div>

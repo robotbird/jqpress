@@ -11,7 +11,6 @@ using Jqpress.Web.Areas.Admin.Models;
 
 namespace Jqpress.Web.Areas.Admin.Controllers
 {
-    //TODO: 保持分类
     public class CategoryController : Controller
     {
 
@@ -23,9 +22,9 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 
             var catelist = CategoryService.GetCategoryTreeList();
             model.CateList = catelist;
-            catelist.Add(new CategoryInfo() { CateName = "全部", CategoryId = -1 });
+            catelist.Add(new CategoryInfo() { CateName = "作为一级分类", CategoryId = -1 });
 
-            model.CateSelectItem = catelist.ConvertAll(c => new SelectListItem { Text = c.CateName, Value = c.CategoryId.ToString(), Selected = c.CategoryId == cateid });
+            model.CateSelectItem = catelist.ConvertAll(c => new SelectListItem { Text = c.TreeChar+c.CateName, Value = c.CategoryId.ToString(), Selected = c.CategoryId == cateid });
 
             return View(model);
         }
@@ -66,7 +65,9 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             cat.SortNum = TypeConverter.StrToInt(cat.SortNum, 1000);
             if (cat.CategoryId > 0)
             {
-                cat = CategoryService.GetCategory(cat.CategoryId);
+                var  oldcat = CategoryService.GetCategory(cat.CategoryId);
+                cat.CreateTime = oldcat.CreateTime;
+                cat.PostCount = oldcat.PostCount;
                 CategoryService.UpdateCategory(cat);
             }
             else 
