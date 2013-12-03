@@ -11,18 +11,17 @@ using Jqpress.Web.Areas.Admin.Models;
 
 namespace Jqpress.Web.Areas.Admin.Controllers
 {
-    //TODO:列表分页
     public class TagController : Controller
     {
         public ActionResult List()
         {
             var model = new TagListModel();
-            var catelist = TagService.GetTagList();
             const int pageSize = 10;
             int count = 0;
             int pageIndex = PressRequest.GetInt("page", 1);
-            List<TagInfo> list = TagService.GetTagList(Pager1.PageSize, Pager1.PageIndex, out recordCount);
-            model.TagList = catelist;
+            var list = TagService.GetTagListPage(pageSize, pageIndex, out count);
+            model.PageList.LoadPagedList(list);
+            model.TagList = (List<TagInfo>)list;
             return View(model);
         }
 

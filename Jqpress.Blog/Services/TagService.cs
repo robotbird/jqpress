@@ -6,6 +6,8 @@ using Jqpress.Blog.Data;
 using Jqpress.Blog.Entity;
 using Jqpress.Framework.Utils;
 using Jqpress.Framework.Web;
+using Jqpress.Framework.Mvc;
+
 
 namespace Jqpress.Blog.Services
 {
@@ -196,6 +198,31 @@ namespace Jqpress.Blog.Services
             return rlist;
         }
 
+        /// <summary>
+        /// 获取分页标签
+        /// </summary>
+        /// <param name="pageSize"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="recordCount"></param>
+        /// <returns></returns>
+        public static IPagedList<TagInfo> GetTagListPage(int pageSize, int pageIndex, out int recordCount)
+        {
+            recordCount = Tags.Count;
+            List<TagInfo> list = new List<TagInfo>();
+
+            int start = (pageIndex - 1) * pageSize;
+            int end = start + pageSize;
+            if (end > Tags.Count)
+            {
+                end = Tags.Count;
+            }
+            for (int i = start; i < end; i++)
+            {
+                list.Add(Tags[i]);
+            }
+            return new PagedList<TagInfo>(list, pageIndex - 1, pageSize, recordCount);
+
+        }
 
 
         /// <summary>

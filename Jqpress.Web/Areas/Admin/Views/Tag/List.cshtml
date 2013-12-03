@@ -83,7 +83,7 @@
                 success: function (data) {
                     var _tr = "<tr class='row' style='background:#FFECC6' id='row" + data.TagId + "'>";
                     _tr += "<td>" + data.SortNum + "</td>";
-                    _tr += " <td>" + data.TreeChar + "<a href='" + data.Url + "' >" + data.CateName + "</a></td>";
+                    _tr += " <td><a href='" + data.Url + "' >" + data.CateName + "</a></td>";
                     _tr += " <td>" + data.Description + "</td>";
                     _tr += " <td>" + data.PostCount + "</td>";
                     _tr += "<td><a class='edit' href='javascript:getJsonData(" + data.TagId + ")' id='" + data.TagId + "'>编辑</a> <a class='delete' href='javascript:deleteRow(" + data.TagId + ")'  id='" + data.TagId + "'>删除</a></td>";
@@ -114,7 +114,6 @@
 		<div class="left">标签管理</div>
 			<div class="right" style="padding-top:6px;">
 			  <a class="addbtn" href="javascript:void(0)" id="addbtn">添加标签</a></div>
-			<div class="clr"></div>
  </div>
 
  <form id="form1" action="">
@@ -161,5 +160,8 @@
                 </tr>
          }
     </table>
+
+<div id="pager" class= "pager">@Html.Pager(Model.PageList).ShowTotalSummary(true).ShowIndividualPages(true)</div>
+
 
 </form>
