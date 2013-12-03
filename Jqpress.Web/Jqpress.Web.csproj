@@ -64,6 +64,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CommentController.cs" />
     <Compile Include="Areas\Admin\Controllers\PostController.cs" />
     <Compile Include="Areas\Admin\Controllers\TagController.cs" />
     <Compile Include="Areas\Admin\Models\BaseModel.cs" />
@@ -628,6 +629,7 @@
     <Content Include="Areas\Admin\Views\Shared\_Notifications.cshtml" />
     <Content Include="Areas\Admin\Views\Category\List.cshtml" />
     <Content Include="Areas\Admin\Views\Tag\List.cshtml" />
+    <Content Include="Areas\Admin\Views\Comment\Index.cshtml" />
     <None Include="common\editors\tiny_mce\plugins\syntaxhl\README" />
     <None Include="common\editors\tiny_mce\themes\advanced\img\Thumbs.db" />
     <None Include="common\images\admin\Thumbs.db" />
