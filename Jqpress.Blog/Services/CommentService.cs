@@ -5,6 +5,10 @@ using System.Text;
 using Jqpress.Blog.Data;
 using Jqpress.Blog.Entity;
 using Jqpress.Blog.Entity.Enum;
+using Jqpress.Framework.Utils;
+using Jqpress.Framework.Web;
+using Jqpress.Framework.Mvc;
+
 
 namespace Jqpress.Blog.Services
 {
@@ -183,6 +187,33 @@ namespace Jqpress.Blog.Services
                 floor++;
             }
             return list;
+        }
+
+        /// <summary>
+        /// 获取评论
+        /// </summary>
+        /// <param name="pageSize"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="totalRecord"></param>
+        /// <param name="userId"></param>
+        /// <param name="postId"></param>
+        /// <param name="parentId"></param>
+        /// <param name="approved"></param>
+        /// <param name="emailStatus"></param>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        public static IPagedList<CommentInfo> GetCommentListPage(int pageSize, int pageIndex, out int recordCount, int order, int userId, int postId, int parentId, int approved, int emailNotify, string keyword)
+        {
+            List<CommentInfo> list = DatabaseProvider.Instance.GetCommentList(pageSize, pageIndex, out recordCount, order, userId, postId, parentId, approved, emailNotify, keyword);
+
+            int floor = 1;
+            foreach (CommentInfo comment in list)
+            {
+
+                comment.Floor = pageSize * (pageIndex - 1) + floor;
+                floor++;
+            }
+            return new PagedList<CommentInfo>(list, pageIndex - 1, pageSize, recordCount);
         }
 
         /// <summary>

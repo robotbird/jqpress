@@ -1,0 +1,94 @@
+﻿@using Jqpress.Framework.Mvc
+@using Jqpress.Framework.Utils;
+@model Jqpress.Web.Areas.Admin.Models.CommentModel
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "评论管理 - 管理中心 - Powered by Jqpress";
+}
+
+<script type="text/javascript">
+    var checkFlag = true;
+    function chooseAll() {
+        if (checkFlag) // 全选　
+        {
+            var inputs = document.getElementsByTagName("input");
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].type == "checkbox" && inputs[i].id != "checkAll") {
+                    inputs[i].checked = true;
+                }
+            }
+            checkFlag = false;
+        }
+        else  // 取消 
+        {
+            var inputs = document.getElementsByTagName("input");
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].type == "checkbox" && inputs[i].id != "checkAll") {
+                    inputs[i].checked = false;
+                }
+            }
+            checkFlag = true;
+        }
+    }
+
+</script>
+
+<div class="body_nav"><div class="left">评论</div></div>
+    <%=ResponseMessage%>
+    <table width="100%" class="tbl1">
+        <tr class="header">
+            <td style="width:7%;">选择</td>
+            <td style="width:50%;">评论</td>
+            
+            <td style="width:25%;">作者</td>
+            <td style="width:8%;"><a href="comment_list.aspx?approved=<%=(int)ApprovedStatus.Wait %>">审核</a></td>
+            <td style="width:10%;">操作</td>
+        </tr>
+         @foreach(var item in Model.CommentList){
+                <tr class="row">
+                    <td><input type="checkbox" id="chkRow"  value='@item.CommentId' /></td>
+                    <td style="line-height:150%;">
+                      <%# GetPostLink(Convert.ToInt32(DataBinder.Eval(Container.DataItem, "PostId")))%>
+                    <br />
+                    <a href="@item.Url">
+                        <span title="@item.Contents">
+                            @StringHelper.CutString(StringHelper.RemoveHtml(item.Contents),0,60)
+                        </span>
+                    </a>
+                        <br />
+                        <span class="gray small" >@item.CreateTime</span>
+                    </td>
+                   
+                    <td>      
+                       <div  style="float:left; padding:0 8px 0 0;">
+                            <img src="http://www.gravatar.com/avatar/@item.GravatarCode?size=32" style="width:32px ;height :32px; border:1px solid #999;" alt="gravatar 图像" title="gravatar 图像"/>
+                                  
+                        </div>
+                        <div style="float:left;">
+                                @item.AuthorLink
+                                <span class="gray small">(@item.IpAddress)</span>
+                        <br />
+                         @item.Email
+
+                        </div>
+                                </td>
+                     
+                     
+                    <td>@item.Approved==1 ?"<img src=../images/yes.gif title=已审核/>" : "<img src=../images/no.gif title=未审核/>"}</td>
+                    <td>
+                          @item.Approved==0 ?"<a href=comment_list.aspx>审核</a>":""}
+                         
+                         <a href="comment_list.aspx" onclick="return confirm('确定要删除吗?')">删除</a>   
+                    </td>
+                </tr>
+             }
+        <tr class="rowend">
+            <td colspan="8">
+                <input id="checkAll" onclick="chooseAll()" type="checkbox" name="checkAll" /><label for="checkAll">全选</label>
+                <input type="submit" name="btnApproved" value="审 核" id="btnApproved" class="button" />
+                <input type="submit" name="btnDelete" value="删 除" onclick="return confirm('确定要删除吗?');" id="btnDelete" class="button" />            </td>
+        </tr>
+    </table>
+    
+<div id="pager" class= "pager">@Html.Pager(Model.PageList).ShowTotalSummary(true).ShowIndividualPages(true)</div>
+
