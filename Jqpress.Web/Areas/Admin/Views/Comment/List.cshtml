@@ -31,57 +31,96 @@
         }
     }
 
+    function approve(id) {
+        $.ajax({
+            url: '@Url.Action("Approve", "Comment",new{dt=DateTime.Now})',
+            data: { id: id },
+            success: function (msg) {
+                if (msg == "approve") {
+                    $("#row" + id + " .img-approve").attr("src", "/Content/images/yes.gif").attr("title", "已审核");
+                    $("#row" + id + " .approve").text("取消审核");
+                } else if (msg == "unapprove") {
+                    $("#row" + id + " .img-approve").attr("src", "/Content/images/no.gif").attr("title", "未审核");
+                    $("#row" + id + " .approve").text("审核");
+                 }
+            }
+        });
+    }
+
+    //删除操作
+    function deleteRow(id) {
+        if (confirm('确认删除?')) {
+            $.ajax({
+                url: '@Url.Action("Delete", "Comment",new{dt=DateTime.Now})',
+                data: { id: id },
+                success: function (msg) {
+                    $("#row" + id).fadeOut(500);
+                }
+            });
+        }
+    }
+    $(document).ready(function () {
+        $(".row td .delete").bind("click", function () { deleteRow(this.id); });
+        $(".row td .approve").bind("click", function () { approve(this.id); });
+    });
 </script>
 
 <div class="body_nav"><div class="left">评论</div></div>
-    <%=ResponseMessage%>
     <table width="100%" class="tbl1">
         <tr class="header">
-            <td style="width:7%;">选择</td>
-            <td style="width:50%;">评论</td>
-            
+            <td style="width:5%;">选择</td>
             <td style="width:25%;">作者</td>
-            <td style="width:8%;"><a href="comment_list.aspx?approved=<%=(int)ApprovedStatus.Wait %>">审核</a></td>
+            <td style="width:50%;">评论</td>
+            <td style="width:8%;">审核</td>
             <td style="width:10%;">操作</td>
         </tr>
          @foreach(var item in Model.CommentList){
-                <tr class="row">
+                <tr class="row" id="row@(item.CommentId)">
                     <td><input type="checkbox" id="chkRow"  value='@item.CommentId' /></td>
                     <td style="line-height:150%;">
-                      <%# GetPostLink(Convert.ToInt32(DataBinder.Eval(Container.DataItem, "PostId")))%>
-                    <br />
-                    <a href="@item.Url">
-                        <span title="@item.Contents">
-                            @StringHelper.CutString(StringHelper.RemoveHtml(item.Contents),0,60)
-                        </span>
-                    </a>
+
+                    <div style="float:left;">
+                    <div  style="float:left; padding:0 8px 0 0;">
+                            <img src="http://www.gravatar.com/avatar/@item.GravatarCode?size=32" style="width:32px ;height :32px; border:1px solid #999;" alt="gravatar 图像" title="gravatar 图像"/>
+                    </div>
+                        @item.AuthorLink
                         <br />
-                        <span class="gray small" >@item.CreateTime</span>
+                        @item.Email
+
+                        </div>
+                    <br />
                     </td>
                    
                     <td>      
-                       <div  style="float:left; padding:0 8px 0 0;">
-                            <img src="http://www.gravatar.com/avatar/@item.GravatarCode?size=32" style="width:32px ;height :32px; border:1px solid #999;" alt="gravatar 图像" title="gravatar 图像"/>
-                                  
-                        </div>
-                        <div style="float:left;">
-                                @item.AuthorLink
-                                <span class="gray small">(@item.IpAddress)</span>
+                       <a href="@item.Url">
+                        <span title="@item.Contents">
+                            @StringHelper.CutString(StringHelper.RemoveHtml(item.Contents),0,60)
+                        </span>
+                       </a>
                         <br />
-                         @item.Email
-
-                        </div>
-                                </td>
+                        <span class="gray small" >@item.CreateTime</span>
+                        
+                    </td>
                      
                      
-                    <td>@item.Approved==1 ?"<img src=../images/yes.gif title=已审核/>" : "<img src=../images/no.gif title=未审核/>"}</td>
+                    <td>@if(item.Approved==1){
+                            <img class="img-approve" src="/Content/images/yes.gif" title="已审核"/> 
+                        }else{
+                             <img class="img-approve" src="/Content/images/no.gif" title="未审核"/>
+                        }
+                            </td>
                     <td>
-                          @item.Approved==0 ?"<a href=comment_list.aspx>审核</a>":""}
-                         
-                         <a href="comment_list.aspx" onclick="return confirm('确定要删除吗?')">删除</a>   
+                          @if (item.Approved == 0)
+                          {
+                              <a class="approve"  href="javascript:void(0)" id="@item.CommentId">审核</a>
+                          } else { 
+                              <a class="approve" href="javascript:void(0)" id="@item.CommentId">取消审核</a>                          
+                          }
+                          <br />
+                         <a class="delete" href="javascript:void(0)" id="@item.CommentId">删除</a>   
                     </td>
                 </tr>
-             }
+         }
         <tr class="rowend">
             <td colspan="8">
                 <input id="checkAll" onclick="chooseAll()" type="checkbox" name="checkAll" /><label for="checkAll">全选</label>

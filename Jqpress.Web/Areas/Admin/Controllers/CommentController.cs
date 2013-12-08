@@ -30,5 +30,45 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             model.CommentList = (List<CommentInfo>)list;
             return View(model);
         }
+
+        /// <summary>
+        /// delete
+        public ContentResult Delete(int? id)
+        {
+            var commentId = id ?? 0;
+            CommentService.DeleteComment(commentId);
+            return Content("success");
+        }
+        /// <summary>
+        /// Approve
+        /// </summary>
+        public ContentResult Approve(int? id)
+        {
+            var commentId = id ?? 0;
+            CommentInfo c = CommentService.GetComment(commentId);
+            if (c != null)
+            {
+                if (c.Approved == 1)
+                {
+                    c.Approved = 0;
+                }
+                else 
+                {
+                    c.Approved = 1;                
+                }
+                if (CommentService.UpdateComment(c) > 0)
+                {
+                    if (c.Approved == 1)
+                    {
+                        return Content("approve");
+                    }
+                    else {
+                        return Content("unapprove");                    
+                    }
+                }
+            }
+            return Content("failure");
+        }
+
     }
 }
