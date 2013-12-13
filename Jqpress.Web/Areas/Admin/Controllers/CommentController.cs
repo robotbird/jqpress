@@ -13,9 +13,6 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 {
     public class CommentController : Controller
     {
-        //
-        // GET: /Admin/Comment/
-
         public ActionResult List()
         {
             var model = new CommentModel();

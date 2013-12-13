@@ -83,7 +83,7 @@
                     <div  style="float:left; padding:0 8px 0 0;">
                             <img src="http://www.gravatar.com/avatar/@item.GravatarCode?size=32" style="width:32px ;height :32px; border:1px solid #999;" alt="gravatar 图像" title="gravatar 图像"/>
                     </div>
-                        @item.AuthorLink
+                        @(new MvcHtmlString(item.AuthorLink))
                         <br />
                         @item.Email
 
@@ -121,12 +121,7 @@
                     </td>
                 </tr>
          }
-        <tr class="rowend">
-            <td colspan="8">
-                <input id="checkAll" onclick="chooseAll()" type="checkbox" name="checkAll" /><label for="checkAll">全选</label>
-                <input type="submit" name="btnApproved" value="审 核" id="btnApproved" class="button" />
-                <input type="submit" name="btnDelete" value="删 除" onclick="return confirm('确定要删除吗?');" id="btnDelete" class="button" />            </td>
-        </tr>
+        
     </table>
     
 <div id="pager" class= "pager">@Html.Pager(Model.PageList).ShowTotalSummary(true).ShowIndividualPages(true)</div>

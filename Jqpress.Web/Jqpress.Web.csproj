@@ -67,11 +67,13 @@
     <Compile Include="Areas\Admin\Controllers\CommentController.cs" />
     <Compile Include="Areas\Admin\Controllers\PostController.cs" />
     <Compile Include="Areas\Admin\Controllers\TagController.cs" />
+    <Compile Include="Areas\Admin\Controllers\UserController.cs" />
     <Compile Include="Areas\Admin\Models\BaseModel.cs" />
     <Compile Include="Areas\Admin\Models\CateListModel.cs" />
     <Compile Include="Areas\Admin\Models\PostModel.cs" />
     <Compile Include="Areas\Admin\Models\TagListModel.cs" />
     <Compile Include="Areas\Admin\Models\CommentModel.cs" />
+    <Compile Include="Areas\Admin\Models\UserModel.cs" />
     <Compile Include="common\ajax\comment.ashx.cs">
       <DependentUpon>comment.ashx</DependentUpon>
     </Compile>
@@ -631,6 +633,7 @@
     <Content Include="Areas\Admin\Views\Category\List.cshtml" />
     <Content Include="Areas\Admin\Views\Tag\List.cshtml" />
     <Content Include="Areas\Admin\Views\Comment\List.cshtml" />
+    <Content Include="Areas\Admin\Views\User\List.cshtml" />
     <None Include="common\editors\tiny_mce\plugins\syntaxhl\README" />
     <None Include="common\editors\tiny_mce\themes\advanced\img\Thumbs.db" />
     <None Include="common\images\admin\Thumbs.db" />
