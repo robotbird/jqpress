@@ -47,7 +47,7 @@
         });
     }
 
-    //删除操作
+    //delete comment
     function deleteRow(id) {
         if (confirm('确认删除?')) {
             $.ajax({
@@ -55,6 +55,28 @@
                 data: { id: id },
                 success: function (msg) {
                     $("#row" + id).fadeOut(500);
+                }
+            });
+        }
+    }
+    //batch delete comment
+    function deleteRows() {
+        var chkid = $('input[name="CommentId"]');
+
+        if (chkid == undefined || chkid == "") {
+            alert("请选择评论");
+            return;
+        }
+        if (confirm('确认删除选择的评论')) {
+            $.each(chkid, function (i, n) {
+                if (n.checked) {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "Comment",new{dt=DateTime.Now})',
+                        data: { id: n.value },
+                        success: function (msg) {
+                            $("#row" + n.value).fadeOut(500);
+                        }
+                    });           
                 }
             });
         }
@@ -76,14 +98,14 @@
         </tr>
          @foreach(var item in Model.CommentList){
                 <tr class="row" id="row@(item.CommentId)">
-                    <td><input type="checkbox" id="chkRow"  value='@item.CommentId' /></td>
+                    <td><input type="checkbox"  name="CommentId" value='@item.CommentId' /></td>
                     <td style="line-height:150%;">
 
                     <div style="float:left;">
                     <div  style="float:left; padding:0 8px 0 0;">
                             <img src="http://www.gravatar.com/avatar/@item.GravatarCode?size=32" style="width:32px ;height :32px; border:1px solid #999;" alt="gravatar 图像" title="gravatar 图像"/>
                     </div>
-                        @item.AuthorLink
+                        @Html.Raw(item.AuthorLink)
                         <br />
                         @item.Email
 
@@ -124,8 +146,7 @@
         <tr class="rowend">
             <td colspan="8">
                 <input id="checkAll" onclick="chooseAll()" type="checkbox" name="checkAll" /><label for="checkAll">全选</label>
-                <input type="submit" name="btnApproved" value="审 核" id="btnApproved" class="button" />
-                <input type="submit" name="btnDelete" value="删 除" onclick="return confirm('确定要删除吗?');" id="btnDelete" class="button" />            </td>
+                <input type="submit" name="btnDelete" value="删 除" onclick="deleteRows()" id="btnDelete" class="button" />            </td>
         </tr>
     </table>
     

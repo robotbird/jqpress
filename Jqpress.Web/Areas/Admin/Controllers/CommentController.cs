@@ -15,6 +15,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
     {
         //
         // GET: /Admin/Comment/
+        //TODO:获取评论的文章地址需要优化
 
         public ActionResult List()
         {
