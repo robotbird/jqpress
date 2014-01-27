@@ -74,7 +74,7 @@ namespace Jqpress.Blog.Common
                 }
 
                 string[] plist = new string[] { "theme/list", "theme/edit", "link/list", "user/list", "setting", "category/list", "tag/list", "comment" };
-                if (CurrentUser.UserType == (int)UserType.Author)
+                if (CurrentUser.Role == (int)UserRole.Author)
                 {
                     string pageName = System.IO.Path.GetFileName(HttpContext.Current.Request.Url.ToString()).ToLower();
 

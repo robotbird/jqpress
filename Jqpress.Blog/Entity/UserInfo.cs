@@ -16,10 +16,6 @@ namespace Jqpress.Blog.Entity
 
         public int CompareTo(UserInfo other)
         {
-            if (this.SortNum != other.SortNum)
-            {
-                return this.SortNum.CompareTo(other.SortNum);
-            }
             return this.UserId.CompareTo(other.UserId);
         }
 
@@ -58,9 +54,9 @@ namespace Jqpress.Blog.Entity
         /// </summary>
         public int UserId { get; set; }
         /// <summary>
-        /// 用户类型 
+        /// 用户角色 
         /// </summary>
-        public int UserType { get; set; }
+        public int Role { get; set; }
 
         /// <summary>
         /// 用户账号

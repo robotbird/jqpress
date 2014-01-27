@@ -22,7 +22,7 @@ namespace Jqpress.Blog.Data.Access
                                 values (
                                 @UserType,@UserName,@NickName,@Password,@Email,@SiteUrl,@AvatarUrl,@Description,@SortNum,@Status, @PostCount,@CommentCount,@CreateTime )",ConfigHelper.Tableprefix);
             OleDbParameter[] prams = { 
-                                        OleDbHelper.MakeInParam("@UserType", OleDbType.Integer,4, userinfo.UserType),
+                                        OleDbHelper.MakeInParam("@UserType", OleDbType.Integer,4, userinfo.Role),
                                         OleDbHelper.MakeInParam("@UserName", OleDbType.VarWChar,50, userinfo.UserName),
                                         OleDbHelper.MakeInParam("@NickName", OleDbType.VarWChar,50, userinfo.NickName),
                                         OleDbHelper.MakeInParam("@Password", OleDbType.VarWChar,50, userinfo.Password),
@@ -68,7 +68,7 @@ namespace Jqpress.Blog.Data.Access
                                 [CreateTime]=@CreateTime
                                 where UserId=@UserId",ConfigHelper.Tableprefix);
             OleDbParameter[] prams = { 
-                                        OleDbHelper.MakeInParam("@UserType", OleDbType.Integer,4, userinfo.UserType),
+                                        OleDbHelper.MakeInParam("@UserType", OleDbType.Integer,4, userinfo.Role),
                                         OleDbHelper.MakeInParam("@UserName", OleDbType.VarWChar,50, userinfo.UserName),
                                         OleDbHelper.MakeInParam("@NickName", OleDbType.VarWChar,50, userinfo.NickName),
                                         OleDbHelper.MakeInParam("@Password", OleDbType.VarWChar,50, userinfo.Password),
@@ -124,7 +124,7 @@ namespace Jqpress.Blog.Data.Access
                 var userinfo = new UserInfo
                                    {
                                        UserId = Convert.ToInt32(read["UserId"]),
-                                       UserType = Convert.ToInt32(read["UserType"]),
+                                       Role = Convert.ToInt32(read["UserType"]),
                                        UserName = Convert.ToString(read["UserName"]),
                                        NickName = Convert.ToString(read["NickName"]),
                                        Password = Convert.ToString(read["Password"]),

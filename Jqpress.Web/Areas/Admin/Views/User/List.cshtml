@@ -33,31 +33,21 @@
 
     //修改操作
     function getJsonData(id) {
-        $.getJSON("user_list.aspx?act=getjson&id=" + id + "&r=" + Math.random(), function (json) {
-            $("#<%=txtUserName.ClientID%>").val(json.UserName);
-            $("#<%=txtNickName.ClientID%>").val(json.NickName);
-            $("#<%=txtEmail.ClientID%>").val(json.Email);
-            $("#<%=txtSortNum.ClientID%>").val(json.SortNum);
-            $("#hidUserId").val(json.UserId);
+        $.getJSON('@Url.Action("Edit", "User",new{dt=DateTime.Now})',{id:id}, function (json) {
+            $("#UserName").val(json.UserName);
+            $("#NickName").val(json.NickName);
+            $("#Email").val(json.Email);
+            $("#UserId").val(json.UserId);
             $("#submit").val("修改");
             $(".formzone").show("slow");
         });
-    }
-    //删除操作
-    function deleteRow(id) {
-        if (confirm('删除用户不会删除所属的文章,确定要删除吗?')) {
-            $.ajax({
-                url: "user_list.aspx?act=delete&id=" + id + "&r=" + Math.random(),
-                success: function (msg) { $("#row" + id).fadeOut(500); }
-            });
-        }
     }
 
     $(document).ready(function () {
         //初始化表单
         function InitForm() {
             $(':text').each(function (i, n) { n.value = ''; });
-            $('#hidUserId').each(function (i, n) { n.value = ''; });
+            $('#UserId').each(function (i, n) { n.value = ''; });
             $("#submit").val("添加");
         }
 
@@ -88,11 +78,11 @@
         $('#aspnetForm').submit(function () {
             if ($("#txtUserName").val() == '') { return; }
             var act = "add";
-            if ($("#hidUserId").val() != '') { act = "update"; }
+            if ($("#UserId").val() != '') { act = "update"; }
 
             jQuery.ajax({
                 type: 'POST', // 设置请求类型为 ‘POST’，默认为 ‘GET’
-                url: 'user_list.aspx?act=' + act, //
+                url: '@Url.Action("Save", "User",new{dt=DateTime.Now})', //
                 data: $('#aspnetForm').serialize(), // 从表单中获取数据  
                 beforeSend: function () { },
                 error: function (XMLHttpRequest, textStatus, errorThrown) { alert(textStatus); },
@@ -136,38 +126,35 @@
 	   <div class="clr"></div>
 </div>
 <div class="formzone" style="display:none;">
-   <input type="hidden" id="hidUserId" name="hidUserId" value="" />
+   <input type="hidden" id="UserId" name="UserId" value="" />
     <div>
-        <label class="label" for="<%=ddlUserType.ClientID %>">角色:</label>
-        <asp:DropDownList ID="ddlUserType" runat="server"  CssClass="select">
-            <asp:ListItem Value="1" Text="管理员"></asp:ListItem>
-            <asp:ListItem Value="5" Text="写作者"></asp:ListItem>
-        </asp:DropDownList>
+        <label class="label" >角色:</label>
+        @Html.DropDownList("", Model.RolesCateItem, new { @class = "select" })
     </div>
     <div>
         <label class="label" >用户名:<span class="small gray">(字母,数字,中文,连字符)</span></label>
-        <asp:TextBox ID="txtUserName"    MaxLength="50"  runat="server" Width="20%"  CssClass="solid-text" ></asp:TextBox>
+        <input type="text" value="" id="UserName" name="UserName" class="solid-text" />
     </div>
     <div>
-        <label class="label" for="<%=txtNickName.ClientID %>">昵称:</label>
-        <asp:TextBox ID="txtNickName"   MaxLength="50"  runat="server" Width="20%" CssClass="solid-text" ></asp:TextBox>
+        <label class="label">昵称:</label>
+        <input type="text" value="" id="NickName" name="NickName" class="solid-text"  />
     </div>
     <div>
-        <label class="label" for="<%=txtPassword.ClientID %>">密码:<span class="small gray"></span></label>
-        <asp:TextBox ID="txtPassword" TextMode="password"    runat="server" Width="20%" CssClass="solid-text" ></asp:TextBox>
+        <label class="label" >密码:<span class="small gray"></span></label>
+        <input type="password" value="" id="Password" name="Password" class="solid-text" />
     </div>
     <div>
-        <label class="label" for="<%=txtPassword2.ClientID %>">确认密码:<span class="small gray"></span></label>
-        <asp:TextBox ID="txtPassword2" TextMode="password" runat="server" Width="20%" CssClass="solid-text" ></asp:TextBox>
+        <label class="label">确认密码:<span class="small gray"></span></label>
+        <input type="password" value="" id="Password2" name="Password2" class="solid-text" />
     </div>
-    <div><label class="label" for="<%=txtEmail.ClientID %>">邮箱:</label>
-        <asp:TextBox ID="txtEmail"   runat="server" Width="20%" CssClass="solid-text" ></asp:TextBox>
+    <div><label class="label" >邮箱:</label>
+
+        <input type="text" value="" id="Email" name="Email" class="solid-text" />
+
     </div>
-    <div><label class="label" for="<%=txtSortNum.ClientID %>">排序:</label><asp:TextBox ID="txtSortNum" runat="server" Width="50" CssClass="solid-text"></asp:TextBox>
-        <span class="m_desc">越小越靠前</span>
-    </div>
+   
     <div>
-        <asp:CheckBox ID="chkStatus" runat="server" Text="使用" Checked="true" />
+        <input type="checkbox" id="Status" name="Status" value="1" /> 可用
      </div>
      <div>
          <input type="submit" class="button" id="submit" value="添加" />
@@ -177,30 +164,30 @@
 
     <table width="100%" class="tbl1">
         <tr class="header">
-            <td>排序</td>
             <td>作者(用户名)</td>
             <td>文章/评论</td>
             <td>状态</td>
             <td>创建日期</td>
             <td>操作</td>
         </tr>
-        <asp:Repeater ID="rptUser" runat="server">
-            <ItemTemplate>
-                <tr class="row" id="row<%# DataBinder.Eval(Container.DataItem, "UserId")%>">                 
-                    <td>
-                    
-                    <%# DataBinder.Eval(Container.DataItem, "SortNum")%></td>
-                    <td>
-                        [<%#GetUserType(DataBinder.Eval(Container.DataItem, "UserType"))%>]
-                        <%# DataBinder.Eval(Container.DataItem, "Link")%>
-                    </td>
-                    
-                    <td><%#  DataBinder.Eval(Container.DataItem,"PostCount")%> / <%# DataBinder.Eval(Container.DataItem, "CommentCount")%></td>
-                    
-                    <td><%# DataBinder.Eval(Container.DataItem, "Status").ToString() == "1" ? "<img src=\"../images/yes.gif\" title=\"使用\"/>" : "<img src=\"../images/no.gif\" title=\"停用\"/>"%></td>
-                    <td><%# Convert.ToDateTime( DataBinder.Eval(Container.DataItem, "CreateTime")).ToString("yyyy-MM-dd")%></td>
-                    <td><a class="edit" href="javascript:void(0)" id="<%# DataBinder.Eval(Container.DataItem, "UserId")%>">编辑</a> <a class="delete" href="javascript:void(0)" id="<%# DataBinder.Eval(Container.DataItem, "UserId")%>">删除</a></td>
-                </tr>
-            </ItemTemplate>
-        </asp:Repeater>
+ 
+ @foreach (var item in Model.UserList)
+ {
+		  <tr id="post@(item.UserId)">
+			<td><input type="checkbox" name="chkid" value="@item.UserId" /> </td>
+			<td>
+			@(new HtmlString(item.Link))
+            @item.PostCount /
+            @item.CommentCount
+			</td>
+            <td>状态</td>
+			<td>@item.CreateTime.ToString("yyyy-MM-dd")</td>
+			<td>
+			  	<span><a href="edit?id=@item.UserId"> 编辑 </a></span>
+				<span><a onclick="return confirm('确定要删除吗?');" href="delete?id=@item.UserId"> 删除</a></span>
+		    </td>
+		  </tr>
+ }
+
+
     </table>

@@ -96,17 +96,28 @@ namespace Jqpress.Blog.Entity.Enum
     }
 
     /// <summary>
-    /// 用户类型
+    /// 用户角色
     /// </summary>
-    public enum UserType
+    public enum UserRole
     {
         /// <summary>
         /// 管理员
         /// </summary>
         Administrator = 1,
-
         /// <summary>
-        /// 写作者
+        /// 编辑
+        /// </summary>
+        Editor = 2,
+        /// <summary>
+        /// 订阅者
+        /// </summary>
+        Subscriber =3,
+        /// <summary>
+        /// 投稿者
+        /// </summary>
+        Contributor = 4,
+        /// <summary>
+        /// 作者
         /// </summary>
         Author = 5,
     }

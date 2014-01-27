@@ -70,7 +70,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             {
                 return RedirectToAction("list");
             }
-            if (CurrentUser.UserType != (int)UserType.Administrator && CurrentUser.UserId != post.UserId)
+            if (CurrentUser.Role != (int)UserRole.Administrator && CurrentUser.UserId != post.UserId)
             {
                 return RedirectToAction("list");
             }
@@ -84,7 +84,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         /// </summary>
         public ActionResult Deletes()
         {
-            if (CurrentUser.UserType != (int)UserType.Administrator)
+            if (CurrentUser.Role != (int)UserRole.Administrator)
             {
                 return Content("没有权限");
             }
