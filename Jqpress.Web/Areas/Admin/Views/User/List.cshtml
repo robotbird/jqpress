@@ -26,6 +26,7 @@
             $("#Password2").val("");
             $("#Email").val(json.Email);
             $("#UserId").val(json.UserId);
+            $("input[name='Status']").attr("checked", json.Status ==1? true:false);
             $("#submit").val("修改");
             $(".formzone").show("slow");
         });

@@ -120,10 +120,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                 return Json("用户名限字母,数字,中文,连字符!");
             }
            
-            if (UserService.ExistsUserName(u.UserName))
-            {
-                return Json("该用户名已存在,请换之");
-            }
+            
             #endregion
 
             if (u.UserId>0)//更新操作
@@ -143,6 +140,10 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                 if (string.IsNullOrEmpty(u.Password))
                 {
                     return Json("请输入密码!");
+                }
+                if (UserService.ExistsUserName(u.UserName))
+                {
+                    return Json("该用户名已存在,请换之");
                 }
                 u.UserId = UserService.InsertUser(u);
                 return Json(u);
