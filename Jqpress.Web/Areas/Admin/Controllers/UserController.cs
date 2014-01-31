@@ -71,9 +71,30 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         public JsonResult Save(UserInfo u)
         {
             var password2 = Request.Form["password2"];
-            if (u.UserId>0)
+           
+
+            if (!string.IsNullOrEmpty(u.Password) && u.Password != password2)
             {
-                u = UserService.GetUser(u.UserId);
+                return Json("两次密码输入不相同!");
+            }
+            else 
+            {
+                if (!string.IsNullOrEmpty(u.Password)) 
+                {
+                    u.Password = EncryptHelper.MD5(u.Password);                
+                }
+            }
+
+            if (u.UserId > 0)
+            {
+                var olduser = UserService.GetUser(u.UserId);
+                u.CreateTime = olduser.CreateTime;
+                u.CommentCount = olduser.CommentCount;
+                u.PostCount = olduser.PostCount;
+                if (string.IsNullOrEmpty(u.Password)) 
+                {
+                    u.Password = olduser.Password;
+                }
             }
             else
             {
@@ -81,15 +102,29 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                 u.CreateTime = DateTime.Now;
                 u.PostCount = 0;
             }
+            u.SiteUrl = string.Empty;
+            u.AvatarUrl = string.Empty;
+            u.Description = string.Empty;
 
-            if (!string.IsNullOrEmpty(u.Password))
+
+
+            #region 验证处理
+            if (string.IsNullOrEmpty(u.UserName))
             {
-                u.Password = EncryptHelper.MD5(u.Password);
+                return Json("请输入登陆用户名!");
             }
-            if (!string.IsNullOrEmpty(u.Password) && u.Password != password2)
+
+            System.Text.RegularExpressions.Regex reg = new System.Text.RegularExpressions.Regex("[A-Za-z0-9\u4e00-\u9fa5-]");
+            if (!reg.IsMatch(u.UserName))
             {
-                return Json("两次密码输入不相同!");
+                return Json("用户名限字母,数字,中文,连字符!");
             }
+           
+            if (UserService.ExistsUserName(u.UserName))
+            {
+                return Json("该用户名已存在,请换之");
+            }
+            #endregion
 
             if (u.UserId>0)//更新操作
             {
@@ -104,32 +139,11 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             }
             else//添加操作
             {
-                #region 验证处理
-                if (string.IsNullOrEmpty(u.UserName))
-                {
-                    return Json("请输入登陆用户名!");
-                }
-
-                System.Text.RegularExpressions.Regex reg = new System.Text.RegularExpressions.Regex("[A-Za-z0-9\u4e00-\u9fa5-]");
-                if (!reg.IsMatch(u.UserName))
-                {
-                    return Json("用户名限字母,数字,中文,连字符!");
-                }
-                if (Jqpress.Framework.Utils.Validate.IsInt(u.UserName))
-                {
-                    return Json("用户名不能为全数字!");
-                }
 
                 if (string.IsNullOrEmpty(u.Password))
                 {
                     return Json("请输入密码!");
                 }
-                if (UserService.ExistsUserName(u.UserName))
-                {
-                    return Json("该用户名已存在,请换之");
-                }
-                #endregion
-
                 u.UserId = UserService.InsertUser(u);
                 return Json(u);
             }

@@ -45,6 +45,27 @@ namespace Jqpress.Blog.Entity
 
             get { return string.Format("<a href=\"{0}\" title=\"作者:{1}\">{1}</a>", this.Url, this.NickName); }
         }
+        /// <summary>
+        /// 角色显示
+        /// </summary>
+        public string RoleDisplay 
+        {
+            
+            get 
+            {
+                string display = "";
+                switch (Role) 
+                {
+                    case 1:display = "管理员"; break;
+                    case 2: display = "编辑"; break;
+                    case 3: display = "订阅者"; break;
+                    case 4: display = "投稿者"; break;
+                    case 5: display = "作者"; break;
+                    default: display = "管理员"; break;
+                }
+                return display;
+            }
+        }
 
         #endregion
 
@@ -57,6 +78,8 @@ namespace Jqpress.Blog.Entity
         /// 用户角色 
         /// </summary>
         public int Role { get; set; }
+
+
 
         /// <summary>
         /// 用户账号
