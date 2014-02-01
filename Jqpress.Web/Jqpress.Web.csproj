@@ -65,11 +65,13 @@
     <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\CommentController.cs" />
+    <Compile Include="Areas\Admin\Controllers\FilesController.cs" />
     <Compile Include="Areas\Admin\Controllers\PostController.cs" />
     <Compile Include="Areas\Admin\Controllers\TagController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
     <Compile Include="Areas\Admin\Models\BaseModel.cs" />
     <Compile Include="Areas\Admin\Models\CateListModel.cs" />
+    <Compile Include="Areas\Admin\Models\FilesModel.cs" />
     <Compile Include="Areas\Admin\Models\PostModel.cs" />
     <Compile Include="Areas\Admin\Models\TagListModel.cs" />
     <Compile Include="Areas\Admin\Models\CommentModel.cs" />
@@ -634,6 +636,10 @@
     <Content Include="Areas\Admin\Views\Tag\List.cshtml" />
     <Content Include="Areas\Admin\Views\Comment\List.cshtml" />
     <Content Include="Areas\Admin\Views\User\List.cshtml" />
+    <Content Include="Areas\Admin\Views\Files\FilesBrowser.cshtml" />
+    <Content Include="Areas\Admin\Views\Files\FilesPicBrowser.cshtml" />
+    <Content Include="Areas\Admin\Views\Files\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Files\LocalFilesBrowser.cshtml" />
     <None Include="common\editors\tiny_mce\plugins\syntaxhl\README" />
     <None Include="common\editors\tiny_mce\themes\advanced\img\Thumbs.db" />
     <None Include="common\images\admin\Thumbs.db" />

@@ -1,0 +1,21 @@
+﻿@using Syw.Framework.Mvc
+@model Syw.Admin.Models.Files.ImageListModel
+@{
+    if (ViewBag.MarketId > 0)
+    {
+        Layout = "~/Administration/Views/Shared/_MarketLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Administration/Views/Shared/_AdminLayout.cshtml";
+    }
+}
+
+   <div class="body_nav">
+			<div class="left">文件管理 <span style="font-size:9px;">&gt;&gt;</span>图片列表</div>
+	</div>
+@Html.Action("FilesBrowser", "Files", new { controller = "Files", act = "Index" ,modelid=1})
+
+
+
+
