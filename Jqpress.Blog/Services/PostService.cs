@@ -153,7 +153,8 @@ namespace Jqpress.Blog.Services
             //PostInfo p = DatabaseProvider.Instance.GetPost(postid);
             ////  BuildPost(p);
             //return p;
-
+            PostInfo p = DatabaseProvider.Instance.GetPost(postid);
+            return p;
 
             foreach (PostInfo post in _posts)
             {

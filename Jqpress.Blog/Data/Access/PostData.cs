@@ -105,14 +105,14 @@ namespace Jqpress.Blog.Data.Access
         /// </summary>
         /// <param name="postinfo">实体</param>
         /// <returns>修改的行数</returns>
-        public int UpdatePost(PostInfo postinfo)
+        public int UpdatePost(PostInfo post)
         {
-            CheckSlug(postinfo);
+            CheckSlug(post);
 
             string cmdText = string.Format(@"update [{0}posts] set  
                                        [CategoryId]=@CategoryId,
                                        [Title]=@Title,
-                                      [Summary]=@Summary,
+                                       [Summary]=@Summary,
                                        [PostContent]=@PostContent,
                                        [Slug]=@Slug,
                                        [UserId]=@UserId,
@@ -126,36 +126,38 @@ namespace Jqpress.Blog.Data.Access
                                        [Status]=@Status,
                                        [TopStatus]=@TopStatus,
                                        [HomeStatus]=@HomeStatus,
-                                       [HideStatus]=@HideStatus,
                                        [PostTime]=@PostTime,
                                        [UpdateTime]=@UpdateTime
                                    where [PostId]=@PostId", ConfigHelper.Tableprefix);
 
-            OleDbParameter[] prams = { 
-                                                                
-                                OleDbHelper.MakeInParam("@CategoryId",OleDbType.Integer,4,postinfo.CategoryId),
-                                OleDbHelper.MakeInParam("@Title",OleDbType.VarWChar,255,postinfo.Title),
-                                OleDbHelper.MakeInParam("@Summary",OleDbType.VarWChar,0,postinfo.Summary),
-                                OleDbHelper.MakeInParam("@PostContent",OleDbType.VarWChar,0,postinfo.PostContent),
-                                OleDbHelper.MakeInParam("@Slug",OleDbType.VarWChar,255,postinfo.Slug),
-                                OleDbHelper.MakeInParam("@UserId",OleDbType.Integer,4,postinfo.UserId),
-                                OleDbHelper.MakeInParam("@CommentStatus",OleDbType.Integer,1,postinfo.CommentStatus),
-                                OleDbHelper.MakeInParam("@CommentCount",OleDbType.Integer,4,postinfo.CommentCount),
-                                OleDbHelper.MakeInParam("@ViewCount",OleDbType.Integer,4,postinfo.ViewCount),
-                                OleDbHelper.MakeInParam("@Tag",OleDbType.VarWChar,255,postinfo.Tag),
-                                OleDbHelper.MakeInParam("@UrlFormat",OleDbType.Integer,1,postinfo.UrlFormat),
-                                OleDbHelper.MakeInParam("@Template",OleDbType.VarChar,50,postinfo.Template ),
-                                OleDbHelper.MakeInParam("@Recommend",OleDbType.Integer,1,postinfo.Recommend),
-                                OleDbHelper.MakeInParam("@Status",OleDbType.Integer,1,postinfo.Status),
-                                OleDbHelper.MakeInParam("@TopStatus",OleDbType.Integer,1,postinfo.TopStatus),
-                                OleDbHelper.MakeInParam("@HomeStatus",OleDbType.Integer,1,postinfo.HomeStatus),
-                                OleDbHelper.MakeInParam("@HideStatus",OleDbType.Integer,1,postinfo.PostStatus),
-                                OleDbHelper.MakeInParam("@PostTime",OleDbType.Date,8,postinfo.PostTime),
-                                OleDbHelper.MakeInParam("@UpdateTime",OleDbType.Date,8,postinfo.UpdateTime),
-                                OleDbHelper.MakeInParam("@PostId",OleDbType.Integer,4,postinfo.PostId)
-                                                        };
-            int cnt = OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams);
-            return cnt;
+           
+              using (var conn=dapper.OpenConnection())
+              {
+                  return conn.Execute(cmdText, new
+                  {
+                      CategoryId = post.CategoryId,
+                      Title = post.Title,
+                      Summary = post.Summary,
+                      PostContent = post.PostContent,
+                      Slug = post.Slug,
+                      UserId = post.UserId,
+                      CommentStatus = post.CommentStatus,
+                      CommentCount = post.CommentCount,
+                      ViewCount = post.ViewCount,
+                      Tag = post.Tag,
+                      UrlFormat = post.UrlFormat,
+                      Template = post.Template,
+                      Recommend = post.Recommend,
+                      Status = post.Status,
+                      TopStatus = post.TopStatus,
+                      HomeStatus = post.HomeStatus,
+                      PostTime = post.PostTime.ToString(),
+                      UpdateTime = post.UpdateTime.ToString(),
+                      PostId = post.PostId
+                  });
+              }                                         
+            //int cnt = OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams);
+            //return cnt;
         }
 
         /// <summary>
