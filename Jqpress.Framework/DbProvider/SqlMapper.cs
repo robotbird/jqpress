@@ -1056,8 +1056,9 @@ this IDbConnection cnn, string sql, Func<TFirst, TSecond, TThird, TFourth, TRetu
  
             il.Emit(OpCodes.Ldarg_0); // stack is now [command]
             il.EmitCall(OpCodes.Callvirt, typeof(IDbCommand).GetProperty("Parameters").GetGetMethod(), null); // stack is now [parameters]
- 
-            IEnumerable<PropertyInfo> props = type.GetProperties().OrderBy(p => p.Name);
+
+            //IEnumerable<PropertyInfo> props = type.GetProperties().OrderBy(p => p.Name);//comment by yepeng 20140216
+            IEnumerable<PropertyInfo> props = type.GetProperties();// add by yepeng 20140216
             if (filterParams)
             {
                 props = FilterParameters(props, identity.sql);
