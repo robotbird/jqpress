@@ -32,7 +32,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
     public class PostController : BaseAdminController
     {
         #region private items
-        private _PostService _postService = new _PostService();
+        private PostService _postService = new PostService();
         #endregion;
         public ActionResult List()
         {
@@ -55,7 +55,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 
             if (cateid > 0)
                 pageIndex = pageIndex + 1;
-            var postlist = PostService.GetPostPageList(pageSize, pageIndex, out count, categoryId, tagid, -1, -1, -1, -1, -1, "", "", keyword);
+            var postlist = _postService.GetPostPageList(pageSize, pageIndex, out count, categoryId, tagid, -1, -1, -1, -1, -1, "", "", keyword);
             model.PageList.LoadPagedList(postlist);
             model.PostList = (List<PostInfo>)postlist;
             return View(model);
@@ -68,7 +68,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         public ActionResult Delete()
         {
             int postId = PressRequest.GetQueryInt("id");
-            PostInfo post = PostService.GetPost(postId);
+            PostInfo post = _postService.GetPost(postId);
             if (post == null)
             {
                 return RedirectToAction("list");
@@ -78,7 +78,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                 return RedirectToAction("list");
             }
 
-            PostService.DeletePost(postId);
+            _postService.DeletePost(postId);
 
             return RedirectToAction("list");
         }
@@ -100,7 +100,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                     {
                         if (id != "")
                         {
-                            PostService.DeletePost(Convert.ToInt32(id));
+                            _postService.DeletePost(Convert.ToInt32(id));
                         }
                     }
                 }
@@ -120,7 +120,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 
             if (postid > 0)
             {
-                model.Post = PostService.GetPost(postid);
+                model.Post = _postService.GetPost(postid);
                 model.Post.Tag = model.Post.Tags.Aggregate(string.Empty, (current, t) => current + (t.CateName + ",")).TrimEnd(',');
                 model.CateSelectItem = catelist.ConvertAll(c => new SelectListItem { Text = c.CateName, Value = c.CategoryId.ToString(), Selected = c.CategoryId == model.Post.CategoryId });
             }
@@ -167,20 +167,20 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             }
             if (p.PostId>0)
             {
-               var  post = PostService.GetPost(p.PostId);
+                var post = _postService.GetPost(p.PostId);
                 p.ViewCount = post.ViewCount;
                 p.CommentCount = post.CommentCount;
 
 
                // PostService.UpdatePost(p);
-                _postService.Update(p);
+                _postService.UpdatePost(p);
                 string url = "http://" + PressRequest.GetCurrentFullHost() + "/post/" + (!string.IsNullOrEmpty(p.Slug) ? p.Slug : p.PostId.ToString());
                 SuccessNotification("修改成功。<a href=\"" + url + "\">查看文章</a> ");
             }
             else
             {
                 p.PostTime = DateTime.Now;
-                p.PostId = PostService.InsertPost(p);
+                p.PostId = _postService.InsertPost(p);
                 string url = "http://" + PressRequest.GetCurrentFullHost() + "/post/" + (!string.IsNullOrEmpty(p.Slug) ? p.Slug : p.PostId.ToString());
                 SuccessNotification("发布成功。<a href=\"" + url + "\">查看文章</a> ");
             }

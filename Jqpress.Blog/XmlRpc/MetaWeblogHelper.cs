@@ -174,10 +174,11 @@ namespace Jqpress.Blog.XmlRpc
             ValidateRequest(userName, password);
 
             PostInfo post = new PostInfo();
+            PostService _postService = new PostService();
 
             if (operate == OperateType.Update)
             {
-                post = PostService.GetPost(Jqpress.Framework.Utils.TypeConverter.StrToInt(postID, 0));
+                post = _postService.GetPost(Jqpress.Framework.Utils.TypeConverter.StrToInt(postID, 0));
 
             }
             else
@@ -240,11 +241,11 @@ namespace Jqpress.Blog.XmlRpc
 
             if (operate == OperateType.Update)
             {
-                PostService.UpdatePost(post);
+                _postService.UpdatePost(post);
             }
             else
             {
-                post.PostId = PostService.InsertPost(post);
+                post.PostId = _postService.InsertPost(post);
 
                 //    SendEmail(p);
             }
@@ -298,8 +299,9 @@ namespace Jqpress.Blog.XmlRpc
             ValidateRequest(userName, password);
 
             MWAPost sendPost = new MWAPost();
+            PostService _postService = new PostService();
 
-            PostInfo post = PostService.GetPost(Jqpress.Framework.Utils.TypeConverter.StrToInt(postID, 0));
+            PostInfo post = _postService.GetPost(Jqpress.Framework.Utils.TypeConverter.StrToInt(postID, 0));
 
             sendPost.postID = post.PostId.ToString();
             sendPost.postDate = post.PostTime;
@@ -457,8 +459,9 @@ namespace Jqpress.Blog.XmlRpc
             {
                 userid = user.UserId;
             }
+            PostService _postService = new PostService();
 
-            List<PostInfo> posts = PostService.GetPostList(numberOfPosts, -1, userid, -1, -1, -1, -1);
+            List<PostInfo> posts = _postService.GetPostList(numberOfPosts, -1, userid, -1, -1, -1, -1);
 
             foreach (PostInfo post in posts)
             {
@@ -528,7 +531,8 @@ namespace Jqpress.Blog.XmlRpc
         internal bool DeletePost(string appKey, string postID, string userName, string password, bool publish)
         {
             ValidateRequest(userName, password);
-            PostService.DeletePost(Jqpress.Framework.Utils.TypeConverter.StrToInt(postID, 0));
+            var _postService = new PostService();
+            _postService.DeletePost(Jqpress.Framework.Utils.TypeConverter.StrToInt(postID, 0));
             return true;
         }
 

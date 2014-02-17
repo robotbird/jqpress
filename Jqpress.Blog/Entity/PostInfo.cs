@@ -221,7 +221,7 @@ namespace Jqpress.Blog.Entity
         {
             get
             {
-                List<PostInfo> list = PostService.GetPostList();
+                List<PostInfo> list = (new PostService()).GetPostList();
                 PostInfo post = list.Find(p => p.PostStatus == 0 && p.Status == 1 && p.PostId > this.PostId);
                 return post != null ? post : new PostInfo();
             }
@@ -235,7 +235,7 @@ namespace Jqpress.Blog.Entity
             get
             {
 
-                List<PostInfo> list = PostService.GetPostList();
+                List<PostInfo> list = (new PostService()).GetPostList();
 
                 PostInfo post = list.Find(p => p.PostStatus == 0 && p.Status == 1 && p.PostId < this.PostId);
 
@@ -255,7 +255,7 @@ namespace Jqpress.Blog.Entity
                     return new List<PostInfo>();
                 }
 
-                List<PostInfo> list = PostService.GetPostList().FindAll(p => p.PostStatus == 0 && p.Status == 1);
+                List<PostInfo> list = (new PostService()).GetPostList().FindAll(p => p.PostStatus == 0 && p.Status == 1);
                 string tags = this.Tag.Replace("}", "},");
                 tags = tags.TrimEnd(',');
 

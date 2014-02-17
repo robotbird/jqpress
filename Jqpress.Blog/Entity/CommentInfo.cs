@@ -44,7 +44,7 @@ namespace Jqpress.Blog.Entity
             // set { _url = value; }
             get
             {
-                PostInfo post = PostService.GetPost(this.PostId);
+                PostInfo post = (new PostService()).GetPost(this.PostId);
                 if (post != null)
                 {
                     return string.Format("{0}#comment-{1}", post.Url, this.CommentId);
@@ -120,7 +120,7 @@ namespace Jqpress.Blog.Entity
         {
             get
             {
-                PostInfo post = PostService.GetPost(this.PostId);
+                PostInfo post = (new PostService()).GetPost(this.PostId);
                 if (post != null)
                 {
                     return post;

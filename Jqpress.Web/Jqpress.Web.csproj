@@ -75,9 +75,6 @@
     <Compile Include="Areas\Admin\Models\TagListModel.cs" />
     <Compile Include="Areas\Admin\Models\CommentModel.cs" />
     <Compile Include="Areas\Admin\Models\UserListModel.cs" />
-    <Compile Include="common\ajax\comment.ashx.cs">
-      <DependentUpon>comment.ashx</DependentUpon>
-    </Compile>
     <Compile Include="common\verifycode.aspx.cs">
       <DependentUpon>verifycode.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -625,7 +622,6 @@
     <Content Include="Content\Site.css" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="common\ajax\comment.ashx" />
     <Content Include="common\config\blog.config" />
     <Content Include="common\config\feed.config" />
     <Content Include="common\config\rewrite.config" />

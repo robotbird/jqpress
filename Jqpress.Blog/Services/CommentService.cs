@@ -20,6 +20,8 @@ namespace Jqpress.Blog.Services
         /// </summary>
         private static List<CommentInfo> _recentcomments;
 
+        private PostService _postService = new PostService();
+
         /// <summary>
         /// lock
         /// </summary>
@@ -59,7 +61,8 @@ namespace Jqpress.Blog.Services
             UserService.UpdateUserCommentCount(comment.UserId, 1);
 
             //文章
-            PostService.UpdatePostCommentCount(comment.PostId, 1);
+            //TODO:postservice
+            //PostService.UpdatePostCommentCount(comment.PostId, 1);
 
 
             _recentcomments = null;
@@ -99,7 +102,8 @@ namespace Jqpress.Blog.Services
                 //用户
                 UserService.UpdateUserCommentCount(comment.UserId, -1);
                 //文章
-                PostService.UpdatePostCommentCount(comment.PostId, -1);
+                //TODO:postservice
+                //_postService.UpdatePostCommentCount(comment.PostId, -1);
             }
 
             _recentcomments = null;

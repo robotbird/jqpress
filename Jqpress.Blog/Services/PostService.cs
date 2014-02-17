@@ -11,6 +11,7 @@ using Jqpress.Framework.Configuration;
 using Jqpress.Blog.Data;
 using Jqpress.Blog.Entity;
 using Jqpress.Blog.Configuration;
+using Jqpress.Blog.Repository;
 
 namespace Jqpress.Blog.Services
 {
@@ -33,10 +34,33 @@ namespace Jqpress.Blog.Services
         /// </summary>
         private static object lockHelper = new object();
 
-        static PostService()
+    
+
+
+        #region 私有变量
+        private IPostRepository _postRepository;
+        #endregion
+
+        #region 构造函数
+        /// <summary>
+        /// 构造器方法
+        /// </summary>
+        public PostService()
+            : this(new PostRepository())
         {
+        }
+        /// <summary>
+        /// 构造器方法
+        /// </summary>
+        /// <param name="postRepository"></param>
+        public PostService(IPostRepository postRepository)
+        {
+            this._postRepository = postRepository;
             LoadPost();
         }
+        #endregion
+
+
 
         /// <summary>
         /// 初始化
@@ -61,9 +85,9 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="post"></param>
         /// <returns></returns>
-        public static int InsertPost(PostInfo post)
+        public  int InsertPost(PostInfo post)
         {
-            post.PostId = DatabaseProvider.Instance.InsertPost(post);
+            post.PostId = _postRepository.Insert(post);
 
             _posts.Add(post);
             _posts.Sort();
@@ -87,13 +111,13 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="_postinfo"></param>
         /// <returns></returns>
-        public static int UpdatePost(PostInfo _postinfo)
+        public  int UpdatePost(PostInfo _postinfo)
         {
             //   PostInfo oldPost = GetPost(_postinfo.PostId);   //好像有问题,不能缓存
 
             PostInfo oldPost = GetPostByDatabase(_postinfo.PostId);
 
-            int result = DatabaseProvider.Instance.UpdatePost(_postinfo);
+            int result = _postRepository.Update(_postinfo);
 
             if (oldPost != null && oldPost.CategoryId != _postinfo.CategoryId)
             {
@@ -118,13 +142,13 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="postid"></param>
         /// <returns></returns>
-        public static int DeletePost(int postid)
+        public  int DeletePost(int postid)
         {
             PostInfo oldPost = GetPost(postid);
 
             _posts.Remove(oldPost);
 
-            int result = DatabaseProvider.Instance.DeletePost(postid);
+            int result = _postRepository.Delete(new PostInfo {PostId = postid });
 
             //统计
             StatisticsService.UpdateStatisticsPostCount(-1);
@@ -148,22 +172,10 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="postid"></param>
         /// <returns></returns>
-        public static PostInfo GetPost(int postid)
+        public  PostInfo GetPost(int postid)
         {
-            //PostInfo p = DatabaseProvider.Instance.GetPost(postid);
-            ////  BuildPost(p);
-            //return p;
-            PostInfo p = DatabaseProvider.Instance.GetPost(postid);
+            PostInfo p = _postRepository.GetById(postid);
             return p;
-
-            foreach (PostInfo post in _posts)
-            {
-                if (post.PostId == postid)
-                {
-                    return post;
-                }
-            }
-            return null;
         }
 
         /// <summary>
@@ -181,7 +193,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="slug"></param>
         /// <returns></returns>
-        public static PostInfo GetPost(string slug)
+        public  PostInfo GetPost(string slug)
         {
             foreach (PostInfo post in _posts)
             {
@@ -210,9 +222,9 @@ namespace Jqpress.Blog.Services
         /// 获取全部文章,是缓存的
         /// </summary>
         /// <returns></returns>
-        public static List<PostInfo> GetPostList()
+        public  List<PostInfo> GetPostList()
         {
-            return DatabaseProvider.Instance.GetPostList();
+            return _postRepository.Table.ToList();
         }
 
         /// <summary>
@@ -222,7 +234,7 @@ namespace Jqpress.Blog.Services
         /// <param name="tagId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public static int GetPostCount(int categoryId, int tagId, int userId)
+        public  int GetPostCount(int categoryId, int tagId, int userId)
         {
             int recordCount = 0;
             GetPostList(1, 1, out recordCount, categoryId, tagId, userId, -1, -1, -1, -1, string.Empty, string.Empty, string.Empty);
@@ -239,7 +251,7 @@ namespace Jqpress.Blog.Services
         /// <param name="status"></param>
         /// <param name="PostStatus"></param>
         /// <returns></returns>
-        public static int GetPostCount(int categoryId, int tagId, int userId,int status,int PostStatus)
+        public  int GetPostCount(int categoryId, int tagId, int userId,int status,int PostStatus)
         {
             int recordCount = 0;
             GetPostList(1, 1, out recordCount, categoryId, tagId, userId, -1, status, -1, PostStatus,  string.Empty, string.Empty, string.Empty);
@@ -259,7 +271,7 @@ namespace Jqpress.Blog.Services
         /// <param name="topstatus"></param>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public static List<PostInfo> GetPostList(int pageSize, int pageIndex, out int recordCount, int categoryId, int tagId, int userId, int recommend, int status, int topstatus, int PostStatus, string begindate, string enddate, string keyword)
+        public  List<PostInfo> GetPostList(int pageSize, int pageIndex, out int recordCount, int categoryId, int tagId, int userId, int recommend, int status, int topstatus, int PostStatus, string begindate, string enddate, string keyword)
         {
             List<PostInfo> list;
             try {
@@ -270,7 +282,7 @@ namespace Jqpress.Blog.Services
                 }
                 else
                 {
-                    list = DatabaseProvider.Instance.GetPostList(pageSize, pageIndex, out recordCount, categoryId, tagId, userId, recommend, status, topstatus, PostStatus, begindate, enddate, keyword);
+                    list = _postRepository.GetPostList(pageSize, pageIndex, out recordCount, categoryId, tagId, userId, recommend, status, topstatus, PostStatus, begindate, enddate, keyword);
                 }
 
                 return list;
@@ -293,7 +305,7 @@ namespace Jqpress.Blog.Services
         /// <param name="topstatus"></param>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public static IPagedList<PostInfo> GetPostPageList(int pageSize, int pageIndex, out int recordCount, int categoryId, int tagId, int userId, int recommend, int status, int topstatus, int PostStatus, string begindate, string enddate, string keyword)
+        public  IPagedList<PostInfo> GetPostPageList(int pageSize, int pageIndex, out int recordCount, int categoryId, int tagId, int userId, int recommend, int status, int topstatus, int PostStatus, string begindate, string enddate, string keyword)
         {
             List<PostInfo> list;
             try
@@ -305,7 +317,7 @@ namespace Jqpress.Blog.Services
                 }
                 else
                 {
-                    list = DatabaseProvider.Instance.GetPostList(pageSize, pageIndex, out recordCount, categoryId, tagId, userId, recommend, status, topstatus, PostStatus, begindate, enddate, keyword);
+                    list = _postRepository.GetPostList(pageSize, pageIndex, out recordCount, categoryId, tagId, userId, recommend, status, topstatus, PostStatus, begindate, enddate, keyword);
                 }
 
                 return new PagedList<PostInfo>(list, pageIndex - 1, pageSize, recordCount);
@@ -318,7 +330,7 @@ namespace Jqpress.Blog.Services
         }
 
 
-        public static List<PostInfo> GetPostList(int rowCount, int categoryId, int userId, int recommend, int status, int topstatus, int PostStatus)
+        public  List<PostInfo> GetPostList(int rowCount, int categoryId, int userId, int recommend, int status, int topstatus, int PostStatus)
         {
             try{
                      List<PostInfo> list = GetPostList();
@@ -373,7 +385,7 @@ namespace Jqpress.Blog.Services
         /// <param name="postId"></param>
         /// <param name="addCount"></param>
         /// <returns></returns>
-        public static int UpdatePostViewCount(int postId, int addCount)
+        public  int UpdatePostViewCount(int postId, int addCount)
         {
             //   CacheHelper.Remove(CacheKey);
 
@@ -383,7 +395,7 @@ namespace Jqpress.Blog.Services
             {
                 post.ViewCount += addCount;
             }
-            return DatabaseProvider.Instance.UpdatePostViewCount(postId, addCount);
+            return _postRepository.UpdatePostViewCount(postId, addCount);
         }
 
         /// <summary>
@@ -392,7 +404,7 @@ namespace Jqpress.Blog.Services
         /// <param name="postId"></param>
         /// <param name="addCount"></param>
         /// <returns></returns>
-        public static int UpdatePostCommentCount(int postId, int addCount)
+        public  int UpdatePostCommentCount(int postId, int addCount)
         {
             PostInfo post = GetPost(postId);
 
@@ -400,7 +412,7 @@ namespace Jqpress.Blog.Services
             {
                 post.CommentCount += addCount;
 
-                return DatabaseProvider.Instance.UpdatePost(post);
+                return _postRepository.Update(post);
             }
             return 0;
 

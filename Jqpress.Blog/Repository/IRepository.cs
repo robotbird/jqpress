@@ -11,9 +11,9 @@ namespace Jqpress.Blog.Repository
     public partial interface IRepository<T>
     {
         T GetById(object id);
-        void Insert(T entity);
-        void Update(T entity);
-        void Delete(T entity);
-        IQueryable<T> Table { get; }
+        int Insert(T entity);
+        int Update(T entity);
+        int Delete(T entity);
+        IEnumerable<T> Table { get; }
     }
 }

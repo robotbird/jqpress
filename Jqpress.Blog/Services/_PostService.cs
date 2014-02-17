@@ -20,9 +20,11 @@ namespace Jqpress.Blog.Services
     /// </summary>
     public class _PostService
     {
+        #region 私有变量
         private IPostRepository _postRepository;
-        
+        #endregion
 
+        #region 构造函数
         /// <summary>
         /// 构造器方法
         /// </summary>
@@ -38,7 +40,9 @@ namespace Jqpress.Blog.Services
         {
             this._postRepository = postRepository;
         }
-        
+        #endregion
+
+        #region 方法
         /// <summary>
         /// 更新文章
         /// </summary>
@@ -47,6 +51,6 @@ namespace Jqpress.Blog.Services
         {
             _postRepository.Update(post);
         }
-      
+        #endregion
     }
 }

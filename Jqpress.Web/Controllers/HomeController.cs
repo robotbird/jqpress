@@ -17,6 +17,9 @@ namespace Jqpress.Web.Controllers
 {
     public class HomeController : Controller
     {
+        #region private items
+        private PostService _postService = new PostService();
+        #endregion;
         public ActionResult Index()
         {
             var model = new IndexModel();
@@ -42,7 +45,7 @@ namespace Jqpress.Web.Controllers
             int tagid = PressRequest.GetQueryInt("tagid",-1);
             if (cateid > 0)
                 pageIndex = pageIndex + 1;
-            var postlist = PostService.GetPostPageList(pageSize,pageIndex,out count,cateid,tagid,-1,-1,-1,-1,-1,"","","");
+            var postlist = _postService.GetPostPageList(pageSize, pageIndex, out count, cateid, tagid, -1, -1, -1, -1, -1, "", "", "");
             model.PageList.LoadPagedList(postlist);
             model.PostList = (List<PostInfo>)postlist;
             return View(model);
@@ -70,11 +73,11 @@ namespace Jqpress.Web.Controllers
 
             if (!Jqpress.Framework.Utils.Validate.IsInt(name))
             {
-                post = PostService.GetPost(StringHelper.SqlEncode(name));
+                post = _postService.GetPost(StringHelper.SqlEncode(name));
             }
             else
             {
-                post = PostService.GetPost(id);
+                post = _postService.GetPost(id);
             }
 
             if (post == null)
@@ -93,7 +96,7 @@ namespace Jqpress.Web.Controllers
             //未访问或按刷新统计
             if (isview == 0 || BlogConfig.GetSetting().SiteTotalType == 1)
             {
-                PostService.UpdatePostViewCount(post.PostId, 1);
+                _postService.UpdatePostViewCount(post.PostId, 1);
             }
             //未访问
             if (isview == 0 && BlogConfig.GetSetting().SiteTotalType == 2)
@@ -130,7 +133,7 @@ namespace Jqpress.Web.Controllers
             if (recordCount != post.CommentCount)
             {
                 post.CommentCount = recordCount;
-                PostService.UpdatePost(post);
+                _postService.UpdatePost(post);
             }
             model.IsDefault = 0;
             model.EnableVerifyCode = BlogConfig.GetSetting().EnableVerifyCode;
@@ -171,7 +174,7 @@ namespace Jqpress.Web.Controllers
                 int tagid = PressRequest.GetQueryInt("tagid", -1);
                 if (cateid > 0)
                     pageIndex = pageIndex + 1;
-                var postlist = PostService.GetPostPageList(pageSize, pageIndex, out count, categoryId, tagid, -1, -1, -1, -1, -1, "", "", "");
+                var postlist = _postService.GetPostPageList(pageSize, pageIndex, out count, categoryId, tagid, -1, -1, -1, -1, -1, "", "", "");
                 model.PageList.LoadPagedList(postlist);
                 model.PostList = (List<PostInfo>)postlist;
             }
@@ -212,7 +215,7 @@ namespace Jqpress.Web.Controllers
                 int tagid = PressRequest.GetQueryInt("tagid", -1);
                 if (cateid > 0)
                     pageIndex = pageIndex + 1;
-                var postlist = PostService.GetPostPageList(pageSize, pageIndex, out count, cateid, tagId, -1, -1, -1, -1, -1, "", "", "");
+                var postlist = _postService.GetPostPageList(pageSize, pageIndex, out count, cateid, tagId, -1, -1, -1, -1, -1, "", "", "");
                 model.PageList.LoadPagedList(postlist);
                 model.PostList = (List<PostInfo>)postlist;
 
