@@ -31,6 +31,9 @@ namespace Jqpress.Web.Areas.Admin.Controllers
     //TODO: post 编辑状态的草稿和私有状态的选中状态不正确，参照wordpress
     public class PostController : BaseAdminController
     {
+        #region private items
+        private _PostService _postService = new _PostService();
+        #endregion;
         public ActionResult List()
         {
             var model = new PostListModel();
@@ -167,7 +170,10 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                var  post = PostService.GetPost(p.PostId);
                 p.ViewCount = post.ViewCount;
                 p.CommentCount = post.CommentCount;
-                PostService.UpdatePost(p);
+
+
+               // PostService.UpdatePost(p);
+                _postService.Update(p);
                 string url = "http://" + PressRequest.GetCurrentFullHost() + "/post/" + (!string.IsNullOrEmpty(p.Slug) ? p.Slug : p.PostId.ToString());
                 SuccessNotification("修改成功。<a href=\"" + url + "\">查看文章</a> ");
             }

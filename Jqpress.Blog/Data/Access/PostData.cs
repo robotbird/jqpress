@@ -103,7 +103,7 @@ namespace Jqpress.Blog.Data.Access
         /// <summary>
         /// 修改
         /// </summary>
-        /// <param name="postinfo">实体</param>
+        /// <param name="post">实体</param>
         /// <returns>修改的行数</returns>
         public int UpdatePost(PostInfo post)
         {
@@ -155,9 +155,7 @@ namespace Jqpress.Blog.Data.Access
                       UpdateTime = post.UpdateTime.ToString(),
                       PostId = post.PostId
                   });
-              }                                         
-            //int cnt = OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams);
-            //return cnt;
+              }
         }
 
         /// <summary>

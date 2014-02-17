@@ -129,6 +129,9 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\IPostRepository.cs" />
+    <Compile Include="Repository\IRepository.cs" />
+    <Compile Include="Repository\PostRepository.cs" />
     <Compile Include="Services\ArchiveService.cs" />
     <Compile Include="Services\CategoryService.cs" />
     <Compile Include="Services\CommentService.cs" />
@@ -138,6 +141,7 @@
     <Compile Include="Services\TagService.cs" />
     <Compile Include="Services\ThemeService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="Services\_PostService.cs" />
     <Compile Include="XmlRpc\MetaWeblogHelper.cs" />
     <Compile Include="XmlRpc\XMLRPCRequest.cs" />
     <Compile Include="XmlRpc\XMLRPCResponse.cs" />
