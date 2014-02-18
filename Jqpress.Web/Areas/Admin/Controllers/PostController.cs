@@ -163,7 +163,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             var isSaveMsg = PressRequest.GetFormInt("chkSaveImage",0);
             if (isSaveMsg>0)
             {
-                p.PostContent = PostService.SaveRemoteImage(p.PostContent);
+                p.PostContent = _postService.SaveRemoteImage(p.PostContent);
             }
             if (p.PostId>0)
             {
@@ -171,8 +171,6 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                 p.ViewCount = post.ViewCount;
                 p.CommentCount = post.CommentCount;
 
-
-               // PostService.UpdatePost(p);
                 _postService.UpdatePost(p);
                 string url = "http://" + PressRequest.GetCurrentFullHost() + "/post/" + (!string.IsNullOrEmpty(p.Slug) ? p.Slug : p.PostId.ToString());
                 SuccessNotification("修改成功。<a href=\"" + url + "\">查看文章</a> ");

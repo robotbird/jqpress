@@ -56,28 +56,8 @@ namespace Jqpress.Blog.Services
         public PostService(IPostRepository postRepository)
         {
             this._postRepository = postRepository;
-            LoadPost();
         }
         #endregion
-
-
-
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        public static void LoadPost()
-        {
-            if (_posts == null)
-            {
-                lock (lockHelper)
-                {
-                    if (_posts == null)
-                    {
-                        _posts = DatabaseProvider.Instance.GetPostList();
-                    }
-                }
-            }
-        }
 
 
         /// <summary>
@@ -115,7 +95,7 @@ namespace Jqpress.Blog.Services
         {
             //   PostInfo oldPost = GetPost(_postinfo.PostId);   //好像有问题,不能缓存
 
-            PostInfo oldPost = GetPostByDatabase(_postinfo.PostId);
+            PostInfo oldPost = GetPost(_postinfo.PostId);
 
             int result = _postRepository.Update(_postinfo);
 
@@ -178,52 +158,25 @@ namespace Jqpress.Blog.Services
             return p;
         }
 
-        /// <summary>
-        /// 从数据库获取文章
-        /// </summary>
-        /// <param name="postId"></param>
-        /// <returns></returns>
-        public static PostInfo GetPostByDatabase(int postId)
-        {
-            return DatabaseProvider.Instance.GetPost(postId);
-        }
 
         /// <summary>
         /// 根据别名获取文章
         /// </summary>
         /// <param name="slug"></param>
         /// <returns></returns>
-        public  PostInfo GetPost(string slug)
+        public  PostInfo GetPostBySlug(string slug)
         {
-            foreach (PostInfo post in _posts)
-            {
-                if (!string.IsNullOrEmpty(slug) && post.Slug.ToLower() == slug.ToLower())
-                {
-                    return post;
-                }
-            }
-            return null;
+            PostInfo p = _postRepository.GetPostbySlug(slug);
+            return p;
         }
 
-        ///// <summary>
-        ///// 获取文章列表
-        ///// </summary>
-        ///// <param name="pageSize"></param>
-        ///// <param name="pageIndex"></param>
-        ///// <param name="recordCount"></param>
-        ///// <returns></returns>
-        //public static List<PostInfo> GetPostList(int pageSize, int pageIndex, out int recordCount)
-        //{
-        //    return GetPostList(pageSize, pageIndex, out recordCount,-1, -1, -1,-1, -1, -1, -1, null, null, null);
-        //}
-
-
         /// <summary>
-        /// 获取全部文章,是缓存的
+        /// 获取全部文章
         /// </summary>
         /// <returns></returns>
         public  List<PostInfo> GetPostList()
         {
+            //TODO:增加缓存
             return _postRepository.Table.ToList();
         }
 
@@ -329,7 +282,17 @@ namespace Jqpress.Blog.Services
 
         }
 
-
+        /// <summary>
+        /// 获取文章分页，伪分页
+        /// </summary>
+        /// <param name="rowCount"></param>
+        /// <param name="categoryId"></param>
+        /// <param name="userId"></param>
+        /// <param name="recommend"></param>
+        /// <param name="status"></param>
+        /// <param name="topstatus"></param>
+        /// <param name="PostStatus"></param>
+        /// <returns></returns>
         public  List<PostInfo> GetPostList(int rowCount, int categoryId, int userId, int recommend, int status, int topstatus, int PostStatus)
         {
             try{
@@ -422,7 +385,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="html"></param>
         /// <returns></returns>
-        public static string SaveRemoteImage(string html)
+        public  string SaveRemoteImage(string html)
         {
             string Reg = @"<img.*src=.?(http|https).+>";
             string currentHost = HttpContext.Current.Request.Url.Host;
@@ -498,7 +461,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        private static bool IsImage(string filePath)
+        private  bool IsImage(string filePath)
         {
             bool ret = false;
 
@@ -537,7 +500,7 @@ namespace Jqpress.Blog.Services
         /// 发邮件
         /// </summary>
         /// <param name="post"></param>
-        public static void SendEmail(PostInfo post)
+        public  void SendEmail(PostInfo post)
         {
             if (BlogConfig.GetSetting().SendMailAuthorByPost == 1)
             {

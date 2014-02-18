@@ -73,7 +73,7 @@ namespace Jqpress.Web.Controllers
 
             if (!Jqpress.Framework.Utils.Validate.IsInt(name))
             {
-                post = _postService.GetPost(StringHelper.SqlEncode(name));
+                post = _postService.GetPostBySlug(StringHelper.SqlEncode(name));
             }
             else
             {
