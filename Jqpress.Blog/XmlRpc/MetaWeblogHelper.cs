@@ -460,8 +460,8 @@ namespace Jqpress.Blog.XmlRpc
                 userid = user.UserId;
             }
             PostService _postService = new PostService();
-
-            List<PostInfo> posts = _postService.GetPostList(numberOfPosts, -1, userid, -1, -1, -1, -1);
+            int recordCount = 0;
+            List<PostInfo> posts = _postService.GetPostList(numberOfPosts, -1, userid, -1, -1, -1, -1, out recordCount);
 
             foreach (PostInfo post in posts)
             {

@@ -20,23 +20,7 @@ namespace Jqpress.Blog.Services
     /// </summary>
     public class PostService
     {
-        /// <summary>
-        /// 列表
-        /// </summary>
-        private static List<PostInfo> _posts;
-        /// <summary>
-        /// 列表统计数量
-        /// </summary>
-        private static int _postcount;
-
-        /// <summary>
-        /// lock
-        /// </summary>
-        private static object lockHelper = new object();
-
-    
-
-
+        
         #region 私有变量
         private IPostRepository _postRepository;
         #endregion
@@ -68,9 +52,6 @@ namespace Jqpress.Blog.Services
         public  int InsertPost(PostInfo post)
         {
             post.PostId = _postRepository.Insert(post);
-
-            _posts.Add(post);
-            _posts.Sort();
 
             //统计
             StatisticsService.UpdateStatisticsPostCount(1);
@@ -125,8 +106,6 @@ namespace Jqpress.Blog.Services
         public  int DeletePost(int postid)
         {
             PostInfo oldPost = GetPost(postid);
-
-            _posts.Remove(oldPost);
 
             int result = _postRepository.Delete(new PostInfo {PostId = postid });
 
@@ -230,8 +209,7 @@ namespace Jqpress.Blog.Services
             try {
                 if (pageIndex == 1 && tagId <= 0 && string.IsNullOrEmpty(begindate)&& string.IsNullOrEmpty(enddate) && string.IsNullOrEmpty(keyword))
                 {
-                    list = GetPostList(pageSize, categoryId, userId, recommend, status, topstatus, PostStatus);
-                    recordCount = _postcount;
+                    list = GetPostList(pageSize, categoryId, userId, recommend, status, topstatus, PostStatus, out recordCount);
                 }
                 else
                 {
@@ -265,8 +243,7 @@ namespace Jqpress.Blog.Services
             {
                 if (pageIndex == 1 && tagId <= 0 && string.IsNullOrEmpty(begindate) && string.IsNullOrEmpty(enddate) && string.IsNullOrEmpty(keyword))
                 {
-                    list = GetPostList(pageSize, categoryId, userId, recommend, status, topstatus, PostStatus);
-                    recordCount = _postcount;
+                    list = GetPostList(pageSize, categoryId, userId, recommend, status, topstatus, PostStatus, out recordCount);
                 }
                 else
                 {
@@ -293,7 +270,7 @@ namespace Jqpress.Blog.Services
         /// <param name="topstatus"></param>
         /// <param name="PostStatus"></param>
         /// <returns></returns>
-        public  List<PostInfo> GetPostList(int rowCount, int categoryId, int userId, int recommend, int status, int topstatus, int PostStatus)
+        public List<PostInfo> GetPostList(int rowCount, int categoryId, int userId, int recommend, int status, int topstatus, int PostStatus, out int recordCount)
         {
             try{
                      List<PostInfo> list = GetPostList();
@@ -322,7 +299,7 @@ namespace Jqpress.Blog.Services
                     {
                         list = list.FindAll(post => post.PostStatus == PostStatus);
                     }
-                    _postcount = list.Count;
+                    recordCount = list.Count;
                     if (rowCount > list.Count)
                     {
                         return list;
