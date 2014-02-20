@@ -21,20 +21,9 @@ namespace Jqpress.Blog.Services
     public class PostService
     {
         /// <summary>
-        /// 列表
-        /// </summary>
-        private static List<PostInfo> _posts;
-        /// <summary>
         /// 列表统计数量
         /// </summary>
         private static int _postcount;
-
-        /// <summary>
-        /// lock
-        /// </summary>
-        private static object lockHelper = new object();
-
-    
 
 
         #region 私有变量
@@ -68,9 +57,6 @@ namespace Jqpress.Blog.Services
         public  int InsertPost(PostInfo post)
         {
             post.PostId = _postRepository.Insert(post);
-
-            _posts.Add(post);
-            _posts.Sort();
 
             //统计
             StatisticsService.UpdateStatisticsPostCount(1);
@@ -125,8 +111,6 @@ namespace Jqpress.Blog.Services
         public  int DeletePost(int postid)
         {
             PostInfo oldPost = GetPost(postid);
-
-            _posts.Remove(oldPost);
 
             int result = _postRepository.Delete(new PostInfo {PostId = postid });
 
