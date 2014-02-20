@@ -28,6 +28,7 @@ namespace Jqpress.Blog.Services
 
         #region 私有变量
         private IPostRepository _postRepository;
+        private CategoryService  categoryService = new CategoryService();
         #endregion
 
         #region 构造函数
@@ -63,7 +64,7 @@ namespace Jqpress.Blog.Services
             //用户
             UserService.UpdateUserPostCount(post.UserId, 1);
             //分类
-            CategoryService.UpdateCategoryCount(post.CategoryId, 1);
+            categoryService.UpdateCategoryCount(post.CategoryId, 1);
             //标签
             TagService.UpdateTagUseCount(post.Tag, 1);
 
@@ -88,8 +89,8 @@ namespace Jqpress.Blog.Services
             if (oldPost != null && oldPost.CategoryId != _postinfo.CategoryId)
             {
                 //分类
-                CategoryService.UpdateCategoryCount(oldPost.CategoryId, -1);
-                CategoryService.UpdateCategoryCount(_postinfo.CategoryId, 1);
+                categoryService.UpdateCategoryCount(oldPost.CategoryId, -1);
+                categoryService.UpdateCategoryCount(_postinfo.CategoryId, 1);
             }
 
             //     CacheHelper.Remove(CacheKey);
@@ -119,7 +120,7 @@ namespace Jqpress.Blog.Services
             //用户
             UserService.UpdateUserPostCount(oldPost.UserId, -1);
             //分类
-            CategoryService.UpdateCategoryCount(oldPost.CategoryId, -1);
+            categoryService.UpdateCategoryCount(oldPost.CategoryId, -1);
             //标签
             TagService.UpdateTagUseCount(oldPost.Tag, -1);
 

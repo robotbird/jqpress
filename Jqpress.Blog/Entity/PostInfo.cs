@@ -188,7 +188,7 @@ namespace Jqpress.Blog.Entity
         {
             get
             {
-                CategoryInfo category = Jqpress.Blog.Services.CategoryService.GetCategory(this.CategoryId);
+                CategoryInfo category = new Jqpress.Blog.Services.CategoryService().GetCategory(this.CategoryId);
                 if (category != null)
                 {
                     return category;

@@ -233,7 +233,7 @@ namespace Jqpress.Blog.XmlRpc
                     newcat.CateName = Jqpress.Framework.Web.HttpHelper.HtmlEncode(item);
                     newcat.Slug = Jqpress.Framework.Utils.StringHelper.FilterSlug(item, "cate", false);
 
-                    newcat.CategoryId = CategoryService.InsertCategory(newcat);
+                    newcat.CategoryId = new CategoryService().InsertCategory(newcat);
                     post.CategoryId = newcat.CategoryId;
                 }
             }
@@ -405,7 +405,7 @@ namespace Jqpress.Blog.XmlRpc
 
             List<MWACategory> categories = new List<MWACategory>();
 
-            foreach (CategoryInfo cat in CategoryService.GetCategoryList())
+            foreach (CategoryInfo cat in new CategoryService().GetCategoryList())
             {
                 MWACategory temp = new MWACategory();
                 temp.title = Jqpress.Framework.Web.HttpHelper.HtmlDecode(cat.CateName);
@@ -590,7 +590,7 @@ namespace Jqpress.Blog.XmlRpc
             name = Jqpress.Framework.Web.HttpHelper.HtmlEncode(name);
 
             cat = new CategoryInfo();
-            foreach (CategoryInfo item in CategoryService.GetCategoryList())
+            foreach (CategoryInfo item in new CategoryService().GetCategoryList())
             {
                 if (item.CateName == name)
                 {

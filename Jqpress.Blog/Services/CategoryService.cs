@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Jqpress.Blog.Data;
 using Jqpress.Blog.Entity;
+using Jqpress.Blog.Repository;
+
 
 namespace Jqpress.Blog.Services
 {
@@ -12,47 +14,40 @@ namespace Jqpress.Blog.Services
          /// <summary>
         /// 分类列表
         /// </summary>
-        private static List<CategoryInfo> _categories;
+        private  List<CategoryInfo> _categories;
 
+
+        #region 私有变量
+        private ICategoryRepository _categoryRepository;
+        #endregion
+
+        #region 构造函数
         /// <summary>
-        /// lock
+        /// 构造器方法
         /// </summary>
-        private static object lockHelper = new object();
-
-        static CategoryService()
+        public CategoryService()
+            : this(new CategoryRepository())
         {
-            LoadCategory();
         }
-
         /// <summary>
-        /// 初始化
+        /// 构造器方法
         /// </summary>
-        public static void LoadCategory()
+        /// <param name="categoryRepository"></param>
+        public CategoryService(ICategoryRepository categoryRepository)
         {
-            if (_categories == null)
-            {
-                lock (lockHelper)
-                {
-                    if (_categories == null)
-                    {
-                        _categories = DatabaseProvider.Instance.GetCategoryList();
-                    }
-                }
-            }
+            this._categoryRepository = categoryRepository;
         }
+        #endregion
 
         /// <summary>
         /// 添加分类
         /// </summary>
         /// <param name="category"></param>
         /// <returns></returns>
-        public static int InsertCategory(CategoryInfo category)
+        public  int InsertCategory(CategoryInfo category)
         {
-            int categoryId = DatabaseProvider.Instance.InsertCategory(category);
+            int categoryId = _categoryRepository.Insert(category);
             category.CategoryId = categoryId;
-
-            _categories.Add(category);
-            _categories.Sort();
 
             return categoryId;
         }
@@ -62,10 +57,10 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="category"></param>
         /// <returns></returns>
-        public static int UpdateCategory(CategoryInfo category)
+        public  int UpdateCategory(CategoryInfo category)
         {
             _categories.Sort();
-            return DatabaseProvider.Instance.UpdateCategory(category);
+            return _categoryRepository.Update(category);
         }
 
         /// <summary>
@@ -74,7 +69,7 @@ namespace Jqpress.Blog.Services
         /// <param name="categoryId"></param>
         /// <param name="addCount"></param>
         /// <returns></returns>
-        public static int UpdateCategoryCount(int categoryId, int addCount)
+        public  int UpdateCategoryCount(int categoryId, int addCount)
         {
             if (categoryId == 0)
             {
@@ -96,11 +91,9 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns></returns>
-        public static int DeleteCategory(int categoryId)
+        public  int DeleteCategory(int categoryId)
         {
-            _categories.RemoveAll(cate => cate.CategoryId == categoryId);
-
-            return DatabaseProvider.Instance.DeleteCategory(categoryId);
+            return _categoryRepository.Delete(new CategoryInfo { CategoryId = categoryId });
         }
 
         /// <summary>
@@ -108,7 +101,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns></returns>
-        public static CategoryInfo GetCategory(int categoryId)
+        public  CategoryInfo GetCategory(int categoryId)
         {
             foreach (CategoryInfo t in _categories)
             {
@@ -126,7 +119,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="slug"></param>
         /// <returns></returns>
-        public static CategoryInfo GetCategory(string slug)
+        public  CategoryInfo GetCategory(string slug)
         {
             foreach (CategoryInfo t in _categories)
             {
@@ -144,7 +137,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="slug"></param>
         /// <returns></returns>
-        public static int GetCategoryId(string slug)
+        public  int GetCategoryId(string slug)
         {
 
             foreach (CategoryInfo t in _categories)
@@ -162,7 +155,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns></returns>
-        public static string GetCategoryName(int categoryId)
+        public  string GetCategoryName(int categoryId)
         {
 
             foreach (CategoryInfo t in _categories)
@@ -179,7 +172,7 @@ namespace Jqpress.Blog.Services
         /// 获取全部分类
         /// </summary>
         /// <returns></returns>
-        public static List<CategoryInfo> GetCategoryList()
+        public  List<CategoryInfo> GetCategoryList()
         {
             return _categories;
         }
@@ -188,7 +181,7 @@ namespace Jqpress.Blog.Services
         /// 获取全部分类
         /// </summary>
         /// <returns></returns>
-        public static List<CategoryInfo> GetCategoryTreeList()
+        public  List<CategoryInfo> GetCategoryTreeList()
         {
             return GetCategoryTree(0, GetCategoryList(), 0);
         }
@@ -202,11 +195,11 @@ namespace Jqpress.Blog.Services
         /// <param name="listcate"></param>
         /// <param name="level">递归等级</param>
         /// <returns></returns>
-        private static List<CategoryInfo> GetCategoryTree(int parentid, List<CategoryInfo> listcate, int level)
+        private  List<CategoryInfo> GetCategoryTree(int parentid, List<CategoryInfo> listcate, int level)
         {
             var listAll = _categories;//这里面从内存读数据，所以不会遍历查库，暂时查库，要不他会将遍历后的值传给_categories
             if (listAll.FindAll(c => !string.IsNullOrEmpty(c.TreeChar)).Count>0) {
-                _categories = DatabaseProvider.Instance.GetCategoryList();
+                _categories = _categoryRepository.Table.ToList();
                 listAll = _categories;
             }
             var treelist = new List<CategoryInfo>();
