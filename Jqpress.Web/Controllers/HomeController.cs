@@ -19,6 +19,7 @@ namespace Jqpress.Web.Controllers
     {
         #region private items
         private PostService _postService = new PostService();
+        private CategoryService _categoryService = new CategoryService();
         #endregion;
         public ActionResult Index()
         {
@@ -157,7 +158,7 @@ namespace Jqpress.Web.Controllers
             model.FooterHtml = BlogConfig.GetSetting().FooterHtml;
             model.GeneralLinks = LinkService.GetLinkList((int)LinkPosition.General, 1);
 
-            CategoryInfo cate = CategoryService.GetCategory(slug);
+            CategoryInfo cate = _categoryService.GetCategory(slug);
             if (cate != null)
             {
                 int categoryId = cate.CategoryId;

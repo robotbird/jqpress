@@ -13,14 +13,16 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 {
     public class CategoryController : Controller
     {
-
+        #region private items
+        private CategoryService _categoryService = new CategoryService();
+        #endregion;
         public ActionResult List() 
         {
             var model = new CateListModel();
 
             int cateid = PressRequest.GetQueryInt("cateid", -1);
 
-            var catelist = CategoryService.GetCategoryTreeList();
+            var catelist = _categoryService.GetCategoryTreeList();
             model.CateList = catelist;
             catelist.Add(new CategoryInfo() { CateName = "作为一级分类", CategoryId = -1 });
 
@@ -35,7 +37,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         public JsonResult Edit(int? id)
         {
             var cid = id??0;
-            CategoryInfo cat = CategoryService.GetCategory(cid);
+            CategoryInfo cat = _categoryService.GetCategory(cid);
             return Json(cat, JsonRequestBehavior.AllowGet);
         }
         /// <summary>
@@ -44,7 +46,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         public ContentResult Delete(int? id)
         {
             var cid = id ?? 0;
-            CategoryService.DeleteCategory(cid);
+            _categoryService.DeleteCategory(cid);
             return Content("success");
         }
         /// <summary>
@@ -65,18 +67,18 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             cat.SortNum = TypeConverter.StrToInt(cat.SortNum, 1000);
             if (cat.CategoryId > 0)
             {
-                var  oldcat = CategoryService.GetCategory(cat.CategoryId);
+                var  oldcat = _categoryService.GetCategory(cat.CategoryId);
                 cat.CreateTime = oldcat.CreateTime;
                 cat.PostCount = oldcat.PostCount;
-                CategoryService.UpdateCategory(cat);
+                _categoryService.UpdateCategory(cat);
             }
             else 
             {
                 cat.CreateTime = DateTime.Now;
                 cat.PostCount = 0;
-                CategoryService.InsertCategory(cat);
+                _categoryService.InsertCategory(cat);
             }
-            cat.TreeChar = CategoryService.GetCategoryTreeList().Find(c => c.CategoryId == cat.CategoryId).TreeChar;
+            cat.TreeChar = _categoryService.GetCategoryTreeList().Find(c => c.CategoryId == cat.CategoryId).TreeChar;
 
             return Json(cat, JsonRequestBehavior.AllowGet);
         }

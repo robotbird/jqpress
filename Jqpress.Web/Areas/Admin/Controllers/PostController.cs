@@ -33,6 +33,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
     {
         #region private items
         private PostService _postService = new PostService();
+        private CategoryService _categoryService = new CategoryService();
         #endregion;
         public ActionResult List()
         {
@@ -42,7 +43,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             int userId = PressRequest.GetQueryInt("userid", -1);
             int hide = PressRequest.GetQueryInt("hide", -1);
 
-            var catelist = CategoryService.GetCategoryList();
+            var catelist = _categoryService.GetCategoryList();
 
             const int pageSize = 10;
             int count = 0;
@@ -115,7 +116,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         {
             int postid = PressRequest.GetInt("id", 0);
             var model = new PostModel();
-            var catelist = CategoryService.GetCategoryList();
+            var catelist = _categoryService.GetCategoryList();
             model.TagList = TagService.GetTagList();
 
             if (postid > 0)
