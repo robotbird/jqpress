@@ -6,10 +6,10 @@ using Jqpress.Framework.DbProvider;
 using Jqpress.Framework.Configuration;
 using Jqpress.Blog.Domain;
 using Jqpress.Blog.Domain.Enum;
-using Jqpress.Blog.IRepository;
+using Jqpress.Blog.Repositories.IRepository;
 
 
-namespace Jqpress.Blog.Repository
+namespace Jqpress.Blog.Repositories.Repository
 {
     public partial class CategoryRepository:ICategoryRepository
     {

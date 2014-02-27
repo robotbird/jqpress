@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Jqpress.Blog.IRepository
+namespace Jqpress.Blog.Repositories.IRepository
 {
     /// <summary>
     /// Repository

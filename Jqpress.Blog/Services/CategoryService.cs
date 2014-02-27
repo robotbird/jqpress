@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using Jqpress.Blog.Data;
 using Jqpress.Blog.Domain;
-using Jqpress.Blog.Repository;
-using Jqpress.Blog.IRepository;
+using Jqpress.Blog.Repositories.Repository;
+using Jqpress.Blog.Repositories.IRepository;
 
 
 namespace Jqpress.Blog.Services

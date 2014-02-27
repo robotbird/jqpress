@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using Jqpress.Blog.Domain;
 
-
-namespace Jqpress.Blog.IRepository
+namespace Jqpress.Blog.Repositories.IRepository
 {
-    public partial interface ICategoryRepository : IRepository<CategoryInfo>
+    public partial interface ITagRepository : IRepository<TagInfo>
     {
     }
 }

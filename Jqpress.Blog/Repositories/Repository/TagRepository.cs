@@ -6,8 +6,8 @@ using Jqpress.Framework.DbProvider;
 using Jqpress.Framework.Configuration;
 using Jqpress.Blog.Domain;
 using Jqpress.Blog.Domain.Enum;
-using Jqpress.Blog.IRepository;
-namespace Jqpress.Blog.Repository
+using Jqpress.Blog.Repositories.IRepository;
+namespace Jqpress.Blog.Repositories.Repository
 {
     public partial class TagRepository
     {
