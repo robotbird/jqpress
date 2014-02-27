@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Jqpress.Blog.Entity;
+using Jqpress.Blog.Domain;
 using System.Web;
 
 namespace Jqpress.Blog.Configuration

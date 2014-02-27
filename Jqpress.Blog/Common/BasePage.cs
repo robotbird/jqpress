@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using Jqpress.Blog.Configuration;
-using Jqpress.Blog.Entity;
+using Jqpress.Blog.Domain;
 using Jqpress.Blog.Services;
 using Jqpress.Framework.Configuration;
 using Jqpress.Framework.DbProvider.Access;

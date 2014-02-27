@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Jqpress.Blog.Configuration;
-using Jqpress.Blog.Entity.Enum;
+using Jqpress.Blog.Domain.Enum;
 using Jqpress.Blog.Services;
 using Jqpress.Framework.Configuration;
 using Jqpress.Framework.Utils;
 
-namespace Jqpress.Blog.Entity
+namespace Jqpress.Blog.Domain
 {
     /// <summary>
     /// 文章实体

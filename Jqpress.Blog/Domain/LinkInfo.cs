@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Jqpress.Framework.Configuration;
 
-namespace Jqpress.Blog.Entity
+namespace Jqpress.Blog.Domain
 {
     /// <summary>
     /// 连接实体(包括导航和友情连接)

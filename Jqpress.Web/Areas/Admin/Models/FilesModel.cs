@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using Jqpress.Framework.Mvc;
-using Jqpress.Blog.Entity;
+using Jqpress.Blog.Domain;
 
 namespace Jqpress.Web.Areas.Admin.Models
 {

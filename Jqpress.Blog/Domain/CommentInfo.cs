@@ -6,7 +6,7 @@ using System.Web.Security;
 using Jqpress.Blog.Services;
 using Jqpress.Framework.Utils;
 
-namespace Jqpress.Blog.Entity
+namespace Jqpress.Blog.Domain
 {
     /// <summary>
     /// 评论实体

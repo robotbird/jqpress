@@ -6,7 +6,7 @@ using Jqpress.Blog.Configuration;
 using Jqpress.Framework.Configuration;
 using Jqpress.Framework.Utils;
 
-namespace Jqpress.Blog.Entity
+namespace Jqpress.Blog.Domain
 {
     /// <summary>
     /// 用户实体

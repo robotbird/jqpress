@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Jqpress.Blog.Entity;
+using Jqpress.Blog.Domain;
 
-namespace Jqpress.Blog.Repository
+namespace Jqpress.Blog.IRepository
 {
     public partial interface IPostRepository:IRepository<PostInfo>
     {

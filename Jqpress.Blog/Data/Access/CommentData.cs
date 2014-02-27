@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Data;
-using Jqpress.Blog.Entity;
+using Jqpress.Blog.Domain;
 using Jqpress.Framework.DbProvider.Access;
 using Jqpress.Framework.Configuration;
 namespace Jqpress.Blog.Data.Access

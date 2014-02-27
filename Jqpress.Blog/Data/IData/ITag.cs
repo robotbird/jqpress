@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Jqpress.Blog.Entity;
+using Jqpress.Blog.Domain;
 namespace Jqpress.Blog.Data.IData
 {
     public partial interface IDataProvider

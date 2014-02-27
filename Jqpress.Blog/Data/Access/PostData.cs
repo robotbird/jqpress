@@ -4,7 +4,7 @@ using System.Data.OleDb;
 using System.Data;
 using System.Linq;
 using Jqpress.Blog.Data.IData;
-using Jqpress.Blog.Entity;
+using Jqpress.Blog.Domain;
 using Jqpress.Framework.DbProvider.Access;
 using Jqpress.Framework.Utils;
 using Jqpress.Framework.Configuration;

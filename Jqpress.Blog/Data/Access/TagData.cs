@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Jqpress.Blog.Entity;
+using Jqpress.Blog.Domain;
 using System.Data.OleDb;
 using System.Data;
 using Jqpress.Framework.DbProvider.Access;
 using Jqpress.Framework.Configuration;
-using Jqpress.Blog.Entity.Enum;
+using Jqpress.Blog.Domain.Enum;
 
 namespace Jqpress.Blog.Data.Access
 {

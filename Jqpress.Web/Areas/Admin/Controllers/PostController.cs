@@ -16,9 +16,9 @@ using Jqpress.Framework.Utils;
 using Jqpress.Framework.Web;
 using Jqpress.Framework.Configuration;
 using Jqpress.Blog.Common;
-using Jqpress.Blog.Entity;
+using Jqpress.Blog.Domain;
 using Jqpress.Blog.Services;
-using Jqpress.Blog.Entity.Enum;
+using Jqpress.Blog.Domain.Enum;
 using Jqpress.Blog.Configuration;
 using Jqpress.Web.Areas.Admin.Models;
 

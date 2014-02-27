@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Jqpress.Blog.Data;
-using Jqpress.Blog.Entity;
+using Jqpress.Blog.Domain;
 using Jqpress.Blog.Repository;
+using Jqpress.Blog.IRepository;
 
 
 namespace Jqpress.Blog.Services

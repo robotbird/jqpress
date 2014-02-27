@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using Jqpress.Framework.Web;
 using Jqpress.Framework.Utils;
 using Jqpress.Blog.Services;
-using Jqpress.Blog.Entity;
+using Jqpress.Blog.Domain;
 using Jqpress.Web.Areas.Admin.Models;
 
 namespace Jqpress.Web.Areas.Admin.Controllers

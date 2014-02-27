@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using Jqpress.Framework.Web;
 using Jqpress.Framework.Utils;
 using Jqpress.Blog.Services;
-using Jqpress.Blog.Entity;
+using Jqpress.Blog.Domain;
 using Jqpress.Web.Areas.Admin.Models;
 
 namespace Jqpress.Web.Areas.Admin.Controllers
@@ -20,7 +20,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 
             List<UserInfo> list = UserService.GetUserList();
             model.UserList = list;
-            var RolesDic = Enum.GetValues(typeof (Jqpress.Blog.Entity.Enum.UserRole)).Cast<int>().ToDictionary(s => Enum.GetName(typeof (Jqpress.Blog.Entity.Enum.UserRole), s));
+            var RolesDic = Enum.GetValues(typeof (Jqpress.Blog.Domain.Enum.UserRole)).Cast<int>().ToDictionary(s => Enum.GetName(typeof (Jqpress.Blog.Domain.Enum.UserRole), s));
             
             var dic = new Dictionary<string,string>();
             dic.Add("Administrator","管理员");
@@ -28,9 +28,9 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             dic.Add("Subscriber","订阅者");
             dic.Add("Contributor","投稿者");
             dic.Add("Author","作者");
-            foreach (int id in Enum.GetValues(typeof(Jqpress.Blog.Entity.Enum.UserRole)))
+            foreach (int id in Enum.GetValues(typeof(Jqpress.Blog.Domain.Enum.UserRole)))
             {
-                string name = Enum.GetName(typeof(Jqpress.Blog.Entity.Enum.UserRole), id);
+                string name = Enum.GetName(typeof(Jqpress.Blog.Domain.Enum.UserRole), id);
                 foreach(KeyValuePair<string,string> kv in dic)
                 {
                     if(kv.Key == name)

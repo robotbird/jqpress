@@ -9,9 +9,10 @@ using System.Text.RegularExpressions;
 using Jqpress.Framework.Mvc;
 using Jqpress.Framework.Configuration;
 using Jqpress.Blog.Data;
-using Jqpress.Blog.Entity;
+using Jqpress.Blog.Domain;
 using Jqpress.Blog.Configuration;
 using Jqpress.Blog.Repository;
+using Jqpress.Blog.IRepository;
 
 namespace Jqpress.Blog.Services
 {

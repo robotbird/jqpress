@@ -7,8 +7,8 @@ using System.Web.Mvc;
 using Jqpress.Framework.Configuration;
 using Jqpress.Framework.Utils;
 using Jqpress.Framework.Web;
-using Jqpress.Blog.Entity;
-using Jqpress.Blog.Entity.Enum;
+using Jqpress.Blog.Domain;
+using Jqpress.Blog.Domain.Enum;
 using Jqpress.Blog.Services;
 
 namespace Jqpress.Web.Areas.Admin.Controllers

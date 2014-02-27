@@ -5,7 +5,7 @@ using System.Text;
 using Jqpress.Blog.Configuration;
 using Jqpress.Framework.Configuration;
 
-namespace Jqpress.Blog.Entity
+namespace Jqpress.Blog.Domain
 {
     /// <summary>
     /// 归档实体

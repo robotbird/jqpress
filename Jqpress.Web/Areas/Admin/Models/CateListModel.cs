@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web;
-using Jqpress.Blog.Entity;
+using Jqpress.Blog.Domain;
 
 namespace Jqpress.Web.Areas.Admin.Models
 {

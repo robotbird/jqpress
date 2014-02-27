@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Jqpress.Blog.Data;
-using Jqpress.Blog.Entity;
+using Jqpress.Blog.Domain;
 
 namespace Jqpress.Blog.Services
 {

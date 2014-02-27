@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Jqpress.Blog.Entity;
 using Jqpress.Framework.DbProvider;
 using Jqpress.Framework.Configuration;
-
+using Jqpress.Blog.Domain;
+using Jqpress.Blog.IRepository;
 
 namespace Jqpress.Blog.Repository
 {

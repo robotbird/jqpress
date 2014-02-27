@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
-using Jqpress.Blog.Entity;
-using Jqpress.Blog.Entity.Enum;
+using Jqpress.Blog.Domain;
+using Jqpress.Blog.Domain.Enum;
 using Jqpress.Blog.Services;
 
 
