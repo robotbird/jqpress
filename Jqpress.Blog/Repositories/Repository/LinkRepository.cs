@@ -12,6 +12,12 @@ namespace Jqpress.Blog.Repositories.Repository
 {
     public partial class LinkRepository:ILinkRepository
     {
+        DapperHelper dapper = new DapperHelper();
+        /// <summary>
+        /// insert link
+        /// </summary>
+        /// <param name="link"></param>
+        /// <returns></returns>
         public int Insert(LinkInfo link)
         {
             string cmdText = string.Format(@"insert into [{0}links]
@@ -22,27 +28,31 @@ namespace Jqpress.Blog.Repositories.Repository
                             (
                             @type,@linkname,@linkurl,@position,@target,@description,@sortnum,@status,@createtime
                             )", ConfigHelper.Tableprefix);
-            OleDbParameter[] prams = { 
-                                OleDbHelper.MakeInParam("@type",OleDbType.Integer,4,link.Type),
-								OleDbHelper.MakeInParam("@linkname",OleDbType.VarWChar,100,link.LinkName),
-                                OleDbHelper.MakeInParam("@linkurl",OleDbType.VarWChar,255,link.LinkUrl),
-                                OleDbHelper.MakeInParam("@position",OleDbType.Integer,4,link.Position),
-                                OleDbHelper.MakeInParam("@target",OleDbType.VarWChar,50,link.Target),
-								OleDbHelper.MakeInParam("@description",OleDbType.VarWChar,255,link.Description),
-                                OleDbHelper.MakeInParam("@sortnum",OleDbType.Integer,4,link.SortNum),
-								OleDbHelper.MakeInParam("@status",OleDbType.Integer,4,link.Status),
-								OleDbHelper.MakeInParam("@createtime",OleDbType.Date,8,link.CreateTime),
-							};
 
-            int r = OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams);
-            if (r > 0)
+            using (var conn = dapper.OpenConnection())
             {
-                return Convert.ToInt32(OleDbHelper.ExecuteScalar(string.Format("select top 1 [linkid] from [{0}links]  order by [linkid] desc", ConfigHelper.Tableprefix)));
+                conn.Execute(cmdText, new
+                {
+                    Type = link.Type,
+                    LinkName = link.LinkName,
+                    LinkUrl = link.LinkUrl,
+                    Postion = link.Position,
+                    Target = link.Target,
+                    Description = link.Description,
+                    SortNum = link.SortNum,
+                    Status = link.Status,
+                    CreateTime = link.CreateTime.ToString()
+                });
+                return conn.Query<int>(string.Format("select top 1 [linkid] from [{0}links]  order by [linkid] desc", ConfigHelper.Tableprefix), null).First();
             }
-            return 0;
-        }
 
-        public int UpdateLink(LinkInfo link)
+        }
+        /// <summary>
+        /// update link
+        /// </summary>
+        /// <param name="link"></param>
+        /// <returns></returns>
+        public int Update(LinkInfo link)
         {
             string cmdText = string.Format(@"update [{0}links] set
                                 [type]=@type,
@@ -55,77 +65,53 @@ namespace Jqpress.Blog.Repositories.Repository
                                 [status]=@status,
                                 [createtime]=@createtime
                                 where linkid=@linkid", ConfigHelper.Tableprefix);
-            OleDbParameter[] prams = { 
-                                OleDbHelper.MakeInParam("@type",OleDbType.Integer,4,link.Type),
-								OleDbHelper.MakeInParam("@linkname",OleDbType.VarWChar,100,link.LinkName),
-                                OleDbHelper.MakeInParam("@linkurl",OleDbType.VarWChar,255,link.LinkUrl),
-                                OleDbHelper.MakeInParam("@position",OleDbType.Integer,4,link.Position),
-                                OleDbHelper.MakeInParam("@target",OleDbType.VarWChar,50,link.Target),
-								OleDbHelper.MakeInParam("@description",OleDbType.VarWChar,255,link.Description),
-                                OleDbHelper.MakeInParam("@sortnum",OleDbType.Integer,4,link.SortNum),
-								OleDbHelper.MakeInParam("@status",OleDbType.Integer,4,link.Status),
-								OleDbHelper.MakeInParam("@createtime",OleDbType.Date,8,link.CreateTime),
-                                OleDbHelper.MakeInParam("@linkid",OleDbType.Integer,4,link.LinkId),
-							};
-
-            return Convert.ToInt32(OleDbHelper.ExecuteScalar(CommandType.Text, cmdText, prams));
+            using (var conn = dapper.OpenConnection())
+            {
+               return conn.Execute(cmdText, new
+                {
+                    Type = link.Type,
+                    LinkName = link.LinkName,
+                    LinkUrl = link.LinkUrl,
+                    Postion = link.Position,
+                    Target = link.Target,
+                    Description = link.Description,
+                    SortNum = link.SortNum,
+                    Status = link.Status,
+                    CreateTime = link.CreateTime.ToString(),
+                    Linkid = link.LinkId
+                });
+            }
         }
-
-        public int DeleteLink(int linkId)
+        /// <summary>
+        /// delete link
+        /// </summary>
+        /// <param name="link"></param>
+        /// <returns></returns>
+        public int Delete(LinkInfo link)
         {
             string cmdText = string.Format("delete from [{0}links] where [linkid] = @linkid", ConfigHelper.Tableprefix);
-            OleDbParameter[] prams = { 
-								OleDbHelper.MakeInParam("@linkid",OleDbType.Integer,4,linkId)
-							};
-            return OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams);
-
-
-        }
-
-
-        public List<LinkInfo> GetLinkList()
-        {
-
-            string cmdText = string.Format("select * from [{0}links]  order by [sortnum] asc,[linkid] asc", ConfigHelper.Tableprefix);
-
-            return DataReaderToListLink(OleDbHelper.ExecuteReader(cmdText));
-
+            using (var conn = dapper.OpenConnection())
+            {
+                return conn.Execute(cmdText, new { categoryid = link.LinkId });
+            }
         }
 
         /// <summary>
-        /// 转换实体
+        /// 获取全部链接
         /// </summary>
-        /// <param LinkName="read">OleDbDataReader</param>
-        /// <param name="read"></param>
-        /// <returns>LinkInfo</returns>
-        private static List<LinkInfo> DataReaderToListLink(OleDbDataReader read)
+        /// <returns></returns>
+        public virtual IEnumerable<LinkInfo> Table
         {
-            var list = new List<LinkInfo>();
-            while (read.Read())
+            get
             {
-                var link = new LinkInfo
+                string cmdText = string.Format("select * from [{0}links]  order by [sortnum] asc,[linkid] asc", ConfigHelper.Tableprefix);
+                using (var conn = dapper.OpenConnection())
                 {
-                    LinkId = Convert.ToInt32(read["Linkid"]),
-                    Type = Convert.ToInt32(read["Type"]),
-                    LinkName = Convert.ToString(read["LinkName"]),
-                    LinkUrl = Convert.ToString(read["LinkUrl"]),
-                    Target = Convert.ToString(read["Target"]),
-                    Description = Convert.ToString(read["Description"]),
-                    SortNum = Convert.ToInt32(read["SortNum"]),
-                    Status = Convert.ToInt32(read["Status"]),
-                    CreateTime = Convert.ToDateTime(read["CreateTime"])
-                };
-                if (read["Position"] != DBNull.Value)
-                {
-                    link.Position = Convert.ToInt32(read["Position"]);
+                    var list = conn.Query<LinkInfo>(cmdText, null);
+                    return list;
                 }
-
-
-
-                list.Add(link);
             }
-            read.Close();
-            return list;
+
         }
     }
 }
