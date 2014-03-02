@@ -77,7 +77,7 @@ namespace Jqpress.Blog.Domain
             {
                 if (this.UserId > 0)
                 {
-                    UserInfo user = UserService.GetUser(this.UserId);
+                    UserInfo user = (new UserService()).GetUser(this.UserId);
                     if (user != null)
                     {
                         return user.Link;

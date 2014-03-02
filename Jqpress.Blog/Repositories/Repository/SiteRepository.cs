@@ -12,7 +12,7 @@ namespace Jqpress.Blog.Repositories.Repository
 {
    public partial class SiteRepository:ISiteRepository
     {
-       DapperHelper dapper = new DapperHelper();
+       
 
        /// <summary>
        /// 更新统计数据
@@ -22,7 +22,7 @@ namespace Jqpress.Blog.Repositories.Repository
         public bool UpdateStatistics(StatisticsInfo statistics)
         {
             string cmdText = string.Format("update [{0}sites] set PostCount=@PostCount,CommentCount=@CommentCount,VisitCount=@VisitCount,TagCount=@TagCount", ConfigHelper.Tableprefix);
-            using(var conn = dapper.OpenConnection())
+            using(var conn = new DapperHelper().OpenConnection())
             {
                 return conn.Execute(cmdText, new
                 {
@@ -41,7 +41,7 @@ namespace Jqpress.Blog.Repositories.Repository
         {
             string cmdText = string.Format("select top 1 * from [{0}sites]", ConfigHelper.Tableprefix);
             string insertText = string.Format("insert into [{0}sites] ([PostCount],[CommentCount],[VisitCount],[TagCount]) values ( '0','0','0','0')", ConfigHelper.Tableprefix);
-            using(var conn = dapper.OpenConnection())
+            using(var conn = new DapperHelper().OpenConnection())
             {
                var list = conn.Query<StatisticsInfo>(cmdText,null).ToList();
                if (list.Count == 0)

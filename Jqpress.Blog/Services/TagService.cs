@@ -2,54 +2,45 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Jqpress.Blog.Data;
 using Jqpress.Blog.Domain;
 using Jqpress.Framework.Utils;
 using Jqpress.Framework.Web;
 using Jqpress.Framework.Mvc;
-
+using Jqpress.Blog.Repositories.Repository;
+using Jqpress.Blog.Repositories.IRepository;
 
 namespace Jqpress.Blog.Services
 {
    public class TagService
     {
-        /// <summary>
-        /// 标签列表
-        /// </summary>
-        private static List<TagInfo> _tags;
+        private ITagRepository _tagRepository;
 
-        private static object lockHelper = new object();
-
+        #region 构造函数
         /// <summary>
-        /// 初始化
+        /// 构造器方法
         /// </summary>
-        public static void LoadTag()
+        public TagService()
+            : this(new TagRepository())
         {
-            if (_tags == null)
-            {
-                lock (lockHelper)
-                {
-                    if (_tags == null)
-                    {
-                        _tags = DatabaseProvider.Instance.GetTagList();
-                    }
-                }
-            }
         }
+        /// <summary>
+        /// 构造器方法
+        /// </summary>
+        /// <param name="tagRepository"></param>
+        public TagService(ITagRepository tagRepository)
+        {
+            this._tagRepository = tagRepository;
+        }
+        #endregion
 
         /// <summary>
         /// 标签列表
         /// </summary>
-        private static List<TagInfo> Tags
+        private  List<TagInfo> Tags
         {
             get
             {
-                if (_tags == null)
-                {
-                    LoadTag();
-                }
-
-                return _tags;
+                return _tagRepository.Table.ToList();
             }
         }
 
@@ -57,7 +48,7 @@ namespace Jqpress.Blog.Services
         /// 获取全部
         /// </summary>
         /// <returns></returns>
-        public static List<TagInfo> GetTagList()
+        public  List<TagInfo> GetTagList()
         {
             return Tags;
         }
@@ -67,13 +58,9 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="tag"></param>
         /// <returns></returns>
-        public static int InsertTag(TagInfo tag)
+        public  int InsertTag(TagInfo tag)
         {
-            tag.TagId = DatabaseProvider.Instance.InsertTag(tag);
-
-            Tags.Add(tag);
-            Tags.Sort();
-
+            tag.TagId = _tagRepository.Insert(tag);
             return tag.TagId;
         }
 
@@ -82,10 +69,9 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="tag"></param>
         /// <returns></returns>
-        public static int UpdateTag(TagInfo tag)
+        public  int UpdateTag(TagInfo tag)
         {
-            Tags.Sort();
-            return DatabaseProvider.Instance.UpdateTag(tag);
+            return _tagRepository.Update(tag);
         }
 
         /// <summary>
@@ -93,10 +79,9 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="tagId"></param>
         /// <returns></returns>
-        public static int DeleteTag(int tagId)
+        public  int DeleteTag(int tagId)
         {
-            Tags.RemoveAll(tag => tag.TagId == tagId);
-            return DatabaseProvider.Instance.DeleteTag(tagId);
+            return _tagRepository.Delete(new TagInfo() { TagId= tagId});
         }
 
         /// <summary>
@@ -104,16 +89,9 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="tagId"></param>
         /// <returns></returns>
-        public static TagInfo GetTag(int tagId)
+        public  TagInfo GetTag(int tagId)
         {
-            foreach (TagInfo t in Tags)
-            {
-                if (t.TagId == tagId)
-                {
-                    return t;
-                }
-            }
-            return null;
+            return _tagRepository.GetById(tagId);
         }
 
         /// <summary>
@@ -121,17 +99,9 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static TagInfo GetTag(string name)
+        public  TagInfo GetTag(string name)
         {
-
-            foreach (TagInfo t in Tags)
-            {
-                if (t.CateName == name)
-                {
-                    return t;
-                }
-            }
-            return null;
+           return _tagRepository.GetTagByName(name);   
         }
 
         /// <summary>
@@ -139,18 +109,9 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="slug"></param>
         /// <returns></returns>
-        public static TagInfo GetTagBySlug(string slug)
+        public  TagInfo GetTagBySlug(string slug)
         {
-
-            foreach (TagInfo t in Tags)
-            {
-
-                if (!string.IsNullOrEmpty(slug) && t.Slug.ToLower() == slug.ToLower())
-                {
-                    return t;
-                }
-            }
-            return null;
+            return _tagRepository.GetTagBySlug(slug);
         }
 
 
@@ -159,7 +120,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="rowCount"></param>
         /// <returns></returns>
-        public static List<TagInfo> GetTagList(int rowCount)
+        public  List<TagInfo> GetTagList(int rowCount)
         {
             if (Tags.Count <= rowCount)
             {
@@ -180,7 +141,7 @@ namespace Jqpress.Blog.Services
         /// <param name="pageIndex"></param>
         /// <param name="recordCount"></param>
         /// <returns></returns>
-        public static List<TagInfo> GetTagList(int pageSize, int pageIndex, out int recordCount)
+        public  List<TagInfo> GetTagList(int pageSize, int pageIndex, out int recordCount)
         {
             recordCount = Tags.Count;
             List<TagInfo> rlist = new List<TagInfo>();
@@ -205,7 +166,7 @@ namespace Jqpress.Blog.Services
         /// <param name="pageIndex"></param>
         /// <param name="recordCount"></param>
         /// <returns></returns>
-        public static IPagedList<TagInfo> GetTagListPage(int pageSize, int pageIndex, out int recordCount)
+        public  IPagedList<TagInfo> GetTagListPage(int pageSize, int pageIndex, out int recordCount)
         {
             recordCount = Tags.Count;
             List<TagInfo> list = new List<TagInfo>();
@@ -230,7 +191,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="tagID"></param>
         /// <returns></returns>
-        public static int GetTagId(string slug)
+        public  int GetTagId(string slug)
         {
 
             foreach (TagInfo t in Tags)
@@ -249,7 +210,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="tagId"></param>
         /// <returns></returns>
-        public static string GetTagName(int tagId)
+        public  string GetTagName(int tagId)
         {
 
             foreach (TagInfo t in Tags)
@@ -267,7 +228,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="ids">标签Id,逗号隔开</param>
         /// <returns></returns>
-        public static List<TagInfo> GetTagList(string ids)
+        public  List<TagInfo> GetTagList(string ids)
         {
 
 
@@ -307,7 +268,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="tagNameList"></param>
         /// <returns></returns>
-        public static string GetTagIdList(string tagNames)
+        public  string GetTagIdList(string tagNames)
         {
             if (string.IsNullOrEmpty(tagNames))
             {
@@ -322,7 +283,7 @@ namespace Jqpress.Blog.Services
             {
                 if (!string.IsNullOrEmpty(n))
                 {
-                    TagInfo t = TagService.GetTag(n);
+                    TagInfo t = GetTag(n);
 
                     if (t == null)
                     {
@@ -335,7 +296,7 @@ namespace Jqpress.Blog.Services
                         t.CateName = n;
                         t.Slug = HttpHelper.HtmlEncode(StringHelper.FilterSlug(n, "tag"));
 
-                        t.TagId = TagService.InsertTag(t);
+                        t.TagId = InsertTag(t);
                     }
                     tagIds += "{" + t.TagId + "}";
                 }
@@ -347,7 +308,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="tagids">格式:{2}{26}</param>
         /// <returns></returns>
-        public static bool UpdateTagUseCount(string tagids, int addCount)
+        public  bool UpdateTagUseCount(string tagids, int addCount)
         {
             if (string.IsNullOrEmpty(tagids))
             {
@@ -362,7 +323,7 @@ namespace Jqpress.Blog.Services
                 if (tag != null)
                 {
                     tag.PostCount += addCount;
-                    DatabaseProvider.Instance.UpdateTag(tag);
+                    _tagRepository.Update(tag);
                 }
             }
             return true;

@@ -53,7 +53,7 @@ namespace Jqpress.Blog.Common
             }
             else
             {
-                UserInfo user = UserService.GetUser(CurrentUserId);
+                UserInfo user = new UserService().GetUser(CurrentUserId);
 
                 if (user == null)       //删除已登陆用户时有效
                 {

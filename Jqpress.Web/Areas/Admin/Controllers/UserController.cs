@@ -13,12 +13,15 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 {
     public class UserController : BaseAdminController
     {
+        #region private items
+        private UserService _userService = new UserService();
+        #endregion;
         public ActionResult List()
         {
             var model = new UserListModel();
 
 
-            List<UserInfo> list = UserService.GetUserList();
+            List<UserInfo> list = _userService.GetUserList();
             model.UserList = list;
             var RolesDic = Enum.GetValues(typeof (Jqpress.Blog.Domain.Enum.UserRole)).Cast<int>().ToDictionary(s => Enum.GetName(typeof (Jqpress.Blog.Domain.Enum.UserRole), s));
             
@@ -50,7 +53,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         public JsonResult Edit(int? id)
         {
             var uid = id ?? 0;
-            var user = UserService.GetUser(uid);
+            var user = _userService.GetUser(uid);
             return Json(user, JsonRequestBehavior.AllowGet);
         }
         /// <summary>
@@ -59,7 +62,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         public ContentResult Delete(int? id)
         {
             var uid = id ?? 0;
-            UserService.DeleteUser(uid);
+            _userService.DeleteUser(uid);
             return Content("success");
         }
         /// <summary>
@@ -87,7 +90,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 
             if (u.UserId > 0)
             {
-                var olduser = UserService.GetUser(u.UserId);
+                var olduser = _userService.GetUser(u.UserId);
                 u.CreateTime = olduser.CreateTime;
                 u.CommentCount = olduser.CommentCount;
                 u.PostCount = olduser.PostCount;
@@ -125,12 +128,12 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 
             if (u.UserId>0)//更新操作
             {
-                UserService.UpdateUser(u);
+                _userService.UpdateUser(u);
 
                 //  如果修改当前用户,则更新COOKIE
                 if (!string.IsNullOrEmpty(u.Password) && u.UserId == CurrentUserId)
                 {
-                   UserService.WriteUserCookie(u.UserId, u.UserName, u.Password, 0);
+                   _userService.WriteUserCookie(u.UserId, u.UserName, u.Password, 0);
                 }
                 return Json(u);
             }
@@ -141,11 +144,11 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                 {
                     return Json("请输入密码!");
                 }
-                if (UserService.ExistsUserName(u.UserName))
+                if (_userService.ExistsUserName(u.UserName))
                 {
                     return Json("该用户名已存在,请换之");
                 }
-                u.UserId = UserService.InsertUser(u);
+                u.UserId = _userService.InsertUser(u);
                 return Json(u);
             }
         }

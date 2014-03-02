@@ -2,61 +2,50 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Jqpress.Blog.Data;
 using Jqpress.Blog.Domain;
+using Jqpress.Blog.Repositories.IRepository;
+using Jqpress.Blog.Repositories.Repository;
 
 namespace Jqpress.Blog.Services
 {
     public class StatisticsService
     {
-        /// <summary>
-        /// 缓存统计
-        /// </summary>
-        private static StatisticsInfo _statistics=null;
+        private ISiteRepository _siteRepository;
 
+        #region 构造函数
         /// <summary>
-        /// lock
+        /// 构造器方法
         /// </summary>
-        private static object lockHelper = new object();
-
-        static StatisticsService()
+        public StatisticsService()
+            : this(new SiteRepository())
         {
-            LoadStatistics();
         }
-
         /// <summary>
-        /// 初始化
+        /// 构造器方法
         /// </summary>
-        private static void LoadStatistics()
+        /// <param name="siteRepository"></param>
+        public StatisticsService(ISiteRepository siteRepository)
         {
-            if (_statistics == null)
-            {
-                lock (lockHelper)
-                {
-                    if (_statistics == null)
-                    {
-                        _statistics = DatabaseProvider.Instance.GetStatistics();
-                    }
-                }
-            }
+            this._siteRepository = siteRepository;
         }
+        #endregion
 
         /// <summary>
         /// 获取
         /// </summary>
         /// <returns></returns>
-        public static StatisticsInfo GetStatistics()
+        public  StatisticsInfo GetStatistics()
         {
-            return _statistics;
+            return _siteRepository.GetStatistics();
         }
 
         /// <summary>
         /// 修改
         /// </summary>
         /// <returns></returns>
-        public static bool UpdateStatistics()
+        public  bool UpdateStatistics(StatisticsInfo statistics)
         {
-            return DatabaseProvider.Instance.UpdateStatistics(_statistics);
+            return _siteRepository.UpdateStatistics(statistics);
         }
 
         /// <summary>
@@ -64,10 +53,11 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="addCount">增加数，可为负数</param>
         /// <returns></returns>
-        public static bool UpdateStatisticsPostCount(int addCount)
+        public  bool UpdateStatisticsPostCount(int addCount)
         {
-            _statistics.PostCount += addCount;
-            return UpdateStatistics();
+            var statistic = _siteRepository.GetStatistics();
+            statistic.PostCount += addCount;
+            return UpdateStatistics(statistic);
         }
 
         /// <summary>
@@ -75,10 +65,11 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="addCount">增加数，可为负数</param>
         /// <returns></returns>
-        public static bool UpdateStatisticsCommentCount(int addCount)
+        public  bool UpdateStatisticsCommentCount(int addCount)
         {
-            _statistics.CommentCount += addCount;
-            return UpdateStatistics();
+            var statistic = _siteRepository.GetStatistics();
+            statistic.CommentCount += addCount;
+            return UpdateStatistics(statistic);
         }
     }
 }

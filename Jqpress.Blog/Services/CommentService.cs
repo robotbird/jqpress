@@ -2,41 +2,52 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Jqpress.Blog.Data;
 using Jqpress.Blog.Domain;
 using Jqpress.Blog.Domain.Enum;
 using Jqpress.Framework.Utils;
 using Jqpress.Framework.Web;
 using Jqpress.Framework.Mvc;
-
+using Jqpress.Blog.Repositories.Repository;
+using Jqpress.Blog.Repositories.IRepository;
 
 namespace Jqpress.Blog.Services
 {
     public class CommentService
     {
-        
+        private ICommentRepository _commentRepository;
+
+        #region 构造函数
+        /// <summary>
+        /// 构造器方法
+        /// </summary>
+        public CommentService()
+            : this(new CommentRepository())
+        {
+        }
+        /// <summary>
+        /// 构造器方法
+        /// </summary>
+        /// <param name="commentRepository"></param>
+        public CommentService(ICommentRepository commentRepository)
+        {
+            this._commentRepository = commentRepository;
+        }
+        #endregion
         /// <summary>
         /// 最近评论列表
         /// </summary>
-        private static List<CommentInfo> _recentcomments;
+        private  List<CommentInfo> _recentcomments;
 
-        private PostService _postService = new PostService();
 
         /// <summary>
         /// lock
         /// </summary>
-        private static object lockHelper = new object();
-
-        static CommentService()
-        {
-            //   LoadRecentComment(); 
-        }
-
+        private  object lockHelper = new object();
 
         /// <summary>
         /// 加载最近评论
         /// </summary>
-        private static void LoadRecentComment(int rowCount)
+        private  void LoadRecentComment(int rowCount)
         {
             lock (lockHelper)
             {
@@ -50,15 +61,15 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="comment"></param>
         /// <returns></returns>
-        public static int InsertComment(CommentInfo comment)
+        public  int InsertComment(CommentInfo comment)
         {
-            int result = DatabaseProvider.Instance.InsertComment(comment);
+            int result = _commentRepository.Insert(comment);
 
             //统计
-            StatisticsService.UpdateStatisticsCommentCount(1);
+            new StatisticsService().UpdateStatisticsCommentCount(1);
 
             //用户
-            UserService.UpdateUserCommentCount(comment.UserId, 1);
+            new UserService().UpdateUserCommentCount(comment.UserId, 1);
 
             //文章
             //TODO:postservice
@@ -75,11 +86,11 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="comment"></param>
         /// <returns></returns>
-        public static int UpdateComment(CommentInfo comment)
+        public  int UpdateComment(CommentInfo comment)
         {
             _recentcomments = null;
 
-            return DatabaseProvider.Instance.UpdateComment(comment);
+            return _commentRepository.Update(comment);
 
         }
 
@@ -88,22 +99,22 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="commentId"></param>
         /// <returns></returns>
-        public static int DeleteComment(int commentId)
+        public  int DeleteComment(int commentId)
         {
             CommentInfo comment = GetComment(commentId);
 
-            int result =DatabaseProvider.Instance.DeleteComment(commentId);
+            int result = _commentRepository.Delete(new CommentInfo { CommentId= commentId});
 
             //统计
-            StatisticsService.UpdateStatisticsCommentCount(-1);
+            new StatisticsService().UpdateStatisticsCommentCount(-1);
 
             if (comment != null)
             {
                 //用户
-                UserService.UpdateUserCommentCount(comment.UserId, -1);
+                new UserService().UpdateUserCommentCount(comment.UserId, -1);
                 //文章
                 //TODO:postservice
-                //_postService.UpdatePostCommentCount(comment.PostId, -1);
+                //new PostService().UpdatePostCommentCount(comment.PostId, -1);
             }
 
             _recentcomments = null;
@@ -116,9 +127,9 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="commentId"></param>
         /// <returns></returns>
-        public static CommentInfo GetComment(int commentId)
+        public  CommentInfo GetComment(int commentId)
         {
-            CommentInfo comment =DatabaseProvider.Instance.GetComment(commentId);
+            CommentInfo comment =_commentRepository.GetById(commentId);
             return comment;
         }
 
@@ -134,7 +145,7 @@ namespace Jqpress.Blog.Services
         /// <param name="emailNotify"></param>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public static List<CommentInfo> GetCommentList(int rowCount, int order, int userId, int postId, int parentId, int approved, int emailNotify, string keyword)
+        public  List<CommentInfo> GetCommentList(int rowCount, int order, int userId, int postId, int parentId, int approved, int emailNotify, string keyword)
         {
             int totalRecord = 0;
             return GetCommentList(rowCount, 1, out totalRecord, order, userId, postId, parentId, approved, emailNotify, keyword);
@@ -145,7 +156,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="rowCount"></param>
         /// <returns></returns>
-        public static List<CommentInfo> GetCommentListByRecent(int rowCount)
+        public  List<CommentInfo> GetCommentListByRecent(int rowCount)
         {
             if (_recentcomments == null)
             {
@@ -179,9 +190,9 @@ namespace Jqpress.Blog.Services
         /// <param name="emailStatus"></param>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public static List<CommentInfo> GetCommentList(int pageSize, int pageIndex, out int totalRecord, int order, int userId, int postId, int parentId, int approved, int emailNotify, string keyword)
+        public  List<CommentInfo> GetCommentList(int pageSize, int pageIndex, out int totalRecord, int order, int userId, int postId, int parentId, int approved, int emailNotify, string keyword)
         {
-            List<CommentInfo> list = DatabaseProvider.Instance.GetCommentList(pageSize, pageIndex, out totalRecord, order, userId, postId, parentId, approved, emailNotify, keyword);
+            List<CommentInfo> list = _commentRepository.GetCommentList(pageSize, pageIndex, out totalRecord, order, userId, postId, parentId, approved, emailNotify, keyword);
 
             int floor = 1;
             foreach (CommentInfo comment in list)
@@ -206,9 +217,9 @@ namespace Jqpress.Blog.Services
         /// <param name="emailStatus"></param>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public static IPagedList<CommentInfo> GetCommentListPage(int pageSize, int pageIndex, out int recordCount, int order, int userId, int postId, int parentId, int approved, int emailNotify, string keyword)
+        public  IPagedList<CommentInfo> GetCommentListPage(int pageSize, int pageIndex, out int recordCount, int order, int userId, int postId, int parentId, int approved, int emailNotify, string keyword)
         {
-            List<CommentInfo> list = DatabaseProvider.Instance.GetCommentList(pageSize, pageIndex, out recordCount, order, userId, postId, parentId, approved, emailNotify, keyword);
+            List<CommentInfo> list = _commentRepository.GetCommentList(pageSize, pageIndex, out recordCount, order, userId, postId, parentId, approved, emailNotify, keyword);
 
             int floor = 1;
             foreach (CommentInfo comment in list)
@@ -225,11 +236,11 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="postId">日志ID</param>
         /// <returns></returns>
-        public static int DeleteCommentByPost(int postId)
+        public  int DeleteCommentByPost(int postId)
         {
-            int result =DatabaseProvider.Instance.DeleteCommentByPost(postId);
+            int result =_commentRepository.DeleteCommentByPost(postId);
 
-            StatisticsService.UpdateStatisticsCommentCount(-result);
+            new StatisticsService().UpdateStatisticsCommentCount(-result);
 
             _recentcomments = null;
 
@@ -241,7 +252,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="incChild"></param>
         /// <returns></returns>
-        public static int GetCommentCount(bool incChild)
+        public  int GetCommentCount(bool incChild)
         {
             return GetCommentCount(-1, incChild);
         }
@@ -251,7 +262,7 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="postId"></param>
         /// <returns></returns>
-        public static int GetCommentCount(int postId, bool incChild)
+        public  int GetCommentCount(int postId, bool incChild)
         {
             return GetCommentCount(-1, postId, incChild);
         }
@@ -263,10 +274,10 @@ namespace Jqpress.Blog.Services
         /// <param name="postId"></param>
         /// <param name="incChild"></param>
         /// <returns></returns>
-        public static int GetCommentCount(int userId, int postId, bool incChild)
+        public  int GetCommentCount(int userId, int postId, bool incChild)
         {
 
-            return DatabaseProvider.Instance.GetCommentCount(userId, postId, incChild);
+            return _commentRepository.GetCommentCount(userId, postId, incChild);
         }
     }
 }

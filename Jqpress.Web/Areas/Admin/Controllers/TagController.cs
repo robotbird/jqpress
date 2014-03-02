@@ -13,13 +13,16 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 {
     public class TagController : Controller
     {
+        #region private items
+        private TagService _tagService = new TagService();
+        #endregion;
         public ActionResult List()
         {
             var model = new TagListModel();
             const int pageSize = 10;
             int count = 0;
             int pageIndex = PressRequest.GetInt("page", 1);
-            var list = TagService.GetTagListPage(pageSize, pageIndex, out count);
+            var list = _tagService.GetTagListPage(pageSize, pageIndex, out count);
             model.PageList.LoadPagedList(list);
             model.TagList = (List<TagInfo>)list;
             return View(model);
@@ -31,7 +34,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         public JsonResult Edit(int? id)
         {
             var cid = id ?? 0;
-            TagInfo cat = TagService.GetTag(cid);
+            TagInfo cat = _tagService.GetTag(cid);
             return Json(cat, JsonRequestBehavior.AllowGet);
         }
         /// <summary>
@@ -40,7 +43,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         public ContentResult Delete(int? id)
         {
             var cid = id ?? 0;
-            TagService.DeleteTag(cid);
+            _tagService.DeleteTag(cid);
             return Content("success");
         }
         /// <summary>
@@ -61,16 +64,16 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             cat.SortNum = TypeConverter.StrToInt(cat.SortNum, 1000);
             if (cat.TagId > 0)
             {
-                var oldcat = TagService.GetTag(cat.TagId);
+                var oldcat = _tagService.GetTag(cat.TagId);
                 cat.CreateTime = oldcat.CreateTime;
                 cat.PostCount = oldcat.PostCount;
-                TagService.UpdateTag(cat);
+                _tagService.UpdateTag(cat);
             }
             else
             {
                 cat.CreateTime = DateTime.Now;
                 cat.PostCount = 0;
-                TagService.InsertTag(cat);
+                _tagService.InsertTag(cat);
             }
             return Json(cat, JsonRequestBehavior.AllowGet);
         }

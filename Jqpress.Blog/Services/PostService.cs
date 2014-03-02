@@ -8,7 +8,6 @@ using System.Web;
 using System.Text.RegularExpressions;
 using Jqpress.Framework.Mvc;
 using Jqpress.Framework.Configuration;
-using Jqpress.Blog.Data;
 using Jqpress.Blog.Domain;
 using Jqpress.Blog.Configuration;
 using Jqpress.Blog.Repositories.Repository;
@@ -27,10 +26,7 @@ namespace Jqpress.Blog.Services
         private static int _postcount;
 
 
-        #region 私有变量
         private IPostRepository _postRepository;
-        private CategoryService  categoryService = new CategoryService();
-        #endregion
 
         #region 构造函数
         /// <summary>
@@ -61,13 +57,13 @@ namespace Jqpress.Blog.Services
             post.PostId = _postRepository.Insert(post);
 
             //统计
-            StatisticsService.UpdateStatisticsPostCount(1);
+            new StatisticsService().UpdateStatisticsPostCount(1);
             //用户
-            UserService.UpdateUserPostCount(post.UserId, 1);
+            new UserService().UpdateUserPostCount(post.UserId, 1);
             //分类
-            categoryService.UpdateCategoryCount(post.CategoryId, 1);
+            new CategoryService().UpdateCategoryCount(post.CategoryId, 1);
             //标签
-            TagService.UpdateTagUseCount(post.Tag, 1);
+            new TagService().UpdateTagUseCount(post.Tag, 1);
 
             //   RemovePostsCache();
             SendEmail(post);
@@ -90,15 +86,15 @@ namespace Jqpress.Blog.Services
             if (oldPost != null && oldPost.CategoryId != _postinfo.CategoryId)
             {
                 //分类
-                categoryService.UpdateCategoryCount(oldPost.CategoryId, -1);
-                categoryService.UpdateCategoryCount(_postinfo.CategoryId, 1);
+                new CategoryService().UpdateCategoryCount(oldPost.CategoryId, -1);
+                new CategoryService().UpdateCategoryCount(_postinfo.CategoryId, 1);
             }
 
             //     CacheHelper.Remove(CacheKey);
 
             //标签
-            TagService.UpdateTagUseCount(oldPost.Tag, -1);
-            TagService.UpdateTagUseCount(_postinfo.Tag, 1);
+            new TagService().UpdateTagUseCount(oldPost.Tag, -1);
+            new TagService().UpdateTagUseCount(_postinfo.Tag, 1);
 
             //   RemovePostsCache();
 
@@ -117,16 +113,16 @@ namespace Jqpress.Blog.Services
             int result = _postRepository.Delete(new PostInfo {PostId = postid });
 
             //统计
-            StatisticsService.UpdateStatisticsPostCount(-1);
+            new StatisticsService().UpdateStatisticsPostCount(-1);
             //用户
-            UserService.UpdateUserPostCount(oldPost.UserId, -1);
+            new UserService().UpdateUserPostCount(oldPost.UserId, -1);
             //分类
-            categoryService.UpdateCategoryCount(oldPost.CategoryId, -1);
+            new CategoryService().UpdateCategoryCount(oldPost.CategoryId, -1);
             //标签
-            TagService.UpdateTagUseCount(oldPost.Tag, -1);
+            new TagService().UpdateTagUseCount(oldPost.Tag, -1);
 
             //删除所有评论
-            CommentService.DeleteCommentByPost(postid);
+            new CommentService().DeleteCommentByPost(postid);
 
             //     RemovePostsCache();
 
@@ -490,7 +486,7 @@ namespace Jqpress.Blog.Services
         {
             if (BlogConfig.GetSetting().SendMailAuthorByPost == 1)
             {
-                List<UserInfo> list = UserService.GetUserList();
+                List<UserInfo> list = new UserService().GetUserList();
                 List<string> emailList = new List<string>();
 
                 foreach (UserInfo user in list)

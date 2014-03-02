@@ -10,43 +10,40 @@ using Jqpress.Blog.Repositories.IRepository;
 
 namespace Jqpress.Blog.Repositories.Repository
 {
-    public partial class UserRepository
+    public partial class UserRepository:IUserRepository
     {
-       DapperHelper dapper = new DapperHelper();
+       
 
         /// <summary>
         /// 添加
         /// </summary>
         /// <param name="userinfo"></param>
         /// <returns></returns>
-        public int InsertUser(UserInfo userinfo)
+        public int Insert(UserInfo userinfo)
         {
             string cmdText = string.Format(@" insert into [{0}users](
                                 [UserType],[UserName],[NickName],[Password],[Email],[SiteUrl],[AvatarUrl],[Description],[sortnum],[Status],[PostCount],[CommentCount],[CreateTime])
                                 values (
                                 @UserType,@UserName,@NickName,@Password,@Email,@SiteUrl,@AvatarUrl,@Description,@SortNum,@Status, @PostCount,@CommentCount,@CreateTime )", ConfigHelper.Tableprefix);
-            OleDbParameter[] prams = { 
-                                        OleDbHelper.MakeInParam("@UserType", OleDbType.Integer,4, userinfo.Role),
-                                        OleDbHelper.MakeInParam("@UserName", OleDbType.VarWChar,50, userinfo.UserName),
-                                        OleDbHelper.MakeInParam("@NickName", OleDbType.VarWChar,50, userinfo.NickName),
-                                        OleDbHelper.MakeInParam("@Password", OleDbType.VarWChar,50, userinfo.Password),
-                                        OleDbHelper.MakeInParam("@Email", OleDbType.VarWChar,50, userinfo.Email),
-                                        OleDbHelper.MakeInParam("@SiteUrl", OleDbType.VarWChar,255, userinfo.SiteUrl),
-                                        OleDbHelper.MakeInParam("@AvatarUrl", OleDbType.VarWChar,255, userinfo.AvatarUrl),
-                                        OleDbHelper.MakeInParam("@Description", OleDbType.VarWChar,255, userinfo.Description),
-                                        OleDbHelper.MakeInParam("@SortNum", OleDbType.Integer,4, userinfo.SortNum),
-                                        OleDbHelper.MakeInParam("@Status", OleDbType.Integer,4, userinfo.Status),                           
-                                        OleDbHelper.MakeInParam("@PostCount", OleDbType.Integer,4, userinfo.PostCount),
-                                        OleDbHelper.MakeInParam("@CommentCount", OleDbType.Integer,4, userinfo.CommentCount),
-                                        OleDbHelper.MakeInParam("@CreateTime", OleDbType.Date,8, userinfo.CreateTime),
-                                        
-                                    };
-            int r = OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams);
-            if (r > 0)
+            using(var conn = new DapperHelper().OpenConnection())
             {
-                return Convert.ToInt32(OleDbHelper.ExecuteScalar(string.Format("select top 1 [UserId] from [{0}users]  order by [UserId] desc", ConfigHelper.Tableprefix)));
+                conn.Execute(cmdText, new {
+                    Role = userinfo.Role,
+                    UserName = userinfo.UserName,
+                    NickName = userinfo.NickName,
+                    Password = userinfo.Password,
+                    Email = userinfo.Email,
+                    SiteUrl = userinfo.SiteUrl,
+                    AvatarUrl = userinfo.AvatarUrl,
+                    Description = userinfo.Description,
+                    SortNum = userinfo.SortNum,
+                    Status = userinfo.Status,
+                    PostCount = userinfo.PostCount,
+                    CommentCount = userinfo.CommentCount,
+                    CreateTime = userinfo.CreateTime.ToString()
+                });
+                return conn.Query<int>(string.Format("select top 1 [UserId] from [{0}users]  order by [UserId] desc", ConfigHelper.Tableprefix), null).First();
             }
-            return 0;
         }
 
         /// <summary>
@@ -54,7 +51,7 @@ namespace Jqpress.Blog.Repositories.Repository
         /// </summary>
         /// <param name="userinfo"></param>
         /// <returns></returns>
-        public int UpdateUser(UserInfo userinfo)
+        public int Update(UserInfo userinfo)
         {
             string cmdText = string.Format(@"update [{0}users] set
                                 [UserType]=@UserType,
@@ -71,23 +68,26 @@ namespace Jqpress.Blog.Repositories.Repository
                                 [CommentCount]=@CommentCount,
                                 [CreateTime]=@CreateTime
                                 where UserId=@UserId", ConfigHelper.Tableprefix);
-            OleDbParameter[] prams = { 
-                                        OleDbHelper.MakeInParam("@UserType", OleDbType.Integer,4, userinfo.Role),
-                                        OleDbHelper.MakeInParam("@UserName", OleDbType.VarWChar,50, userinfo.UserName),
-                                        OleDbHelper.MakeInParam("@NickName", OleDbType.VarWChar,50, userinfo.NickName),
-                                        OleDbHelper.MakeInParam("@Password", OleDbType.VarWChar,50, userinfo.Password),
-                                        OleDbHelper.MakeInParam("@Email", OleDbType.VarWChar,50, userinfo.Email),
-                                        OleDbHelper.MakeInParam("@SiteUrl", OleDbType.VarWChar,255, userinfo.SiteUrl),
-                                        OleDbHelper.MakeInParam("@AvatarUrl", OleDbType.VarWChar,255, userinfo.AvatarUrl),
-                                        OleDbHelper.MakeInParam("@Description", OleDbType.VarWChar,255, userinfo.Description),
-                                        OleDbHelper.MakeInParam("@SortNum", OleDbType.VarWChar,255, userinfo.SortNum),
-                                        OleDbHelper.MakeInParam("@Status", OleDbType.Integer,4, userinfo.Status),                           
-                                        OleDbHelper.MakeInParam("@PostCount", OleDbType.Integer,4, userinfo.PostCount),
-                                        OleDbHelper.MakeInParam("@CommentCount", OleDbType.Integer,4, userinfo.CommentCount),
-                                        OleDbHelper.MakeInParam("@CreateTime", OleDbType.Date,8, userinfo.CreateTime),
-                                        OleDbHelper.MakeInParam("@UserId", OleDbType.Integer,4, userinfo.UserId),
-                                    };
-            return OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams);
+           using(var conn = new DapperHelper().OpenConnection())
+           {
+              return conn.Execute(cmdText, new
+               {
+                   Role = userinfo.Role,
+                   UserName = userinfo.UserName,
+                   NickName = userinfo.NickName,
+                   Password = userinfo.Password,
+                   Email = userinfo.Email,
+                   SiteUrl = userinfo.SiteUrl,
+                   AvatarUrl = userinfo.AvatarUrl,
+                   Description = userinfo.Description,
+                   SortNum = userinfo.SortNum,
+                   Status = userinfo.Status,
+                   PostCount = userinfo.PostCount,
+                   CommentCount = userinfo.CommentCount,
+                   CreateTime = userinfo.CreateTime.ToString(),
+                   UserId = userinfo.UserId
+               });
+           }
         }
 
         /// <summary>
@@ -95,38 +95,90 @@ namespace Jqpress.Blog.Repositories.Repository
         /// </summary>
         /// <param name="userid"></param>
         /// <returns></returns>
-        public int DeleteUser(int userid)
+        public int Delete(UserInfo userinfo)
         {
             string cmdText = string.Format("delete from [{0}users] where [userid] = @userid", ConfigHelper.Tableprefix);
-            OleDbParameter[] prams = { 
-								        OleDbHelper.MakeInParam("@userid",OleDbType.Integer,4,userid)
-							        };
-            return OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams);
+            using(var conn = new DapperHelper().OpenConnection())
+            {
+                return conn.Execute(cmdText, new {userid = userinfo.UserId });
+            }
+        }
+
+
+        /// <summary>
+        /// 获取用户 
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public UserInfo GetById(object Id)
+        {
+            string cmdText = string.Format("select * from [{0}users] where [UserId] = @userId ", ConfigHelper.Tableprefix);
+            using (var conn = new DapperHelper().OpenConnection())
+            {
+                return conn.Query<UserInfo>(cmdText, new { userId = (int)Id }).First();
+            }
         }
 
         /// <summary>
-        /// 获取全部
+        /// 根据用户名获取用户 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        public UserInfo GetUserByName(string userName) 
+        {
+            string cmdText = string.Format("select * from [{0}users] where [userName] = @userName ", ConfigHelper.Tableprefix);
+            using(var conn = new DapperHelper().OpenConnection())
+            {
+                return conn.Query<UserInfo>(cmdText, new {userName = userName }).First();
+            }
+        }
+
+        /// <summary>
+        /// 根据用户名和密码获取用户
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public UserInfo GetUser(string userName, string password) 
+        {
+            string cmdText = string.Format("select * from [{0}users] where [userName] = @userName and [password]=@password ", ConfigHelper.Tableprefix);
+            using (var conn = new DapperHelper().OpenConnection())
+            {
+                return conn.Query<UserInfo>(cmdText, new { userName = userName,password = password }).First();
+            }
+        }
+
+        /// <summary>
+        /// 获取全部用户
         /// </summary>
         /// <returns></returns>
-        public List<UserInfo> GetUserList()
+        public virtual IEnumerable<UserInfo> Table
         {
-            string cmdText = string.Format("select * from [{0}users]  order by [sortnum] asc,[userid] asc", ConfigHelper.Tableprefix);
-            return DataReaderToUserList(OleDbHelper.ExecuteReader(cmdText));
-
+            get
+            {
+                string cmdText = string.Format("select * from [{0}users]  order by [sortnum] asc,[userid] asc", ConfigHelper.Tableprefix);
+                using (var conn = new DapperHelper().OpenConnection())
+                {
+                    var list = conn.Query<UserInfo>(cmdText, null);
+                    return list;
+                }
+            }
         }
 
+
+
         /// <summary>
-        /// 是否存在
+        /// 是否存在此用户名
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
         public bool ExistsUserName(string userName)
         {
             string cmdText = string.Format("select count(1) from [{0}users] where [userName] = @userName ", ConfigHelper.Tableprefix);
-            OleDbParameter[] prams = { 
-                                        OleDbHelper.MakeInParam("@userName",OleDbType.VarWChar,50,userName),
-							        };
-            return Convert.ToInt32(OleDbHelper.ExecuteScalar(CommandType.Text, cmdText, prams)) > 0;
+            using(var conn = new DapperHelper().OpenConnection())
+            {
+                return conn.Execute(cmdText, new {userName = userName })>0;
+            }
         }
     }
 }

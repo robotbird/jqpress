@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Jqpress.Blog.Data;
+using Jqpress.Framework.Cache;
 using Jqpress.Blog.Domain;
 using Jqpress.Blog.Repositories.Repository;
 using Jqpress.Blog.Repositories.IRepository;
@@ -12,15 +12,7 @@ namespace Jqpress.Blog.Services
 {
    public class CategoryService
     {
-         /// <summary>
-        /// 分类列表
-        /// </summary>
-        private  List<CategoryInfo> _categories;
-
-
-        #region 私有变量
         private ICategoryRepository _categoryRepository;
-        #endregion
 
         #region 构造函数
         /// <summary>
@@ -60,7 +52,6 @@ namespace Jqpress.Blog.Services
         /// <returns></returns>
         public  int UpdateCategory(CategoryInfo category)
         {
-            _categories.Sort();
             return _categoryRepository.Update(category);
         }
 
@@ -104,15 +95,7 @@ namespace Jqpress.Blog.Services
         /// <returns></returns>
         public  CategoryInfo GetCategory(int categoryId)
         {
-            foreach (CategoryInfo t in _categories)
-            {
-                if (t.CategoryId == categoryId)
-                {
-                    return t;
-                }
-            }
-            return null;
-
+            return _categoryRepository.GetById(categoryId);
         }
 
         /// <summary>
@@ -122,33 +105,7 @@ namespace Jqpress.Blog.Services
         /// <returns></returns>
         public  CategoryInfo GetCategory(string slug)
         {
-            foreach (CategoryInfo t in _categories)
-            {
-                if (!string.IsNullOrEmpty(slug) && t.Slug.ToLower() == slug.ToLower())
-                {
-                    return t;
-                }
-            }
-            return null;
-
-        }
-
-        /// <summary>
-        /// 获取分类ID
-        /// </summary>
-        /// <param name="slug"></param>
-        /// <returns></returns>
-        public  int GetCategoryId(string slug)
-        {
-
-            foreach (CategoryInfo t in _categories)
-            {
-                if (!string.IsNullOrEmpty(slug) && t.Slug.ToLower() == slug.ToLower())
-                {
-                    return t.CategoryId;
-                }
-            }
-            return -1;
+            return _categoryRepository.GetCategoryBySlug(slug);
         }
 
         /// <summary>
@@ -158,15 +115,7 @@ namespace Jqpress.Blog.Services
         /// <returns></returns>
         public  string GetCategoryName(int categoryId)
         {
-
-            foreach (CategoryInfo t in _categories)
-            {
-                if (t.CategoryId == categoryId)
-                {
-                    return t.CateName;
-                }
-            }
-            return string.Empty;
+            return GetCategory(categoryId).CateName;
         }
 
         /// <summary>
@@ -175,7 +124,7 @@ namespace Jqpress.Blog.Services
         /// <returns></returns>
         public  List<CategoryInfo> GetCategoryList()
         {
-            return _categories;
+            return _categoryRepository.Table.ToList();
         }
 
         /// <summary>
@@ -198,11 +147,22 @@ namespace Jqpress.Blog.Services
         /// <returns></returns>
         private  List<CategoryInfo> GetCategoryTree(int parentid, List<CategoryInfo> listcate, int level)
         {
-            var listAll = _categories;//这里面从内存读数据，所以不会遍历查库，暂时查库，要不他会将遍历后的值传给_categories
-            if (listAll.FindAll(c => !string.IsNullOrEmpty(c.TreeChar)).Count>0) {
-                _categories = _categoryRepository.Table.ToList();
-                listAll = _categories;
+            string categoryCacheKey = "category";
+
+            //这里面从内存读数据，所以不会遍历查库，暂时查库，要不他会将遍历后的值传给_categories
+            List<CategoryInfo> listAll = (List<CategoryInfo>)CacheHelper.Get(categoryCacheKey);
+
+            if (listAll == null)
+            {
+                listAll = _categoryRepository.Table.ToList();
+
+                CacheHelper.Insert(categoryCacheKey, listAll, CacheHelper.HourFactor * 12);
             }
+
+            //if (listAll.FindAll(c => !string.IsNullOrEmpty(c.TreeChar)).Count>0) {
+            //    _categories = _categoryRepository.Table.ToList();
+            //    listAll = _categories;
+            //}
             var treelist = new List<CategoryInfo>();
 
 

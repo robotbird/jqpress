@@ -13,7 +13,7 @@ namespace Jqpress.Blog.Repositories.Repository
 {
     public partial class CategoryRepository:ICategoryRepository
     {
-        DapperHelper dapper = new DapperHelper();
+        
 
         /// <summary>
         /// 添加分类
@@ -28,7 +28,7 @@ namespace Jqpress.Blog.Repositories.Repository
                             ([ParentId],[CateName],[Slug],[Description],[SortNum],[PostCount],[CreateTime])
                             values
                             (@ParentId,@CateName,@Slug,@Description,@SortNum,@PostCount,@CreateTime)", ConfigHelper.Tableprefix);
-            using (var conn = dapper.OpenConnection()) 
+            using (var conn = new DapperHelper().OpenConnection()) 
             {
                 conn.Execute(cmdText, new { 
                     ParentId = category.ParentId,
@@ -60,7 +60,7 @@ namespace Jqpress.Blog.Repositories.Repository
                                 [PostCount]=@PostCount,
                                 [CreateTime]=@CreateTime
                                 where categoryid=@categoryid", ConfigHelper.Tableprefix);
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                return conn.Execute(cmdText, new
                 {
@@ -83,7 +83,7 @@ namespace Jqpress.Blog.Repositories.Repository
         public int Delete(CategoryInfo category)
         {
             string cmdText = string.Format("delete from [{0}category] where [categoryid] = @categoryid", ConfigHelper.Tableprefix);
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                 return conn.Execute(cmdText, new { categoryid = category.CategoryId });
             }
@@ -96,10 +96,23 @@ namespace Jqpress.Blog.Repositories.Repository
         public CategoryInfo GetById(object id)
         {
             string cmdText = string.Format("select * from [{0}category] where [categoryid] = @categoryid", ConfigHelper.Tableprefix);
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
-                var list = conn.Query<CategoryInfo>(cmdText, new { categoryid = (int)id });
-                return list.ToList().Count > 0 ? list.ToList()[0] : null;
+                return  conn.Query<CategoryInfo>(cmdText, new { categoryid = (int)id }).First();
+            }
+        }
+
+        /// <summary>
+        /// 获取分类
+        /// </summary>
+        /// <param name="slug"></param>
+        /// <returns></returns>
+        public CategoryInfo GetCategoryBySlug(string slug) 
+        {
+            string cmdText = string.Format("select * from [{0}category] where [slug] = @slug", ConfigHelper.Tableprefix);
+            using (var conn = new DapperHelper().OpenConnection())
+            {
+                return conn.Query<CategoryInfo>(cmdText, new { slug = slug }).First();
             }
         }
 
@@ -112,7 +125,7 @@ namespace Jqpress.Blog.Repositories.Repository
             get
             {
                 string cmdText = string.Format("select * from [{0}category]  order by [SortNum] asc,[categoryid] asc", ConfigHelper.Tableprefix);
-                using (var conn = dapper.OpenConnection())
+                using (var conn = new DapperHelper().OpenConnection())
                 {
                     var list = conn.Query<CategoryInfo>(cmdText, null);
                     return list;
@@ -131,7 +144,7 @@ namespace Jqpress.Blog.Repositories.Repository
             while (true)
             {
                 string cmdText = cate.CategoryId == 0 ? string.Format("select count(1) from [{2}category] where [Slug]='{0}' and [type]={1}", cate.Slug, (int)CategoryType.Category, ConfigHelper.Tableprefix) : string.Format("select count(1) from [{3}category] where [Slug]='{0}'  and [type]={1} and [categoryid]<>{2}", cate.Slug, (int)CategoryType.Category, cate.CategoryId, ConfigHelper.Tableprefix);
-                using (var conn = dapper.OpenConnection())
+                using (var conn = new DapperHelper().OpenConnection())
                 {
                     int r = conn.Query<int>(cmdText, null).First();
 

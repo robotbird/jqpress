@@ -34,6 +34,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         #region private items
         private PostService _postService = new PostService();
         private CategoryService _categoryService = new CategoryService();
+        private TagService _tagService = new TagService();
         #endregion;
         public ActionResult List()
         {
@@ -117,7 +118,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             int postid = PressRequest.GetInt("id", 0);
             var model = new PostModel();
             var catelist = _categoryService.GetCategoryList();
-            model.TagList = TagService.GetTagList();
+            model.TagList = _tagService.GetTagList();
 
             if (postid > 0)
             {
@@ -143,7 +144,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             int pages = PressRequest.GetFormInt("page", 1);
 
             p.UpdateTime = DateTime.Now;
-            p.Tag = TagService.GetTagIdList(p.Tag);
+            p.Tag = _tagService.GetTagIdList(p.Tag);
             p.UserId = CurrentUserId;
             p.Slug = TypeConverter.ObjectToString(p.Slug);
             p.Summary = TypeConverter.ObjectToString(p.Summary);

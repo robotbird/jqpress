@@ -50,7 +50,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             if (cookie != null)
             {
                 CurrentUserId = TypeConverter.ObjectToInt(cookie["userid"]);
-                CurrentUser = UserService.GetUser(CurrentUserId);
+                CurrentUser = (new UserService()).GetUser(CurrentUserId);
                 if (CurrentUserId == 0)
                 {
                     filterContext.Result = RedirectToAction("login", "home", new { area = "admin" });

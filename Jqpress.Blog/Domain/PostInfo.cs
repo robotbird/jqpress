@@ -171,7 +171,7 @@ namespace Jqpress.Blog.Domain
         {
             get
             {
-                UserInfo user = Jqpress.Blog.Services.UserService.GetUser(this.UserId);
+                UserInfo user = (new UserService()).GetUser(this.UserId);
                 if (user != null)
                 {
                     return user;
@@ -210,7 +210,7 @@ namespace Jqpress.Blog.Domain
                 {
                     temptags = temptags.TrimEnd(',');
                 }
-                return TagService.GetTagList(temptags);
+                return (new TagService()).GetTagList(temptags);
             }
         }
 

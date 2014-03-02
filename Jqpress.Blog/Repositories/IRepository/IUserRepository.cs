@@ -2,10 +2,32 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Jqpress.Blog.Repositories.IRepository;
+using Jqpress.Blog.Domain;
 
 namespace Jqpress.Blog.Repositories.IRepository
 {
-    interface IUserRepository
+   public partial  interface IUserRepository:IRepository<UserInfo>
     {
+        /// <summary>
+        /// 是否存在此用户名
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        bool ExistsUserName(string userName);
+
+        /// <summary>
+        /// 根据用户名获取用户 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        UserInfo GetUserByName(string userName);
+        /// <summary>
+        /// 根据用户名和密码获取用户
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        UserInfo GetUser(string userName, string password);
     }
 }

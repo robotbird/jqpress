@@ -256,7 +256,7 @@ namespace Jqpress.Blog.Common
         {
             if (IsLogin)
             {
-                return UserService.GetUser(CurrentUserId);
+                return (new UserService()).GetUser(CurrentUserId);
             }
             return null;
         }

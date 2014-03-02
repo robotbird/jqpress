@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Jqpress.Blog.Data;
 using Jqpress.Blog.Domain;
+using Jqpress.Blog.Repositories.Repository;
+using Jqpress.Blog.Repositories.IRepository;
 
 namespace Jqpress.Blog.Services
 {
@@ -13,53 +14,34 @@ namespace Jqpress.Blog.Services
     /// </summary>
     public class LinkService
     {
+        private ILinkRepository _linkRepository;
 
+        #region 构造函数
         /// <summary>
-        /// 列表
+        /// 构造器方法
         /// </summary>
-        private static List<LinkInfo> _links;
-
-        /// <summary>
-        /// lock
-        /// </summary>
-        private static object lockHelper = new object();
-
-        static LinkService()
+        public LinkService()
+            : this(new LinkRepository())
         {
-            LoadLink();
         }
-
-
         /// <summary>
-        /// 初始化
+        /// 构造器方法
         /// </summary>
-        public static void LoadLink()
+        /// <param name="linkRepository"></param>
+        public LinkService(ILinkRepository linkRepository)
         {
-            if (_links == null)
-            {
-                lock (lockHelper)
-                {
-                    if (_links == null)
-                    {
-                        _links =  DatabaseProvider.Instance.GetLinkList();
-
-                    }
-                }
-            }
+            this._linkRepository = linkRepository;
         }
-
+        #endregion
 
         /// <summary>
         /// 添加
         /// </summary>
         /// <param name="link"></param>
         /// <returns></returns>
-        public static int InsertLink(LinkInfo link)
+        public  int InsertLink(LinkInfo link)
         {
-            link.LinkId =  DatabaseProvider.Instance.InsertLink(link);
-            _links.Add(link);
-            _links.Sort();
-
+            link.LinkId =  _linkRepository.Insert(link);
             return link.LinkId;
         }
 
@@ -68,10 +50,9 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="link"></param>
         /// <returns></returns>
-        public static int UpdateLink(LinkInfo link)
+        public  int UpdateLink(LinkInfo link)
         {
-            _links.Sort();
-            return  DatabaseProvider.Instance.UpdateLink(link);
+            return  _linkRepository.Update(link);
         }
 
         /// <summary>
@@ -79,15 +60,9 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="termid"></param>
         /// <returns></returns>
-        public static int DeleteLink(int linkId)
+        public  int Delete(int linkId)
         {
-
-            LinkInfo link = GetLink(linkId);
-            if (link != null)
-            {
-                _links.Remove(link);
-            }
-            return  DatabaseProvider.Instance.DeleteLink(linkId);
+            return _linkRepository.Delete(new LinkInfo() { LinkId = linkId});
         }
 
         /// <summary>
@@ -95,26 +70,18 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="linkId"></param>
         /// <returns></returns>
-        public static LinkInfo GetLink(int linkId)
+        public LinkInfo GetLink(int linkId)
         {
 
-            foreach (LinkInfo l in _links)
-            {
-                if (l.LinkId == linkId)
-                {
-                    return l;
-                }
-            }
-            return null;
+            return _linkRepository.GetById(linkId);
         }
-
         /// <summary>
         /// 获取连接列表
         /// </summary>
         /// <param name="position"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public static List<LinkInfo> GetLinkList(int position, int status)
+        public  List<LinkInfo> GetLinkList(int position, int status)
         {
             return GetLinkList(-1, position, status);
         }
@@ -126,9 +93,9 @@ namespace Jqpress.Blog.Services
         /// <param name="position"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public static List<LinkInfo> GetLinkList(int type, int position, int status)
+        public  List<LinkInfo> GetLinkList(int type, int position, int status)
         {
-            List<LinkInfo> list = _links;
+            List<LinkInfo> list = _linkRepository.Table.ToList();
 
             if (type != -1)
             {
@@ -152,9 +119,9 @@ namespace Jqpress.Blog.Services
         /// 获取连接列表
         /// </summary>
         /// <returns></returns>
-        public static List<LinkInfo> GetLinkList()
+        public  List<LinkInfo> GetLinkList()
         {
-            return _links;
+            return _linkRepository.Table.ToList();
         }
     }
 }

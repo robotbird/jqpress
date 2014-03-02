@@ -12,7 +12,7 @@ namespace Jqpress.Blog.Repositories.Repository
 {
     public partial class LinkRepository:ILinkRepository
     {
-        DapperHelper dapper = new DapperHelper();
+        
         /// <summary>
         /// insert link
         /// </summary>
@@ -29,7 +29,7 @@ namespace Jqpress.Blog.Repositories.Repository
                             @type,@linkname,@linkurl,@position,@target,@description,@sortnum,@status,@createtime
                             )", ConfigHelper.Tableprefix);
 
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                 conn.Execute(cmdText, new
                 {
@@ -65,7 +65,7 @@ namespace Jqpress.Blog.Repositories.Repository
                                 [status]=@status,
                                 [createtime]=@createtime
                                 where linkid=@linkid", ConfigHelper.Tableprefix);
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                return conn.Execute(cmdText, new
                 {
@@ -90,12 +90,19 @@ namespace Jqpress.Blog.Repositories.Repository
         public int Delete(LinkInfo link)
         {
             string cmdText = string.Format("delete from [{0}links] where [linkid] = @linkid", ConfigHelper.Tableprefix);
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                 return conn.Execute(cmdText, new { categoryid = link.LinkId });
             }
         }
-
+        public LinkInfo GetById(object Id) 
+        {
+            string cmdText = string.Format("select * from [{0}links] where [linkid]=@linkid ", ConfigHelper.Tableprefix);
+            using(var conn = new DapperHelper().OpenConnection())
+            {
+                return conn.Query<LinkInfo>(cmdText, new {linkid=(int)Id }).First();
+            }
+        }
         /// <summary>
         /// 获取全部链接
         /// </summary>
@@ -105,7 +112,7 @@ namespace Jqpress.Blog.Repositories.Repository
             get
             {
                 string cmdText = string.Format("select * from [{0}links]  order by [sortnum] asc,[linkid] asc", ConfigHelper.Tableprefix);
-                using (var conn = dapper.OpenConnection())
+                using (var conn = new DapperHelper().OpenConnection())
                 {
                     var list = conn.Query<LinkInfo>(cmdText, null);
                     return list;

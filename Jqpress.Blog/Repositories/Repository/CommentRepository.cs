@@ -12,8 +12,6 @@ namespace Jqpress.Blog.Repositories.Repository
 {
     public partial class CommentRepository:ICommentRepository
     {
-        DapperHelper dapper = new DapperHelper();
-
         /// <summary>
         /// 添加
         /// </summary>
@@ -25,7 +23,7 @@ namespace Jqpress.Blog.Repositories.Repository
                             PostId, ParentId,UserId,Author,Email,AuthorUrl,Contents,EmailNotify,IpAddress,CreateTime,Approved)
                              values (
                             @PostId, @ParentId,@UserId,@Author,@Email,@AuthorUrl,@Contents,@EmailNotify,@IpAddress,@CreateTime,@Approved)", ConfigHelper.Tableprefix);
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                 conn.Execute(cmdText, new
                 {
@@ -67,7 +65,7 @@ namespace Jqpress.Blog.Repositories.Repository
                             Approved=@Approved
                             where CommentId=@CommentId ", ConfigHelper.Tableprefix);
 
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                return conn.Execute(cmdText, new
                 {
@@ -95,7 +93,7 @@ namespace Jqpress.Blog.Repositories.Repository
         public int Delete(CommentInfo comment)
         {
             string cmdText = string.Format("delete from [{0}comments] where [commentId] = @commentId", ConfigHelper.Tableprefix);
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                 return conn.Execute(cmdText, new { commentId = comment.CommentId });
             }
@@ -109,7 +107,7 @@ namespace Jqpress.Blog.Repositories.Repository
         public CommentInfo GetById(object id)
         {
             string cmdText = string.Format("select * from [{0}comments] where [commentId] = @commentId", ConfigHelper.Tableprefix);
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                 var list = conn.Query<CommentInfo>(cmdText, new { commentId = (int)id });
                 return list.ToList().Count > 0 ? list.ToList()[0] : null;
@@ -123,7 +121,7 @@ namespace Jqpress.Blog.Repositories.Repository
             get
             {
                 string cmdText = string.Format("select * from [{0}comments] order by creattime desc", ConfigHelper.Tableprefix);
-                using (var conn = dapper.OpenConnection())
+                using (var conn = new DapperHelper().OpenConnection())
                 {
                     var list = conn.Query<CommentInfo>(cmdText, null);
                     return list;
@@ -179,11 +177,11 @@ namespace Jqpress.Blog.Repositories.Repository
             }
 
            
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                 string cmdTotalRecord = "select count(1) from [" + ConfigHelper.Tableprefix + "comments] where " + condition;
                 totalRecord = conn.Query<int>(cmdTotalRecord, null).First();
-                string cmdText = dapper.GetPageSql("[" + ConfigHelper.Tableprefix + "comments]", "[CommentId]", "*", pageSize, pageIndex, 1, condition);
+                string cmdText = new DapperHelper().GetPageSql("[" + ConfigHelper.Tableprefix + "comments]", "[CommentId]", "*", pageSize, pageIndex, 1, condition);
 
                 var list = conn.Query<CommentInfo>(cmdText, null);
                 return list.ToList();
@@ -199,7 +197,7 @@ namespace Jqpress.Blog.Repositories.Repository
         public int DeleteCommentByPost(int postId)
         {
             string cmdText = string.Format("delete from [{0}comments] where [postId] = @postId", ConfigHelper.Tableprefix);
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                 return conn.Execute(cmdText, new { postId = postId });
             }
@@ -228,7 +226,7 @@ namespace Jqpress.Blog.Repositories.Repository
             {
                 condition += " and [parentid]=0";
             }
-            using (var conn = dapper.OpenConnection()) 
+            using (var conn = new DapperHelper().OpenConnection()) 
             {
                 string cmdTotalRecord = "select count(1) from [" + ConfigHelper.Tableprefix + "comments] where " + condition;
                 return conn.Query<int>(cmdTotalRecord, null).First();

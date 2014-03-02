@@ -24,6 +24,11 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 {
     public  class HomeController : Controller
     {
+        #region private items
+        private StatisticsService _statisticsService = new StatisticsService();
+        private CommentService _commentService = new CommentService();
+        private UserService _userService = new UserService();
+        #endregion;
         #region 首页
         private int UpfileCount = 0;
 
@@ -35,11 +40,11 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         {
             var model = new IndexModel();
 
-            model.PostCount = StatisticsService.GetStatistics().PostCount;
-            model.CommentCount = StatisticsService.GetStatistics().CommentCount;
-            model.TagCount = StatisticsService.GetStatistics().TagCount;
-            model.VisitCount = StatisticsService.GetStatistics().VisitCount;
-            model.Commentlist = CommentService.GetCommentList(15, 1, -1, -1, -1, (int)ApprovedStatus.Wait, -1, string.Empty);
+            model.PostCount = _statisticsService.GetStatistics().PostCount;
+            model.CommentCount = _statisticsService.GetStatistics().CommentCount;
+            model.TagCount = _statisticsService.GetStatistics().TagCount;
+            model.VisitCount = _statisticsService.GetStatistics().VisitCount;
+            model.Commentlist = _commentService.GetCommentList(15, 1, -1, -1, -1, (int)ApprovedStatus.Wait, -1, string.Empty);
             model.DbPath = ConfigHelper.SitePath + ConfigHelper.DbConnection;
 
             System.IO.FileInfo file = new System.IO.FileInfo(Server.MapPath(ConfigHelper.SitePath + ConfigHelper.DbConnection));
@@ -206,7 +211,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             string password = Jqpress.Framework.Utils.EncryptHelper.MD5(PressRequest.GetFormString("password"));
             int expires = PressRequest.GetFormString("rememberme") == "forever" ? 43200 : 0;
 
-            user = UserService.GetUser(userName, password);
+            user = _userService.GetUser(userName, password);
 
             if (user != null)
             {
@@ -214,7 +219,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                 {
                     ModelState.AddModelError("", "此用户已停用");
                 }
-                UserService.WriteUserCookie(user.UserId, user.UserName, user.Password, expires);
+                _userService.WriteUserCookie(user.UserId, user.UserName, user.Password, expires);
                 return true;
             }
             else

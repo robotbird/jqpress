@@ -8,5 +8,16 @@ namespace Jqpress.Blog.Repositories.IRepository
 {
     public partial interface ISiteRepository
     {
+        /// <summary>
+        /// 获取统计数据
+        /// </summary>
+        /// <returns></returns>
+        StatisticsInfo GetStatistics();
+        /// <summary>
+        /// 更新统计数据
+        /// </summary>
+        /// <param name="statistics"></param>
+        /// <returns></returns>
+        bool UpdateStatistics(StatisticsInfo statistics);
     }
 }

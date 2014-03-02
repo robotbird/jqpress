@@ -3,64 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
-using Jqpress.Blog.Data;
-using Jqpress.Blog.Domain;
 using Jqpress.Blog.Common;
 using Jqpress.Blog.Domain;
 using Jqpress.Framework.Utils;
 using Jqpress.Framework.Web;
 using Jqpress.Framework.Configuration;
-using Jqpress.Blog.Services;
+using Jqpress.Blog.Repositories.Repository;
+using Jqpress.Blog.Repositories.IRepository;
 
 namespace Jqpress.Blog.Services
 {
    public class UserService
     {
-               /// <summary>
-        /// 列表
-        /// </summary>
-        private static List<UserInfo> _users;
+        private IUserRepository _userRepository;
 
+        #region 构造函数
         /// <summary>
-        /// lock
+        /// 构造器方法
         /// </summary>
-        private static object lockHelper = new object();
-
-        static UserService()
+        public UserService()
+            : this(new UserRepository())
         {
-            LoadUser();
         }
-
         /// <summary>
-        /// 初始化
+        /// 构造器方法
         /// </summary>
-        public static void LoadUser()
+        /// <param name="userRepository"></param>
+        public UserService(IUserRepository userRepository)
         {
-            if (_users == null)
-            {
-                lock (lockHelper)
-                {
-                    if (_users == null)
-                    {
-                        _users = DatabaseProvider.Instance.GetUserList();
-
-                        //   BuildUser();
-                    }
-                }
-            }
+            this._userRepository = userRepository;
         }
+        #endregion
+
 
         /// <summary>
         /// 添加用户
         /// </summary>
         /// <param name="_userinfo"></param>
         /// <returns></returns>
-        public static int InsertUser(UserInfo _userinfo)
+        public  int InsertUser(UserInfo _userinfo)
         {
-            _userinfo.UserId = DatabaseProvider.Instance.InsertUser(_userinfo);
-            _users.Add(_userinfo);
-            _users.Sort();
-
+            _userinfo.UserId = _userRepository.Insert(_userinfo);
             return _userinfo.UserId;
         }
 
@@ -69,10 +52,9 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="_userinfo"></param>
         /// <returns></returns>
-        public static int UpdateUser(UserInfo _userinfo)
+        public  int UpdateUser(UserInfo _userinfo)
         {
-            _users.Sort();
-            return DatabaseProvider.Instance.UpdateUser(_userinfo);
+            return _userRepository.Update(_userinfo);
         }
 
         /// <summary>
@@ -81,7 +63,7 @@ namespace Jqpress.Blog.Services
         /// <param name="userId"></param>
         /// <param name="addCount"></param>
         /// <returns></returns>
-        public static int UpdateUserPostCount(int userId, int addCount)
+        public  int UpdateUserPostCount(int userId, int addCount)
         {
             UserInfo user = GetUser(userId);
             if (user != null)
@@ -98,7 +80,7 @@ namespace Jqpress.Blog.Services
         /// <param name="userId"></param>
         /// <param name="addCount"></param>
         /// <returns></returns>
-        public static int UpdateUserCommentCount(int userId, int addCount)
+        public  int UpdateUserCommentCount(int userId, int addCount)
         {
             UserInfo user = GetUser(userId);
             if (user != null)
@@ -115,15 +97,9 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public static int DeleteUser(int userId)
+        public  int DeleteUser(int userId)
         {
-            UserInfo user = GetUser(userId);
-            if (user != null)
-            {
-                _users.Remove(user);
-            }
-
-            return DatabaseProvider.Instance.DeleteUser(userId);
+            return _userRepository.Delete(new UserInfo { UserId= userId });
         }
 
 
@@ -131,9 +107,9 @@ namespace Jqpress.Blog.Services
         /// 获取全部用户
         /// </summary>
         /// <returns></returns>
-        public static List<UserInfo> GetUserList()
+        public  List<UserInfo> GetUserList()
         {
-            return _users;
+            return _userRepository.Table.ToList();
         }
 
         /// <summary>
@@ -141,9 +117,9 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public static bool ExistsUserName(string userName)
+        public  bool ExistsUserName(string userName)
         {
-            return DatabaseProvider.Instance.ExistsUserName(userName);
+            return _userRepository.ExistsUserName(userName);
         }
 
         /// <summary>
@@ -151,16 +127,9 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public static UserInfo GetUser(int userId)
+        public  UserInfo GetUser(int userId)
         {
-            foreach (UserInfo user in _users)
-            {
-                if (user.UserId == userId)
-                {
-                    return user;
-                }
-            }
-            return null;
+            return _userRepository.GetById(userId);
         }
 
         /// <summary>
@@ -168,17 +137,10 @@ namespace Jqpress.Blog.Services
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public static UserInfo GetUser(string userName)
+        public  UserInfo GetUser(string userName)
         {
 
-            foreach (UserInfo user in _users)
-            {
-                if (user.UserName.ToLower() == userName.ToLower())
-                {
-                    return user;
-                }
-            }
-            return null;
+            return _userRepository.GetUserByName(userName);
         }
 
         /// <summary>
@@ -187,28 +149,21 @@ namespace Jqpress.Blog.Services
         /// <param name="userName"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static UserInfo GetUser(string userName, string password)
+        public  UserInfo GetUser(string userName, string password)
         {
-            foreach (UserInfo user in _users)
-            {
-                if (  user.UserName.ToLower() == userName.ToLower() && user.Password.ToLower() == password.ToLower())
-                {
-                    return user;
-                }
-            }
-            return null;
+            return _userRepository.GetUser(userName, password);
         }
 
         #region 用户COOKIE操作
         /// <summary>
         /// 用户COOKIE名
         /// </summary>
-        private static readonly string CookieUser = ConfigHelper.SitePrefix + "admin";
+        private  readonly string CookieUser = ConfigHelper.SitePrefix + "admin";
         /// <summary>
         /// 读当前用户COOKIE
         /// </summary>
         /// <returns></returns>
-        public static HttpCookie ReadUserCookie()
+        public  HttpCookie ReadUserCookie()
         {
             return HttpContext.Current.Request.Cookies[CookieUser];
         }
@@ -217,7 +172,7 @@ namespace Jqpress.Blog.Services
         /// 移除当前用户COOKIE
         /// </summary>
         /// <returns></returns>
-        public static bool RemoveUserCookie()
+        public  bool RemoveUserCookie()
         {
             HttpCookie cookie = new HttpCookie(CookieUser);
             cookie.Values.Clear();
@@ -235,7 +190,7 @@ namespace Jqpress.Blog.Services
         /// <param name="password"></param>
         /// <param name="expires"></param>
         /// <returns></returns>
-        public static bool WriteUserCookie(int userID, string userName, string password, int expires)
+        public  bool WriteUserCookie(int userID, string userName, string password, int expires)
         {
             HttpCookie cookie = HttpContext.Current.Request.Cookies[CookieUser];
             if (cookie == null)

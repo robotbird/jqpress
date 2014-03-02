@@ -11,7 +11,7 @@ namespace Jqpress.Blog.Repositories.Repository
 {
     public partial class PostRepository:IPostRepository
     {
-        DapperHelper dapper = new DapperHelper();
+        
         
         /// <summary>
         /// 新增文章
@@ -30,7 +30,7 @@ namespace Jqpress.Blog.Repositories.Repository
                                 @CategoryId,@Title,@Summary,@PostContent,@Slug,@UserId,@CommentStatus,@CommentCount,@ViewCount,@Tag,@UrlFormat,@Template,@Recommend,@Status,@TopStatus,@HomeStatus,@PostTime,@UpdateTime
                                 )", ConfigHelper.Tableprefix);
 
-            using(var conn = dapper.OpenConnection())
+            using(var conn = new DapperHelper().OpenConnection())
             {
                 conn.Execute(cmdText, new
                 {
@@ -84,7 +84,7 @@ namespace Jqpress.Blog.Repositories.Repository
                                    where [PostId]=@PostId", ConfigHelper.Tableprefix);
 
 
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                return conn.Execute(cmdText, new
                 {
@@ -120,7 +120,7 @@ namespace Jqpress.Blog.Repositories.Repository
             if (oldPost == null) throw new Exception("文章不存在");
 
             string cmdText = string.Format("delete from [{0}posts] where [PostId] = @PostId", ConfigHelper.Tableprefix);
-            using(var conn = dapper.OpenConnection())
+            using(var conn = new DapperHelper().OpenConnection())
             {
                return conn.Execute(cmdText, new {PostId = post.PostId });
             }
@@ -133,7 +133,7 @@ namespace Jqpress.Blog.Repositories.Repository
         public virtual PostInfo GetById(object id) 
         {
             string cmdText = string.Format("select top 1 * from [{0}posts] where [PostId] = @PostId", ConfigHelper.Tableprefix);
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                 var list = conn.Query<PostInfo>(cmdText, new { PostId = (int)id });
                 return list.ToList().Count > 0 ? list.ToList()[0] : null;
@@ -147,7 +147,7 @@ namespace Jqpress.Blog.Repositories.Repository
             get
             {
                 string cmdText = string.Format("select * from [{0}posts] order by [postid] desc", ConfigHelper.Tableprefix);
-                using (var conn = dapper.OpenConnection())
+                using (var conn = new DapperHelper().OpenConnection())
                 {
                     var list = conn.Query<PostInfo>(cmdText, null);
                     return list;
@@ -164,7 +164,7 @@ namespace Jqpress.Blog.Repositories.Repository
         {
             string cmdText = string.Format("select top 1 * from [{0}posts] where [slug] = @_slug", ConfigHelper.Tableprefix);
 
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                 var list = conn.Query<PostInfo>(cmdText, new { _slug = slug });
                 return list.ToList().Count > 0 ? list.ToList()[0] : null;
@@ -236,11 +236,11 @@ namespace Jqpress.Blog.Repositories.Repository
                 condition += string.Format(" and (summary like '%{0}%' or title like '%{0}%'  )", keyword);
             }
 
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                 string cmdTotalRecord = "select count(1) from [" + ConfigHelper.Tableprefix + "posts] where " + condition;
                 recordCount = conn.Query<int>(cmdTotalRecord,null).First();
-                string cmdText = dapper.GetPageSql("[" + ConfigHelper.Tableprefix + "Posts]", "[PostId]", "*", pageSize, pageIndex, 1, condition);
+                string cmdText = new DapperHelper().GetPageSql("[" + ConfigHelper.Tableprefix + "Posts]", "[PostId]", "*", pageSize, pageIndex, 1, condition);
 
                 var list = conn.Query<PostInfo>(cmdText, null);
                 return list.ToList();
@@ -271,7 +271,7 @@ namespace Jqpress.Blog.Repositories.Repository
 
                 string cmdText = string.Format("select top {0} * from [{2}posts] where {1} order by [postid] desc", rowCount, where, ConfigHelper.Tableprefix);
 
-                using (var conn = dapper.OpenConnection())
+                using (var conn = new DapperHelper().OpenConnection())
                 {
                     var list = conn.Query<PostInfo>(cmdText, null);
                     return list.ToList();
@@ -294,7 +294,7 @@ namespace Jqpress.Blog.Repositories.Repository
             {
                 string cmdText = post.PostId == 0 ? string.Format("select count(1) from [{1}posts] where [slug]='{0}'  ", post.Slug, ConfigHelper.Tableprefix) : string.Format("select count(1) from [{2}posts] where [slug]='{0}'   and [postid]<>{1}", post.Slug, post.PostId, ConfigHelper.Tableprefix);
 
-                using (var conn = dapper.OpenConnection())
+                using (var conn = new DapperHelper().OpenConnection())
                 {
                     int r = conn.Query<int>(cmdText,null).First();
 
@@ -313,7 +313,7 @@ namespace Jqpress.Blog.Repositories.Repository
         public virtual List<ArchiveInfo> GetArchive()
         {
             string cmdText = string.Format("select format(PostTime, 'yyyymm') as [date] ,  count(*) as [count] from [{0}posts] where [status]=1 and [PostStatus]=0  group by  format(PostTime, 'yyyymm')  order by format(PostTime, 'yyyymm') desc", ConfigHelper.Tableprefix);
-            using(var conn = dapper.OpenConnection())
+            using(var conn = new DapperHelper().OpenConnection())
             {
               return  conn.Query<ArchiveInfo>(cmdText,null).ToList();
             }
@@ -327,7 +327,7 @@ namespace Jqpress.Blog.Repositories.Repository
         public virtual int UpdatePostViewCount(int postId, int addCount)
         {
             string cmdText = string.Format("update [{0}posts] set [viewcount] = [viewcount] + @addcount where [postid]=@postid", ConfigHelper.Tableprefix);
-            using(var conn = dapper.OpenConnection())
+            using(var conn = new DapperHelper().OpenConnection())
             {
                 return conn.Execute(cmdText, new { addcount =addCount,postid = postId });
             }

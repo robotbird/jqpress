@@ -20,6 +20,8 @@ namespace Jqpress.Web.Controllers
         #region private items
         private PostService _postService = new PostService();
         private CategoryService _categoryService = new CategoryService();
+        private LinkService _linkService = new LinkService();
+        private TagService _tagService = new TagService();
         #endregion;
         public ActionResult Index()
         {
@@ -32,10 +34,10 @@ namespace Jqpress.Web.Controllers
             model.MetaKeywords = BlogConfig.GetSetting().MetaKeywords;
             model.MetaDescription = BlogConfig.GetSetting().MetaDescription;
             model.SiteDescription = BlogConfig.GetSetting().SiteDescription;
-            model.NavLinks = LinkService.GetLinkList((int)LinkPosition.Navigation, 1);
-            model.RecentTags = TagService.GetTagList(BlogConfig.GetSetting().SidebarTagCount);
+            model.NavLinks = _linkService.GetLinkList((int)LinkPosition.Navigation, 1);
+            model.RecentTags = _tagService.GetTagList(BlogConfig.GetSetting().SidebarTagCount);
             model.FooterHtml = BlogConfig.GetSetting().FooterHtml;
-            model.GeneralLinks = LinkService.GetLinkList((int)LinkPosition.General, 1);
+            model.GeneralLinks = _linkService.GetLinkList((int)LinkPosition.General, 1);
 
             ThemeService.InitTheme(0);
 
@@ -62,10 +64,10 @@ namespace Jqpress.Web.Controllers
             model.MetaKeywords = BlogConfig.GetSetting().MetaKeywords;
             model.MetaDescription = BlogConfig.GetSetting().MetaDescription;
             model.SiteDescription = BlogConfig.GetSetting().SiteDescription;
-            model.NavLinks = LinkService.GetLinkList((int)LinkPosition.Navigation, 1);
-            model.RecentTags = TagService.GetTagList(BlogConfig.GetSetting().SidebarTagCount);
+            model.NavLinks = _linkService.GetLinkList((int)LinkPosition.Navigation, 1);
+            model.RecentTags = _tagService.GetTagList(BlogConfig.GetSetting().SidebarTagCount);
             model.FooterHtml = BlogConfig.GetSetting().FooterHtml;
-            model.GeneralLinks = LinkService.GetLinkList((int)LinkPosition.General, 1);
+            model.GeneralLinks = _linkService.GetLinkList((int)LinkPosition.General, 1);
 
             int postId = id;
             PostInfo post = null;
@@ -153,10 +155,10 @@ namespace Jqpress.Web.Controllers
             model.MetaKeywords = BlogConfig.GetSetting().MetaKeywords;
             model.MetaDescription = BlogConfig.GetSetting().MetaDescription;
             model.SiteDescription = BlogConfig.GetSetting().SiteDescription;
-            model.NavLinks = LinkService.GetLinkList((int)LinkPosition.Navigation, 1);
-            model.RecentTags = TagService.GetTagList(BlogConfig.GetSetting().SidebarTagCount);
+            model.NavLinks = _linkService.GetLinkList((int)LinkPosition.Navigation, 1);
+            model.RecentTags = _tagService.GetTagList(BlogConfig.GetSetting().SidebarTagCount);
             model.FooterHtml = BlogConfig.GetSetting().FooterHtml;
-            model.GeneralLinks = LinkService.GetLinkList((int)LinkPosition.General, 1);
+            model.GeneralLinks = _linkService.GetLinkList((int)LinkPosition.General, 1);
 
             CategoryInfo cate = _categoryService.GetCategory(slug);
             if (cate != null)
@@ -196,11 +198,11 @@ namespace Jqpress.Web.Controllers
             model.MetaKeywords = BlogConfig.GetSetting().MetaKeywords;
             model.MetaDescription = BlogConfig.GetSetting().MetaDescription;
             model.SiteDescription = BlogConfig.GetSetting().SiteDescription;
-            model.NavLinks = LinkService.GetLinkList((int)LinkPosition.Navigation, 1);
-            model.RecentTags = TagService.GetTagList(BlogConfig.GetSetting().SidebarTagCount);
+            model.NavLinks = _linkService.GetLinkList((int)LinkPosition.Navigation, 1);
+            model.RecentTags = _tagService.GetTagList(BlogConfig.GetSetting().SidebarTagCount);
             model.FooterHtml = BlogConfig.GetSetting().FooterHtml;
-            model.GeneralLinks = LinkService.GetLinkList((int)LinkPosition.General, 1);
-            TagInfo tag = TagService.GetTagBySlug(slug);
+            model.GeneralLinks = _linkService.GetLinkList((int)LinkPosition.General, 1);
+            TagInfo tag = _tagService.GetTagBySlug(slug);
             if (tag != null)
             {
                 int tagId = tag.TagId;

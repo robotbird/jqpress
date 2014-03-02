@@ -13,8 +13,9 @@ namespace Jqpress.Web.Areas.Admin.Controllers
 {
     public class CommentController : Controller
     {
-        //
-        // GET: /Admin/Comment/
+        #region private items
+        private CommentService _commentService = new CommentService();
+        #endregion;
         //TODO:获取评论的文章地址需要优化
 
         public ActionResult List()
@@ -25,7 +26,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             int pageIndex = PressRequest.GetInt("page", 1);
             int approved = PressRequest.GetQueryInt("approved", -1);
 
-            var list = CommentService.GetCommentListPage(pageSize, pageIndex, out count, 1, -1, -1, -1, approved, -1, string.Empty);
+            var list = _commentService.GetCommentListPage(pageSize, pageIndex, out count, 1, -1, -1, -1, approved, -1, string.Empty);
 
             model.PageList.LoadPagedList(list);
             model.CommentList = (List<CommentInfo>)list;
@@ -37,7 +38,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         public ContentResult Delete(int? id)
         {
             var commentId = id ?? 0;
-            CommentService.DeleteComment(commentId);
+            _commentService.DeleteComment(commentId);
             return Content("success");
         }
         /// <summary>
@@ -46,7 +47,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         public ContentResult Approve(int? id)
         {
             var commentId = id ?? 0;
-            CommentInfo c = CommentService.GetComment(commentId);
+            CommentInfo c = _commentService.GetComment(commentId);
             if (c != null)
             {
                 if (c.Approved == 1)
@@ -57,7 +58,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                 {
                     c.Approved = 1;                
                 }
-                if (CommentService.UpdateComment(c) > 0)
+                if (_commentService.UpdateComment(c) > 0)
                 {
                     if (c.Approved == 1)
                     {

@@ -9,9 +9,9 @@ using Jqpress.Blog.Domain.Enum;
 using Jqpress.Blog.Repositories.IRepository;
 namespace Jqpress.Blog.Repositories.Repository
 {
-    public partial class TagRepository
+    public partial class TagRepository:ITagRepository
     {
-        DapperHelper dapper = new DapperHelper();
+        
         /// <summary>
         /// 检查别名是否重复
         /// </summary>
@@ -22,7 +22,7 @@ namespace Jqpress.Blog.Repositories.Repository
             while (true)
             {
                 string cmdText = cate.TagId == 0 ? string.Format("select count(1) from [{2}category] where [Slug]='{0}' and [type]={1}", cate.Slug, (int)CategoryType.Tag, ConfigHelper.Tableprefix) : string.Format("select count(1) from [{3}category] where [Slug]='{0}'  and [type]={1} and [categoryid]<>{2}", cate.Slug, (int)CategoryType.Tag, cate.TagId, ConfigHelper.Tableprefix);
-                using (var conn = dapper.OpenConnection())
+                using (var conn = new DapperHelper().OpenConnection())
                 {
                     int r = conn.Query<int>(cmdText, null).First();
 
@@ -47,7 +47,7 @@ namespace Jqpress.Blog.Repositories.Repository
                             (
                             @Type,@ParentId,@CateName,@Slug,@Description,@SortNum,@PostCount,@CreateTime
                             )", ConfigHelper.Tableprefix);
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                 conn.Execute(cmdText, new
                 {
@@ -77,7 +77,7 @@ namespace Jqpress.Blog.Repositories.Repository
                                 [PostCount]=@PostCount,
                                 [CreateTime]=@CreateTime
                                 where categoryid=@categoryid", ConfigHelper.Tableprefix);
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                 return conn.Execute(cmdText, new
                 {
@@ -97,7 +97,7 @@ namespace Jqpress.Blog.Repositories.Repository
         public int Delete(TagInfo tag)
         {
             string cmdText = string.Format("delete from [{0}category] where [categoryid] = @categoryid", ConfigHelper.Tableprefix);
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                 return conn.Execute(cmdText, new { categoryid = tag.TagId });
             }
@@ -106,12 +106,32 @@ namespace Jqpress.Blog.Repositories.Repository
         public TagInfo GetById(object id)
         {
             string cmdText = string.Format("select * from [{0}category] where [categoryid] = @categoryid", ConfigHelper.Tableprefix);
-            using (var conn = dapper.OpenConnection())
+            using (var conn = new DapperHelper().OpenConnection())
             {
                 var list = conn.Query<TagInfo>(cmdText, new { categoryid = (int)id });
                 return list.ToList().Count > 0 ? list.ToList()[0] : null;
             }
         }
+        public TagInfo GetTagByName(string name)
+        {
+            string cmdText = string.Format("select * from [{0}category] where [CateName] = @CateName", ConfigHelper.Tableprefix);
+            using (var conn = new DapperHelper().OpenConnection())
+            {
+                var list = conn.Query<TagInfo>(cmdText, new { CateName = name });
+                return list.ToList().Count > 0 ? list.ToList()[0] : null;
+            }
+        }
+
+        public TagInfo GetTagBySlug(string slug)
+        {
+            string cmdText = string.Format("select * from [{0}category] where [Slug] = @Slug", ConfigHelper.Tableprefix);
+            using (var conn = new DapperHelper().OpenConnection())
+            {
+                var list = conn.Query<TagInfo>(cmdText, new { Slug = slug });
+                return list.ToList().Count > 0 ? list.ToList()[0] : null;
+            }
+        }
+
         /// <summary>
         /// 获取全部标签
         /// </summary>
@@ -123,7 +143,7 @@ namespace Jqpress.Blog.Repositories.Repository
                 string condition = " [type]=" + (int)CategoryType.Tag;
 
                 string cmdText = string.Format("select * from [{0}category] where " + condition + " order by [SortNum] asc,[categoryid] asc", ConfigHelper.Tableprefix);
-                using (var conn = dapper.OpenConnection())
+                using (var conn = new DapperHelper().OpenConnection())
                 {
                     var list = conn.Query<TagInfo>(cmdText, null);
                     return list;

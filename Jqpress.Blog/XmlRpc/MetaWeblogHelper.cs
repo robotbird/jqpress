@@ -131,12 +131,12 @@ namespace Jqpress.Blog.XmlRpc
             //tagNames = tagNames.Replace("，", ",");
 
             //string[] names = tagNames.Split(',');
-
+            TagService tagService = new TagService();
             foreach (string n in names)
             {
                 if (!string.IsNullOrEmpty(n))
                 {
-                    TagInfo t = TagService.GetTag(Jqpress.Framework.Web.HttpHelper.HtmlEncode(n));
+                    TagInfo t = new TagService().GetTag(Jqpress.Framework.Web.HttpHelper.HtmlEncode(n));
 
                     if (t == null)
                     {
@@ -149,7 +149,7 @@ namespace Jqpress.Blog.XmlRpc
                         t.CateName = Jqpress.Framework.Web.HttpHelper.HtmlEncode(n);
                         t.Slug = Jqpress.Framework.Utils.StringHelper.FilterSlug(n, "tag", false);
 
-                        t.TagId = TagService.InsertTag(t);
+                        t.TagId = new TagService().InsertTag(t);
                     }
                     tagIds += "{" + t.TagId + "}";
                 }
@@ -178,7 +178,7 @@ namespace Jqpress.Blog.XmlRpc
 
             if (operate == OperateType.Update)
             {
-                post = _postService.GetPost(Jqpress.Framework.Utils.TypeConverter.StrToInt(postID, 0));
+                post = new PostService().GetPost(Jqpress.Framework.Utils.TypeConverter.StrToInt(postID, 0));
 
             }
             else
@@ -187,7 +187,7 @@ namespace Jqpress.Blog.XmlRpc
                 post.ViewCount = 0;
                 post.PostTime = DateTime.Now;
 
-                UserInfo user = UserService.GetUser(userName);
+                UserInfo user = (new UserService()).GetUser(userName);
                 if (user != null)
                 {
                     post.UserId = user.UserId;
@@ -241,11 +241,11 @@ namespace Jqpress.Blog.XmlRpc
 
             if (operate == OperateType.Update)
             {
-                _postService.UpdatePost(post);
+                new PostService().UpdatePost(post);
             }
             else
             {
-                post.PostId = _postService.InsertPost(post);
+                post.PostId = new PostService().InsertPost(post);
 
                 //    SendEmail(p);
             }
@@ -301,7 +301,7 @@ namespace Jqpress.Blog.XmlRpc
             MWAPost sendPost = new MWAPost();
             PostService _postService = new PostService();
 
-            PostInfo post = _postService.GetPost(Jqpress.Framework.Utils.TypeConverter.StrToInt(postID, 0));
+            PostInfo post = new PostService().GetPost(Jqpress.Framework.Utils.TypeConverter.StrToInt(postID, 0));
 
             sendPost.postID = post.PostId.ToString();
             sendPost.postDate = post.PostTime;
@@ -431,7 +431,7 @@ namespace Jqpress.Blog.XmlRpc
 
             List<string> keywords = new List<string>();
 
-            foreach (TagInfo tag in TagService.GetTagList(100))
+            foreach (TagInfo tag in (new TagService()).GetTagList(100))
             {
                 keywords.Add(Jqpress.Framework.Web.HttpHelper.HtmlDecode(tag.CateName));
             }
@@ -454,14 +454,14 @@ namespace Jqpress.Blog.XmlRpc
             List<MWAPost> sendPosts = new List<MWAPost>();
 
             int userid = 0;
-            UserInfo user = UserService.GetUser(userName);
+            UserInfo user = (new UserService()).GetUser(userName);
             if (user != null)
             {
                 userid = user.UserId;
             }
             PostService _postService = new PostService();
 
-            List<PostInfo> posts = _postService.GetPostList(numberOfPosts, -1, userid, -1, -1, -1, -1);
+            List<PostInfo> posts = new PostService().GetPostList(numberOfPosts, -1, userid, -1, -1, -1, -1);
 
             foreach (PostInfo post in posts)
             {
@@ -532,7 +532,7 @@ namespace Jqpress.Blog.XmlRpc
         {
             ValidateRequest(userName, password);
             var _postService = new PostService();
-            _postService.DeletePost(Jqpress.Framework.Utils.TypeConverter.StrToInt(postID, 0));
+            new PostService().DeletePost(Jqpress.Framework.Utils.TypeConverter.StrToInt(postID, 0));
             return true;
         }
 
@@ -543,7 +543,7 @@ namespace Jqpress.Blog.XmlRpc
             List<MWAAuthor> authors = new List<MWAAuthor>();
 
             MWAAuthor temp = new MWAAuthor();
-            UserInfo user = UserService.GetUser(userName);
+            UserInfo user = (new UserService()).GetUser(userName);
             if (user != null)
             {
                 temp.user_id = user.UserId.ToString();
@@ -569,7 +569,7 @@ namespace Jqpress.Blog.XmlRpc
         private void ValidateRequest(string userName, string password)
         {
             password = Jqpress.Framework.Utils.EncryptHelper.MD5(password);
-            if (UserService.GetUser(userName, password) == null)
+            if ((new UserService()).GetUser(userName, password) == null)
             {
                 throw new MetaWeblogException("11", "用户名或密码错误");
             }
