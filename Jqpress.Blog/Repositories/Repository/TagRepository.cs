@@ -131,7 +131,11 @@ namespace Jqpress.Blog.Repositories.Repository
             }
 
         }
-
+        /// <summary>
+        /// 根据多个标签id获取标签
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
         public List<TagInfo> GetTagList(int[] ids)
         {
             var result = from t in Table

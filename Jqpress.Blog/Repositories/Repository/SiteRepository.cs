@@ -12,57 +12,44 @@ namespace Jqpress.Blog.Repositories.Repository
 {
    public partial class SiteRepository:ISiteRepository
     {
+       DapperHelper dapper = new DapperHelper();
+
+       /// <summary>
+       /// 更新统计数据
+       /// </summary>
+       /// <param name="statistics"></param>
+       /// <returns></returns>
         public bool UpdateStatistics(StatisticsInfo statistics)
         {
             string cmdText = string.Format("update [{0}sites] set PostCount=@PostCount,CommentCount=@CommentCount,VisitCount=@VisitCount,TagCount=@TagCount", ConfigHelper.Tableprefix);
-            OleDbParameter[] prams = {
-					                        OleDbHelper.MakeInParam("@PostCount", OleDbType.Integer,4,statistics.PostCount),
-					                        OleDbHelper.MakeInParam("@CommentCount", OleDbType.Integer,4,statistics.CommentCount),
-					                        OleDbHelper.MakeInParam("@VisitCount", OleDbType.Integer,4,statistics.VisitCount),
-					                        OleDbHelper.MakeInParam("@TagCount", OleDbType.Integer,4,statistics.TagCount),
-                                        };
-
-            return OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams) == 1;
+            using(var conn = dapper.OpenConnection())
+            {
+                return conn.Execute(cmdText, new
+                {
+                    PostCount = statistics.PostCount,
+                    CommentCount = statistics.CommentCount,
+                    VisitCount = statistics.VisitCount,
+                    TagCount = statistics.TagCount
+                })>0;
+            }
         }
-
+       /// <summary>
+       /// 获取统计数据
+       /// </summary>
+       /// <returns></returns>
         public StatisticsInfo GetStatistics()
         {
             string cmdText = string.Format("select top 1 * from [{0}sites]", ConfigHelper.Tableprefix);
-
             string insertText = string.Format("insert into [{0}sites] ([PostCount],[CommentCount],[VisitCount],[TagCount]) values ( '0','0','0','0')", ConfigHelper.Tableprefix);
-
-            List<StatisticsInfo> list = DataReaderToListSite(OleDbHelper.ExecuteReader(cmdText));
-
-            if (list.Count == 0)
+            using(var conn = dapper.OpenConnection())
             {
-                OleDbHelper.ExecuteNonQuery(insertText);
+               var list = conn.Query<StatisticsInfo>(cmdText,null).ToList();
+               if (list.Count == 0)
+               {
+                   conn.Execute(insertText,null);
+               }
+               return list.Count > 0 ? list[0] : null;
             }
-            list = DataReaderToListSite(OleDbHelper.ExecuteReader(cmdText));
-
-            return list.Count > 0 ? list[0] : null;
-        }
-        /// <summary>
-        /// 转换实体
-        /// </summary>
-        /// <param name="read">OleDbDataReader</param>
-        /// <returns>TermInfo</returns>
-        private static List<StatisticsInfo> DataReaderToListSite(OleDbDataReader read)
-        {
-            var list = new List<StatisticsInfo>();
-            while (read.Read())
-            {
-                var site = new StatisticsInfo
-                {
-                    PostCount = Convert.ToInt32(read["PostCount"]),
-                    CommentCount = Convert.ToInt32(read["CommentCount"]),
-                    VisitCount = Convert.ToInt32(read["VisitCount"]),
-                    TagCount = Convert.ToInt32(read["TagCount"])
-                };
-
-                list.Add(site);
-            }
-            read.Close();
-            return list;
         }
     }
 }

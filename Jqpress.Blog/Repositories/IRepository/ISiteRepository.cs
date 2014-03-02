@@ -6,7 +6,7 @@ using Jqpress.Blog.Domain;
 
 namespace Jqpress.Blog.Repositories.IRepository
 {
-    public partial interface ISiteRepository:IRepository<StatisticsInfo>
+    public partial interface ISiteRepository
     {
     }
 }
