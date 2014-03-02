@@ -19,30 +19,31 @@ namespace Jqpress.Blog.Repositories.Repository
         /// </summary>
         /// <param name="comment"></param>
         /// <returns></returns>
-        public int InsertComment(CommentInfo comment)
+        public int Insert(CommentInfo comment)
         {
             string cmdText = string.Format(@"insert into [{0}comments](
                             PostId, ParentId,UserId,Author,Email,AuthorUrl,Contents,EmailNotify,IpAddress,CreateTime,Approved)
                              values (
                             @PostId, @ParentId,@UserId,@Author,@Email,@AuthorUrl,@Contents,@EmailNotify,@IpAddress,@CreateTime,@Approved)", ConfigHelper.Tableprefix);
+            using (var conn = dapper.OpenConnection())
+            {
+                conn.Execute(cmdText, new
+                {
+                    PostId = comment.ParentId,
+                    ParentId = comment.ParentId,
+                    UserId = comment.UserId,
+                    Author = comment.Author,
+                    Email = comment.Email,
+                    AuthorUrl = comment.AuthorUrl,
+                    Contents = comment.Contents,
+                    EmailNotify = comment.EmailNotify,
+                    IpAddress = comment.IpAddress,
+                    CreateTime = comment.CreateTime.ToString(),
+                    Approved = comment.Approved
+                });
+                return conn.Query<int>(string.Format("select top 1 [CommentId] from [{0}comments]  order by [CommentId] desc", ConfigHelper.Tableprefix), null).First();
+            }
 
-            OleDbParameter[] prams = { 
-                                        OleDbHelper.MakeInParam("@PostId", OleDbType.Integer,4, comment.PostId),
-                                        OleDbHelper.MakeInParam("@ParentId", OleDbType.Integer,4, comment.ParentId),
-                                        OleDbHelper.MakeInParam("@UserId", OleDbType.Integer,4, comment.UserId),
-                                        OleDbHelper.MakeInParam("@Author", OleDbType.VarWChar,255, comment.Author),
-                                        OleDbHelper.MakeInParam("@Email", OleDbType.VarWChar,255, comment.Email),
-                                        OleDbHelper.MakeInParam("@AuthorUrl", OleDbType.VarWChar,255, comment.AuthorUrl),
-                                        OleDbHelper.MakeInParam("@Contents", OleDbType.VarWChar,255, comment.Contents),
-                                        OleDbHelper.MakeInParam("@EmailNotify", OleDbType.Integer,4 ,    comment.EmailNotify),
-                                        OleDbHelper.MakeInParam("@IpAddress", OleDbType.VarWChar,255, comment.IpAddress),
-                                        OleDbHelper.MakeInParam("@CreateTime", OleDbType.Date,8, comment.CreateTime),
-                                        OleDbHelper.MakeInParam("@Approved", OleDbType.Integer,4 ,   comment.Approved),
-            };
-            OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams);
-
-            int newId = Convert.ToInt32(OleDbHelper.ExecuteScalar(string.Format("select top 1 [CommentId] from [{0}comments]  order by [CommentId] desc", ConfigHelper.Tableprefix)));
-            return newId;
         }
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace Jqpress.Blog.Repositories.Repository
         /// </summary>
         /// <param name="comment"></param>
         /// <returns></returns>
-        public int UpdateComment(CommentInfo comment)
+        public int Update(CommentInfo comment)
         {
             string cmdText = string.Format(@"update [{0}comments] set 
                             PostId=@PostId,                            
@@ -66,23 +67,24 @@ namespace Jqpress.Blog.Repositories.Repository
                             Approved=@Approved
                             where CommentId=@CommentId ", ConfigHelper.Tableprefix);
 
-            OleDbParameter[] prams = { 
-                                        OleDbHelper.MakeInParam("@PostId", OleDbType.Integer,4, comment.PostId),
-                                        OleDbHelper.MakeInParam("@ParentId", OleDbType.Integer,4, comment.ParentId),
-                                        OleDbHelper.MakeInParam("@UserId", OleDbType.Integer,4, comment.UserId),
-                                        OleDbHelper.MakeInParam("@Author", OleDbType.VarWChar,255, comment.Author),
-                                        OleDbHelper.MakeInParam("@Email", OleDbType.VarWChar,255, comment.Email),
-                                        OleDbHelper.MakeInParam("@AuthorUrl", OleDbType.VarWChar,255, comment.AuthorUrl),
-                                        OleDbHelper.MakeInParam("@Contents", OleDbType.VarWChar,255, comment.Contents),
-                                        OleDbHelper.MakeInParam("@EmailNotify", OleDbType.Integer,4 ,    comment.EmailNotify),
-                                        OleDbHelper.MakeInParam("@IpAddress", OleDbType.VarWChar,255, comment.IpAddress),
-                                        OleDbHelper.MakeInParam("@CreateTime", OleDbType.Date,8, comment.CreateTime),
-                                        OleDbHelper.MakeInParam("@Approved", OleDbType.Integer,4 ,   comment.Approved),
-                                        OleDbHelper.MakeInParam("@CommentId", OleDbType.Integer,4, comment.CommentId),
-
-                                    };
-            return OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams);
-
+            using (var conn = dapper.OpenConnection())
+            {
+               return conn.Execute(cmdText, new
+                {
+                    PostId = comment.ParentId,
+                    ParentId = comment.ParentId,
+                    UserId = comment.UserId,
+                    Author = comment.Author,
+                    Email = comment.Email,
+                    AuthorUrl = comment.AuthorUrl,
+                    Contents = comment.Contents,
+                    EmailNotify = comment.EmailNotify,
+                    IpAddress = comment.IpAddress,
+                    CreateTime = comment.CreateTime.ToString(),
+                    Approved = comment.Approved,
+                    CommentId = comment.CommentId
+                });
+            }
         }
 
         /// <summary>
@@ -90,32 +92,43 @@ namespace Jqpress.Blog.Repositories.Repository
         /// </summary>
         /// <param name="commentId"></param>
         /// <returns></returns>
-        public int DeleteComment(int commentId)
+        public int Delete(CommentInfo comment)
         {
-
             string cmdText = string.Format("delete from [{0}comments] where [commentId] = @commentId", ConfigHelper.Tableprefix);
-            OleDbParameter[] prams = { 
-								OleDbHelper.MakeInParam("@commentId",OleDbType.Integer,4,commentId)
-							};
-
-            int result = OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams);
-            return result;
+            using (var conn = dapper.OpenConnection())
+            {
+                return conn.Execute(cmdText, new { commentId = comment.CommentId });
+            }
         }
 
         /// <summary>
-        /// 获取实体
+        /// 获取评论
         /// </summary>
-        /// <param name="commentId"></param>
+        /// <param name="categoryId"></param>
         /// <returns></returns>
-        public CommentInfo GetComment(int commentId)
+        public CommentInfo GetById(object id)
         {
             string cmdText = string.Format("select * from [{0}comments] where [commentId] = @commentId", ConfigHelper.Tableprefix);
-            OleDbParameter[] prams = { 
-								        OleDbHelper.MakeInParam("@commentId",OleDbType.Integer,4,commentId)
-							          };
-            List<CommentInfo> list = DataReaderToCommentList(OleDbHelper.ExecuteReader(cmdText, prams));
-
-            return list.Count > 0 ? list[0] : null;
+            using (var conn = dapper.OpenConnection())
+            {
+                var list = conn.Query<CommentInfo>(cmdText, new { commentId = (int)id });
+                return list.ToList().Count > 0 ? list.ToList()[0] : null;
+            }
+        }
+        /// <summary>
+        /// 获取所有评论
+        /// </summary>
+        public virtual IEnumerable<CommentInfo> Table
+        {
+            get
+            {
+                string cmdText = string.Format("select * from [{0}comments] order by creattime desc", ConfigHelper.Tableprefix);
+                using (var conn = dapper.OpenConnection())
+                {
+                    var list = conn.Query<CommentInfo>(cmdText, null);
+                    return list;
+                }
+            }
         }
 
 
@@ -165,13 +178,17 @@ namespace Jqpress.Blog.Repositories.Repository
                 condition += string.Format(" and (content like '%{0}%' or author like '%{0}%' or ipaddress like '%{0}%' or email like '%{0}%'  or siteurl like '%{0}%' )", keyword);
             }
 
-            string cmdTotalRecord = "select count(1) from [" + ConfigHelper.Tableprefix + "comments] where " + condition;
-            totalRecord = Convert.ToInt32(OleDbHelper.ExecuteScalar(CommandType.Text, cmdTotalRecord));
+           
+            using (var conn = dapper.OpenConnection())
+            {
+                string cmdTotalRecord = "select count(1) from [" + ConfigHelper.Tableprefix + "comments] where " + condition;
+                totalRecord = conn.Query<int>(cmdTotalRecord, null).First();
+                string cmdText = dapper.GetPageSql("[" + ConfigHelper.Tableprefix + "comments]", "[CommentId]", "*", pageSize, pageIndex, 1, condition);
 
-            //   throw new Exception(cmdTotalRecord);
+                var list = conn.Query<CommentInfo>(cmdText, null);
+                return list.ToList();
+            }
 
-            string cmdText = OleDbHelper.GetPageSql("[" + ConfigHelper.Tableprefix + "comments]", "[CommentId]", "*", pageSize, pageIndex, order, condition);
-            return DataReaderToCommentList(OleDbHelper.ExecuteReader(cmdText));
         }
 
         /// <summary>
@@ -182,43 +199,10 @@ namespace Jqpress.Blog.Repositories.Repository
         public int DeleteCommentByPost(int postId)
         {
             string cmdText = string.Format("delete from [{0}comments] where [postId] = @postId", ConfigHelper.Tableprefix);
-            OleDbParameter[] prams = { 
-								OleDbHelper.MakeInParam("@postId",OleDbType.Integer,4,postId)
-							};
-            int result = OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams);
-
-            return result;
-        }
-
-        /// <summary>
-        /// 数据转换
-        /// </summary>
-        /// <param name="read"></param>
-        /// <returns></returns>
-        private static List<CommentInfo> DataReaderToCommentList(OleDbDataReader read)
-        {
-            var list = new List<CommentInfo>();
-            while (read.Read())
+            using (var conn = dapper.OpenConnection())
             {
-                var comment = new CommentInfo
-                {
-                    CommentId = Convert.ToInt32(read["CommentId"]),
-                    ParentId = Convert.ToInt32(read["ParentId"]),
-                    PostId = Convert.ToInt32(read["PostId"]),
-                    UserId = Convert.ToInt32(read["UserId"]),
-                    Author = Convert.ToString(read["Author"]),
-                    Email = Convert.ToString(read["Email"]),
-                    AuthorUrl = Convert.ToString(read["AuthorUrl"]),
-                    Contents = Convert.ToString(read["Contents"]),
-                    EmailNotify = Convert.ToInt32(read["EmailNotify"]),
-                    IpAddress = Convert.ToString(read["IpAddress"]),
-                    CreateTime = Convert.ToDateTime(read["CreateTime"]),
-                    Approved = Convert.ToInt32(read["Approved"])
-                };
-                list.Add(comment);
+                return conn.Execute(cmdText, new { postId = postId });
             }
-            read.Close();
-            return list;
         }
 
 
@@ -244,8 +228,12 @@ namespace Jqpress.Blog.Repositories.Repository
             {
                 condition += " and [parentid]=0";
             }
-            string cmdText = string.Format("select count(1) from [{0}comments] where " + condition, ConfigHelper.Tableprefix);
-            return Convert.ToInt32(OleDbHelper.ExecuteScalar(CommandType.Text, cmdText));
+            using (var conn = dapper.OpenConnection()) 
+            {
+                string cmdTotalRecord = "select count(1) from [" + ConfigHelper.Tableprefix + "comments] where " + condition;
+                return conn.Query<int>(cmdTotalRecord, null).First();
+            }
+            
         }
     }
 }
