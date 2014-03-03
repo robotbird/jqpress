@@ -54,7 +54,7 @@ namespace Jqpress.Blog.Repositories.Repository
         public int Update(UserInfo userinfo)
         {
             string cmdText = string.Format(@"update [{0}users] set
-                                [UserType]=@UserType,
+                                [Role]=@Role,
                                 [UserName]=@UserName,
                                 [NickName]=@NickName,
                                 [Password]=@Password,

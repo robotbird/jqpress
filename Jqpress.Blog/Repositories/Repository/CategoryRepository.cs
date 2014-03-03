@@ -95,6 +95,10 @@ namespace Jqpress.Blog.Repositories.Repository
         /// <returns></returns>
         public CategoryInfo GetById(object id)
         {
+            if ((int)id <= 0) 
+            {
+                return null;
+            }
             string cmdText = string.Format("select * from [{0}category] where [categoryid] = @categoryid", ConfigHelper.Tableprefix);
             using (var conn = new DapperHelper().OpenConnection())
             {
