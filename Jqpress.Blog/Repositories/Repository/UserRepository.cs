@@ -22,9 +22,9 @@ namespace Jqpress.Blog.Repositories.Repository
         public int Insert(UserInfo userinfo)
         {
             string cmdText = string.Format(@" insert into [{0}users](
-                                [UserType],[UserName],[NickName],[Password],[Email],[SiteUrl],[AvatarUrl],[Description],[sortnum],[Status],[PostCount],[CommentCount],[CreateTime])
+                                [Role],[UserName],[NickName],[Password],[Email],[SiteUrl],[AvatarUrl],[Description],[sortnum],[Status],[PostCount],[CommentCount],[CreateTime])
                                 values (
-                                @UserType,@UserName,@NickName,@Password,@Email,@SiteUrl,@AvatarUrl,@Description,@SortNum,@Status, @PostCount,@CommentCount,@CreateTime )", ConfigHelper.Tableprefix);
+                                @Role,@UserName,@NickName,@Password,@Email,@SiteUrl,@AvatarUrl,@Description,@SortNum,@Status, @PostCount,@CommentCount,@CreateTime )", ConfigHelper.Tableprefix);
             using(var conn = new DapperHelper().OpenConnection())
             {
                 conn.Execute(cmdText, new {
