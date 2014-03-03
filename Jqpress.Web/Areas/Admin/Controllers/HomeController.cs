@@ -140,9 +140,9 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             DirectoryInfo mydir = new DirectoryInfo(dirp);
             foreach (FileSystemInfo fsi in mydir.GetFileSystemInfos())
             {
-                if (fsi is FileInfo)
+                if (fsi is System.IO.FileInfo)
                 {
-                    FileInfo fi = (FileInfo)fsi;
+                    System.IO.FileInfo fi = (System.IO.FileInfo)fsi;
                     dirSize += fi.Length;
                 }
                 else
@@ -165,7 +165,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             DirectoryInfo mydir = new DirectoryInfo(dirp);
             foreach (FileSystemInfo fsi in mydir.GetFileSystemInfos())
             {
-                if (fsi is FileInfo)
+                if (fsi is System.IO.FileInfo)
                 {
                     //   FileInfo fi = (FileInfo)fsi;
                     UpfileCount += 1;

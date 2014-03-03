@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using Jqpress.Framework.Mvc;
 using Jqpress.Blog.Domain;
+using FileInfo = Jqpress.Blog.Domain.FileInfo;
+
 
 namespace Jqpress.Web.Areas.Admin.Models
 {
@@ -14,8 +16,9 @@ namespace Jqpress.Web.Areas.Admin.Models
         {
             filePageList = new FilePageList();
             FoldPageList = new PageList();
+            FoldList = new List<FoldInfo>();
+            FileList = new List<FileInfo>();
         }
-        public int ModelID { get; set; }
         /// <summary>
         /// 父页面的action
         /// </summary>
@@ -151,5 +154,13 @@ namespace Jqpress.Web.Areas.Admin.Models
         /// 分页类
         /// </summary>
         public class PageList : BasePageableModel { }
+        /// <summary>
+        /// 文件夹列表
+        /// </summary>
+        public List<FoldInfo> FoldList { get; set; }
+        /// <summary>
+        /// 文件列表
+        /// </summary>
+        public List<FileInfo> FileList { get; set; }
     }
 }

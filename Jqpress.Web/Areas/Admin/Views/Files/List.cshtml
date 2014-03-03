@@ -1,7 +1,8 @@
-﻿@using Syw.Framework.Mvc
-@model Syw.Admin.Models.Files.ImageListModel
+﻿@using Jqpress.Framework.Mvc
+@model Jqpress.Web.Areas.Admin.Models.FilesModel
 @{
-    Layout =null;          
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "文件管理 - 管理中心 - Powered by Jqpress";
     }
     <link href="@Url.Content("~/Administration/Content/layout.css")" rel="stylesheet" type="text/css" />
 <style type="text/css">
@@ -16,7 +17,7 @@
 .upfile img{ border:0px solid #ccc; }
 .upfile .delete{position:relative;  width:20px; height:20px;   top:-92px;   right:-40px;  border:0px solid gray; color:Gray; font-size:10px; }
 </style>
- <form name="aspnetForm" action="@Url.Action("SaveFiles", "Files", new { path = ViewBag.path ,state=1})" method="post"  id="aspnetForm" enctype="multipart/form-data">
+ <form name="aspnetForm" action="@Url.Action("SaveFiles", "Files", new { path = ViewBag.path })" method="post"  id="aspnetForm" enctype="multipart/form-data">
 <div  class="imgright">   
     
     <h4>上传附件</h4>
@@ -48,7 +49,7 @@
                 @d.FileSystemInfosLength 个文件
                 </span>
              </p>
-        <a class="delete" href="/admin/files/DeleteFile?path=@ViewBag.path/@d.FoldName&url=@ViewBag.path&state=1"  title="删除" onclick=" return confirm('确定要删除 @d.FoldName  吗?');">X</a>
+        <a class="delete" href="/admin/files/DeleteFile?path=@ViewBag.path/@d.FoldName&url=@ViewBag.path"  title="删除" onclick=" return confirm('确定要删除 @d.FoldName  吗?');">X</a>
         </li>
         } 
 
@@ -63,7 +64,7 @@
                 <br />
                 <span class="gray">@f.FileLength</span>
                 </p>
-        <a class="delete" href="/admin/files/DeleteFile?path=@f.FilePath&url=@ViewBag.path&state=1"  title="删除" onclick=" return confirm('确定要删除 @f.FileName  吗?');">X</a>
+        <a class="delete" href="/admin/files/DeleteFile?path=@f.FilePath&url=@ViewBag.path"  title="删除" onclick=" return confirm('确定要删除 @f.FileName  吗?');">X</a>
         </li>
         
      } 
@@ -85,16 +86,16 @@
 
     function returnValue(fileUrl, fileExtension) {
 
-        if (window.opener != undefined) {
-            window.opener.document.getElementById("src").value = fileUrl;
-            window.close();
-            return false;
-        } else {
-            parent.addFileToEditor(fileUrl, fileExtension);
-            parent.tb_remove();
-            return false;
-        }
-
+    if(window.opener!=undefined){
+       window.opener.document.getElementById("src").value=fileUrl;
+       window.close();
+       return false;
+    }else{
+        parent.addFileToEditor(fileUrl,fileExtension) ;
+        parent.tb_remove();
+        return false;
     }
+
+}
 </script>
 

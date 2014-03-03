@@ -42,12 +42,15 @@
 		<div class="menu_title2"><a href="@Url.Action("list","category")">分类目录</a></div>
 		<div class="menu_title2"><a href="@Url.Action("list","tag")">文章标签</a></div>
 		<div class="menu_title2"><a href="@Url.Action("list","comment")">文章评论</a></div>
+
+        <div class="menu_title1"><a href="link_list.aspx">页面管理</a></div>
+		<div class="menu_title2"><a href="link_list.aspx">页面列表</a></div>
+		<div class="menu_title2"><a href="link_list.aspx">添加页面</a></div>
+
 		
 		<div class="menu_title1"><a href="@Url.Action("list","user")">用户</a></div>
 		<div class="menu_title2"><a href="@Url.Action("list","user")">用户管理</a></div>
-		
-	    <div class="menu_title1"><a href="link_list.aspx">链接</a></div>
-		<div class="menu_title2"><a href="link_list.aspx">链接管理</a></div>
+
 			
 		<div class="menu_title1"><a href="blog_set.aspx" >设置</a></div>
 		<div class="menu_title2"><a href="blog_set.aspx" >站点设置</a></div>
@@ -55,7 +58,7 @@
 
         
         <div class="menu_title1"><a href="#" >工具</a></div>
-        <div class="menu_title2"><a href="file_list.aspx" >文件管理</a></div>
+        <div class="menu_title2"><a href="@Url.Action("list","files")" >文件管理</a></div>
 		<div class="menu_title2"><a href="blog_db.aspx" >数据库备份</a></div>
 		
 	</div>

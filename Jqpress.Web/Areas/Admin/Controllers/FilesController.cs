@@ -7,16 +7,18 @@ using System.Web.Mvc;
 using Jqpress.Framework.Configuration;
 using Jqpress.Framework.Utils;
 using Jqpress.Framework.Web;
+using Jqpress.Framework.Mvc;
+using Jqpress.Blog.Domain;
 using Jqpress.Web.Areas.Admin.Models;
+using FileInfo =  Jqpress.Blog.Domain.FileInfo;
+
 namespace Jqpress.Web.Areas.Admin.Controllers
 {
     public class FilesController : BaseAdminController
     {
         public string urlpath = PressRequest.GetQueryString("path");
-        public int states = PressRequest.GetQueryInt("state");
-        public string rootpath = "/userfiles";
+        public string rootpath = "/upfiles";
 
-        public string img1url = "http://img1.xzJqpress.com";
         private string FileName;
 
         public ActionResult Index()
@@ -27,25 +29,23 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         /// 文件浏览
         /// </summary>
         /// <returns></returns>
-        public ActionResult FilesBrowser()
+        public ActionResult List()
         {
-            var imgWebService = new FileWebService();
             int pageIndex = PressRequest.GetQueryInt("page", 1);
             int pageSize = 30;
             if (string.IsNullOrEmpty(urlpath))
             {
                 urlpath = rootpath;
             }
-            var list = imgWebService.GetFilesList(urlpath);
-            var model = new ImageListModel();
-            #region webservice
-            model.FoldList = list.FoldList.Select(fold => new Jqpress.Core.Entity.File.FoldInfo
+            var list = GetFilesList(urlpath);
+            var model = new FilesModel();
+            model.FoldList = list.FoldList.Select(fold => new FoldInfo
                                                               {
                                                                   FoldName = fold.FoldName,
                                                                   FoldPath = fold.FoldPath,
                                                                   FileSystemInfosLength = fold.FileSystemInfosLength
                                                               }).ToList();
-            model.FileList = list.FileList.Select(f => new Jqpress.Core.Entity.File.FileInfo
+            model.FileList = list.FileList.Select(f => new FileInfo
                                                            {
                                                                FileName = f.FileName,
                                                                Extension = f.Extension,
@@ -53,15 +53,13 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                                                                FilePath = f.FilePath,
                                                                FileUrl = f.FileUrl
                                                            }).ToList();
-            #endregion
             if (model.FileList.Count == 0)
             {
-                IPagedList<Jqpress.Core.Entity.File.FoldInfo> foldlist = new PagedList<Jqpress.Core.Entity.File.FoldInfo>(model.FoldList, pageIndex - 1, pageSize);
-                model.FoldPageList.LoadPagedList<Jqpress.Core.Entity.File.FoldInfo>(foldlist);          
-                model.FoldList = (List<Jqpress.Core.Entity.File.FoldInfo>)foldlist;             
+                IPagedList<FoldInfo> foldlist = new PagedList<FoldInfo>(model.FoldList, pageIndex - 1, pageSize);
+                model.FoldPageList.LoadPagedList<FoldInfo>(foldlist);          
+                model.FoldList = (List<FoldInfo>)foldlist;             
             }
             string controller = RouteData.Values["controller"].ToString();
-            model.ModelID =Convert.ToInt32(RouteData.Values["modelid"]);
             string aera = "Admin";
             model.CurrentAction = "/" + aera + "/" + controller + "/" + "FilesBrowser";
             model.UserDirectory = new DirectoryInfo(Server.MapPath(urlpath));
@@ -70,6 +68,72 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             model.PathUrl = GetPathUrl();
             return View(model);
         }
+        public FilesModel GetFilesList(string path)
+        {
+            path = path.Replace("//", "/");
+            var model = new FilesModel();
+            if (!Directory.Exists(Server.MapPath(path)))
+                return model;
+
+            var dic = new DirectoryInfo(Server.MapPath(path));
+            foreach (var d in dic.GetFileSystemInfos())
+            {
+                if (d is DirectoryInfo)
+                {
+                    var fold = new FoldInfo
+                    {
+                        FoldName = d.Name,
+                        FoldPath = path,
+                        FileSystemInfosLength = ((DirectoryInfo)d).GetFileSystemInfos().Length
+                    };
+                    model.FoldList.Add(fold);
+                }
+                else
+                {
+                    var file = new FileInfo
+                    {
+                        FileName = d.Name,
+                        FileLength = FileHelper.ConvertUnit(((System.IO.FileInfo)d).Length),
+                        Extension = d.Extension,
+                        FileUrl = path + "/" + d.Name,
+                        FilePath = d.FullName
+                    };
+                    model.FileList.Add(file);
+                }
+            }
+            return model;
+        }
+        /// <summary>
+        /// 获取当前路径所有连接
+        /// </summary>
+        protected string GetPathUrl()
+        {
+            string pathLink = string.Empty;
+            FileName = System.IO.Path.GetFileName(Request.Url.AbsolutePath);
+            urlpath = urlpath.Replace("//", "");
+            string path2 = urlpath.Substring(1, urlpath.Length - 1);
+
+            string[] tempPath = path2.Split('/');
+
+            string temp = "/";
+
+            pathLink = ConfigHelper.SitePath.TrimEnd('/');
+
+            for (int i = 0; i < tempPath.Length; i++)
+            {
+
+                temp += (i != 0 ? "/" : "") + tempPath[i];
+                if (i == 0 && ConfigHelper.SitePath.Length > 1) //有虚拟目录
+                {
+                    continue;
+                }
+                pathLink += string.Format("/<a href='{2}?path={0}'>{1}</a>", temp, tempPath[i], FileName);
+            }
+            return pathLink.Replace("//", "");
+        }
+
+        #region 以下需要逐步实现的
+        /*
         /// <summary>
         /// 图片添加浏览页
         /// </summary>
@@ -90,13 +154,13 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             var list = imgWebService.GetFilesList(urlpath);
             var model = new ImageListModel();
             #region webservice
-            model.FoldList = list.FoldList.Select(fold => new Jqpress.Core.Entity.File.FoldInfo
+            model.FoldList = list.FoldList.Select(fold => new FoldInfo
             {
                 FoldName = fold.FoldName,
                 FoldPath = fold.FoldPath,
                 FileSystemInfosLength = fold.FileSystemInfosLength
             }).ToList();
-            model.FileList = list.FileList.Select(f => new Jqpress.Core.Entity.File.FileInfo
+            model.FileList = list.FileList.Select(f => new FileInfo
             {
                 FileName = f.FileName,
                 Extension = f.Extension,
@@ -107,9 +171,9 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             #endregion
             if (model.FileList.Count == 0)
             {
-                IPagedList<Jqpress.Core.Entity.File.FoldInfo> foldlist = new PagedList<Jqpress.Core.Entity.File.FoldInfo>(model.FoldList, pageIndex - 1, pageSize);
-                model.FoldPageList.LoadPagedList<Jqpress.Core.Entity.File.FoldInfo>(foldlist);
-                model.FoldList = (List<Jqpress.Core.Entity.File.FoldInfo>)foldlist;
+                IPagedList<FoldInfo> foldlist = new PagedList<FoldInfo>(model.FoldList, pageIndex - 1, pageSize);
+                model.FoldPageList.LoadPagedList<FoldInfo>(foldlist);
+                model.FoldList = (List<FoldInfo>)foldlist;
             }
             string controller = RouteData.Values["controller"].ToString();
             model.ModelID = Convert.ToInt32(RouteData.Values["modelid"]);
@@ -206,35 +270,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             var img = new ImageInfo { FileName = filename, Path = dir, ByteImage = FileHelper.HttpPostedFileToByte(file) };
             imgWebService.UploadImageBase(img, basepath);
         }
-
-        /// <summary>
-        /// 获取当前路径所有连接
-        /// </summary>
-        protected string GetPathUrl()
-        {
-            string pathLink = string.Empty;
-            FileName = System.IO.Path.GetFileName(Request.Url.AbsolutePath);
-            urlpath = urlpath.Replace("//", "");
-            string path2 = urlpath.Substring(1, urlpath.Length - 1);
-
-            string[] tempPath = path2.Split('/');
-
-            string temp = "/";
-
-            pathLink = ConfigHelper.SitePath.TrimEnd('/');
-
-            for (int i = 0; i < tempPath.Length; i++)
-            {
-
-                temp +=(i!=0?"/":"")+ tempPath[i];
-                if (i == 0 && ConfigHelper.SitePath.Length > 1) //有虚拟目录
-                {
-                    continue;
-                }
-                pathLink += string.Format("/<a href='{2}?path={0}'>{1}</a>", temp, tempPath[i], FileName);
-            }
-            return pathLink.Replace("//","");
-        }
-
+        */
+        #endregion
     }
 }

@@ -92,6 +92,7 @@
     <Compile Include="Domain\CommentInfo.cs" />
     <Compile Include="Domain\Enum\Enums.cs" />
     <Compile Include="Domain\FeedInfo.cs" />
+    <Compile Include="Domain\FileInfo.cs" />
     <Compile Include="Domain\FoldInfo.cs" />
     <Compile Include="Domain\LinkInfo.cs" />
     <Compile Include="Domain\PostInfo.cs" />
