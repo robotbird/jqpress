@@ -1,3 +1,8 @@
+------git 常用命令----------
+0、公司文件地址 cd F:/gitcode/donet/jqpressmvc
+1、提交 git commit -a
+2、推送 git push --recurse-submodules=check --progress "origin" develop:develop
+
 --开发计划------------------
 在有限的时间内每周完成一个模块的开发
 
