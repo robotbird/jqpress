@@ -61,7 +61,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             }
             string controller = RouteData.Values["controller"].ToString();
             string aera = "Admin";
-            model.CurrentAction = "/" + aera + "/" + controller + "/" + "FilesBrowser";
+            model.CurrentAction = "/" + aera + "/" + controller + "/" + "list";
             model.UserDirectory = new DirectoryInfo(Server.MapPath(urlpath));
             ViewBag.path = urlpath;
             ViewBag.UrlPath = System.IO.Path.GetFileName(Request.Url.AbsolutePath);
