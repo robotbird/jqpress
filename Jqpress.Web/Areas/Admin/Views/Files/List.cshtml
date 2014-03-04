@@ -17,7 +17,7 @@
 .upfile img{ border:0px solid #ccc; }
 .upfile .delete{position:relative;  width:20px; height:20px;   top:-92px;   right:-40px;  border:0px solid gray; color:Gray; font-size:10px; }
 </style>
- <form name="aspnetForm" action="@Url.Action("SaveFiles", "Files", new { path = ViewBag.path })" method="post"  id="aspnetForm" enctype="multipart/form-data">
+ <form name="aspnetForm" action="@Url.Action("Upload", "Files", new { path = ViewBag.path })" method="post"  id="aspnetForm" enctype="multipart/form-data">
 <div  class="imgright">   
     
     <h4>上传附件</h4>
