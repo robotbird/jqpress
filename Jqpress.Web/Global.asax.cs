@@ -22,7 +22,6 @@ namespace Jqpress.Web
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             #region 忽略静态文件路由
-            routes.IgnoreRoute("{*allaspx}", new { allaspx = @".*\.aspx(/.*)?" });
             routes.IgnoreRoute("{*jpg}", new { jpg = @".*\.jpg(/.*)?" });
             routes.IgnoreRoute("{*gif}", new { gif = @".*\.gif(/.*)?" });
             routes.IgnoreRoute("{*js}", new { js = @".*\.js(/.*)?" });
