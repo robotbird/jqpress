@@ -26,7 +26,7 @@ From Medium Devices Up To Larger Devices
  	***/
  	.page-sidebar {
 		position: absolute;
- 		width: 215px;
+ 		width: 150px;
   	}
 
   	.page-sidebar-menu .search-form {
@@ -90,7 +90,7 @@ From Medium Devices Up To Larger Devices
   	Page content
   	***/
   	.page-content { 
-  		margin-left: 215px; 
+  		margin-left: 150px; 
 		margin-top: 0px;
 		min-height: 760px; 
 		padding: 25px 20px 20px 20px;

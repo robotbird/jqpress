@@ -14,7 +14,8 @@ Page header
 .header {
   filter: none;
   background-image: none;
-  background-color: #242527;
+  /* background-color: #242527; */
+  background-color:#35363a;
 }
 .header .navbar-nav .dropdown-toggle:hover,
 .header .navbar-nav .dropdown.open .dropdown-toggle {
