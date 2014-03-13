@@ -144,7 +144,8 @@ namespace Jqpress.Blog.Repositories.Repository
             string cmdText = string.Format("select * from [{0}users] where [userName] = @userName and [password]=@password ", ConfigHelper.Tableprefix);
             using (var conn = new DapperHelper().OpenConnection())
             {
-                return conn.Query<UserInfo>(cmdText, new { userName = userName,password = password }).First();
+                var list =conn.Query<UserInfo>(cmdText, new { userName = userName,password = password });
+                return list.Count()==0?null:list.First();
             }
         }
 

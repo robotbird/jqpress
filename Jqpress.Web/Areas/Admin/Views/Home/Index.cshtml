@@ -8,48 +8,43 @@
 @using Jqpress.Blog.Domain
 @using Jqpress.Framework.Utils
  
-  <link href="@Url.Content("~/Content/index.css")" rel="stylesheet" type="text/css" media="screen" />
+  <div class="row">
+            <div class="col-md-6">
+               <!-- BEGIN Portlet PORTLET-->
+               <div class="portlet">
+                  <div class="portlet-title">
+                     <div class="caption"><i class="icon-reorder"></i>概况</div>
+                     <div class="tools">
+                        <a href="javascript:;" class="collapse"></a>
+                        <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                        <a href="javascript:;" class="reload"></a>
+                        <a href="javascript:;" class="remove"></a>
+                     </div>
+                  </div>
+                  <div class="portlet-body">
+                    	<div>文章： @Model.PostCount 篇</div>
+	                    <div>评论：@Model.CommentCount 条</div>
+                        <div>标签：@Model.TagCount 个</div>
+                        <div>访问量：@Model.VisitCount 次</div>
+                  </div>
+               </div>
+               <!-- END Portlet PORTLET-->
+            </div>
 
-<div class="body_nav"><div class="left">控制台</div></div>
-
-
-<div id="dashboard-widgets-wrap">
-
-<div class="metabox-holder" id="dashboard-widgets">
-	<div style="width:50%;" class="postbox-container">
-<div class="meta-box-sortables ui-sortable" id="normal-sortables">
-<div class="postbox " id="dashboard_right_now">
-<div title="显示/隐藏" class="handlediv"><br></div><h3 class="hndle"><span>概况</span></h3>
-	<div>文章： @Model.PostCount 篇</div>
-	<div>评论：@Model.CommentCount 条</div>
-    <div>标签：@Model.TagCount 个</div>
-    <div>访问量：@Model.VisitCount 次</div>
-</div>
-
-<div class="postbox " id="dashboard_systeminfo">
-<div title="显示/隐藏" class="handlediv"><br></div><h3 class="hndle"><span>系统信息</span></h3>
-    <div>数据库： @Model.DbPath  (@Model.DbSize) </div>
-    <div>附件：@Model.UpfilePath  (共 @Model.UpfileCount 个, @Model.UpfileSize)</div>
-    <div>程序目录：@HttpContext.Current.Request.PhysicalApplicationPath</div>    
-    <div>程序版本:@Model.Version  <a href="http://www.jqpress.com" target="_blank">去官网查看新版</a></div>
-    <div>CPU：@Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER")  (@Environment.ProcessorCount 核)</div>
-    <div>缓存数量：@Model.CacheCount </div>
-    <div>操作系统：@Environment.OSVersion </div>
-    <div>.NET 版本：@Environment.Version</div>
-    <div>IIS 版本：@HttpContext.Current.Request.ServerVariables["SERVER_SOFTWARE"] </div>
-    <div>服务器IP：@HttpContext.Current.Request.ServerVariables["LOCAl_ADDR"]</div>
-
-</div>
-</div>	
-</div>
-
-<div style="width:49%;" class="postbox-container">
-
-<div class="meta-box-sortables ui-sortable" id="side-sortables">
-<div class="postbox " id="dashboard_recent_comments">
-<div title="显示/隐藏" class="handlediv"><br></div><h3 class="hndle"><span>近期评论</h3>
-<div class="inside">
-	     @foreach (CommentInfo comment in Model.Commentlist)
+            <div class="col-md-6">
+               <!-- BEGIN Portlet PORTLET-->
+               <div class="portlet">
+                  <div class="portlet-title">
+                     <div class="caption"><i class="icon-reorder"></i>近期评论</div>
+                     <div class="tools">
+                        <a href="javascript:;" class="collapse"></a>
+                        <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                        <a href="javascript:;" class="reload"></a>
+                        <a href="javascript:;" class="remove"></a>
+                     </div>
+                  </div>
+                  <div class="portlet-body">
+                    		     @foreach (CommentInfo comment in Model.Commentlist)
          { 
                <p><a href="comment_list.aspx?operate=update&commentid=@comment.CommentId">审核</a>
                     <a href="comment_list.aspx?operate=delete&commentid=@comment.CommentId" onclick="return confirm('确定要删除吗?')">删除</a>      
@@ -58,36 +53,65 @@
                </p>
         } 
         @if (@Model.Commentlist.Count == 0){  <p> 暂无待审核评论</p> } 
+                  </div>
+               </div>
+               <!-- END Portlet PORTLET-->
+            </div>
 
-</div>
-</div>
+      </div>
+  <div class="row">
 
+            <div class="col-md-6">
+               <!-- BEGIN Portlet PORTLET-->
+               <div class="portlet">
+                  <div class="portlet-title">
+                     <div class="caption"><i class="icon-reorder"></i>系统信息</div>
+                     <div class="tools">
+                        <a href="javascript:;" class="collapse"></a>
+                        <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                        <a href="javascript:;" class="reload"></a>
+                        <a href="javascript:;" class="remove"></a>
+                     </div>
+                  </div>
+                  <div class="portlet-body">
+                    		        <div>数据库： @Model.DbPath  (@Model.DbSize) </div>
+                            <div>附件：@Model.UpfilePath  (共 @Model.UpfileCount 个, @Model.UpfileSize)</div>
+                            <div>程序目录：@HttpContext.Current.Request.PhysicalApplicationPath</div>    
+                            <div>程序版本:@Model.Version  <a href="http://www.jqpress.com" target="_blank">去官网查看新版</a></div>
+                            <div>CPU：@Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER")  (@Environment.ProcessorCount 核)</div>
+                            <div>缓存数量：@Model.CacheCount </div>
+                            <div>操作系统：@Environment.OSVersion </div>
+                            <div>.NET 版本：@Environment.Version</div>
+                            <div>IIS 版本：@HttpContext.Current.Request.ServerVariables["SERVER_SOFTWARE"] </div>
+                            <div>服务器IP：@HttpContext.Current.Request.ServerVariables["LOCAl_ADDR"]</div>
+                  </div>
+               </div>
+               <!-- END Portlet PORTLET-->
+            </div>
 
-<div class="postbox " id="dashboard_primary">
-<script type="text/javascript">
-    $(document).ready(function () {
-        $.get('@Url.Action("GetRss","Admin")', function (data) {
-            $(".rss-widget ul").empty().append(data);
-        });
-    }); 
-</script>
-<div title="显示/隐藏" class="handlediv"><br></div><h3 class="hndle"><span>jqpress新闻 </span></h3>
-<div class="inside" style="">
-    <div class="rss-widget">
-       <ul>
-       加载新闻中...
-          
-          </ul>
-         </div>
-        </div>
-</div>
-
-</div>	
-
-</div>
-
-
-</div>
-
-<div class="clear"></div>
+            <div class="col-md-6">
+               <!-- BEGIN Portlet PORTLET-->
+               <script type="text/javascript">
+                   $(document).ready(function () {
+                       $.get('@Url.Action("GetRss","Admin")', function (data) {
+                           $("jqpress-news").empty().append(data);
+                       });
+                   }); 
+               </script>
+               <div class="portlet">
+                  <div class="portlet-title">
+                     <div class="caption"><i class="icon-reorder"></i>jqpress新闻</div>
+                     <div class="tools">
+                        <a href="javascript:;" class="collapse"></a>
+                        <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                        <a href="javascript:;" class="reload"></a>
+                        <a href="javascript:;" class="remove"></a>
+                     </div>
+                  </div>
+                  <div class="portlet-body" id="jqpress-news">
+                    	
+                  </div>
+               </div>
+               <!-- END Portlet PORTLET-->
+            </div>
 </div>
