@@ -117,72 +117,105 @@
 </script>
 
 
-<div class="body_nav">
-		<div class="left">文章管理 <span style="font-size:9px;">&gt;&gt;</span>@(Model.Post.PostId > 0 ? "修改" : "添加")文章</div>
-			<div class="clr"></div>
+<!-- BEGIN PAGE HEADER-->
+<div class="row">
+<div class="col-md-12">
+    <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+    <h3 class="page-title">
+        @(Model.Post.PostId > 0 ? "编辑" : "添加")文章 
+    </h3>
+    <!-- END PAGE TITLE & BREADCRUMB-->
 </div>
+</div>
+<!-- END PAGE HEADER-->
+
+
+
  @Html.JPartial("_Notifications")
-<div class="formzone">
-<form name="form1" method="post" action="@Url.Action("SavePost", "Post")"  >
-<input type="hidden"  id="PostId" name="PostId" value="@Model.Post.PostId" />
 
-<div id="titlewrap">
-    <input type="text" id="Title" name="Title" value="@Model.Post.Title" class="solid-text" style="width:60%;" />
-	<label id="lableTitle" for="Title"  >标题不能为空</label>
-</div>
-<div id="contentswrap">
-    <a href="upfilebyeditor.aspx?keepThis=true&getfile=1&TB_iframe=true&height=420&width=620" title="插入图片/文件" class="thickbox" target="_blank">插入图片/文件</a>
-    <textarea name="PostContent" rows="2" cols="20" id="PostContent" style="height:400px;width:95%;">@Model.Post.PostContent</textarea>
-</div>
-<div id="summarywrap">
-	 <label  class="label" for="Summary">摘要: <a href="javascript:void(0);" onclick="createSummary('part');">从正文提取部分</a>/<a href="javascript:void(0);" onclick="createSummary('full');">全部</a></label>
-        <textarea name="Summary" rows="2" cols="20" id="Summary" style="height:100px;width:95%;">@Model.Post.Summary</textarea>
-</div>
-<div id="categorywrap">
-	<label for="CategoryId">分类&nbsp;</label>
-    @Html.DropDownList("CategoryId", Model.CateSelectItem, new { @class = "select" })
 
-</div>
-<div id="tagwrap">
-     <label for="txtTags">标签&nbsp;</label>
-    <input name="Tag" type="text" id="Tag" value="@Model.Post.Tag" class="solid-text" style="width:49%;" />
-    多个TAG请用逗号隔开!
-        <a  href="###" onclick="showTag();" >查看常用标签↓</a>
-        <div id="taglist" style=" border:2px solid #ccc;display:none;  line-height:135%; padding:3px ;  ">
-              @foreach (var  item in  Model.TagList)
-              { 
-                 <a href="###" style="padding-left:3px;">@item.CateName</a><span class="gray small">(@item.PostCount)</span>
-              }
-        </div>
+                  <div class="portlet-body form">
+                     <form name="form1" method="post" action="@Url.Action("SavePost", "Post")"  >
+                      <input type="hidden"  id="PostId" name="PostId" value="@Model.Post.PostId" />
+
+                        <div class="form-body">
+                           <div class="form-group">
+                               <input type="text" id="Title" name="Title" value="@Model.Post.Title" class="form-control" style="width:60%;" />
+                           </div>
+                           <div class="form-group">
+                              <a href="#picture" title="插入图片/文件"  data-toggle="modal" >插入图片/文件</a>
+                              <textarea name="PostContent" rows="2" cols="20" id="PostContent" style="height:400px;width:95%;">@Model.Post.PostContent</textarea>
+                           </div>
+                           <div class="form-group">
+                              	<label  class="label" for="Summary">摘要: <a href="javascript:void(0);" onclick="createSummary('part');">从正文提取部分</a>/<a href="javascript:void(0);" onclick="createSummary('full');">全部</a></label>
+                                <textarea class="form-control" maxlength="225" name="Summary" rows="2" cols="20" id="Summary" style="height:100px;width:95%;">@Model.Post.Summary</textarea>
+                           </div>
+                           <div class="form-group">
+                              <label for="CategoryId">分类&nbsp;</label>
+                              @Html.DropDownList("CategoryId", Model.CateSelectItem, new { @class = "form-control input-medium" })
+                           </div>
+                           <div class="form-group">
+                                        <label for="txtTags">标签&nbsp;</label>
+                                        <input name="Tag" type="text" id="Tag" value="@Model.Post.Tag" class="form-control input-medium" value="@Model.Post.Tag"  />
+                                        多个TAG请用逗号隔开!
+                                            <a  href="###" onclick="showTag();" >查看常用标签↓</a>
+                                            <div id="taglist"  style="border:2px solid #ccc;display:none;line-height:135%; padding:3px;">
+                                                  @foreach (var  item in  Model.TagList)
+                                                  { 
+                                                     <a href="###" style="padding-left:3px;">@item.CateName</a><span class="gray small">(@item.PostCount)</span>
+                                                  }
+                                            </div>
                  
-<script type="text/javascript">
-    function showTag() {
-        if (document.getElementById('taglist').style.display == '') {
-            document.getElementById('taglist').style.display = 'none';
-        } else {
-            document.getElementById('taglist').style.display = '';
-        }
-    }
-</script>    
-        
-</div>
-<div id="slugwrap">
-	<label for="Url" id="title-prompt-text" >自定义地址&nbsp;</label>
-     http://@(PressRequest.GetCurrentFullHost())/post/<input name="Slug" type="text" id="Slug" class="solid-text" value="@(Model.Post.Slug)" style="width:49%;" />
-</div>
-<div id="propertywrap">
+                                    <script type="text/javascript">
 
- <input id="chkStatus" type="checkbox" name="chkStatus" value="1"   @(Model.Post.Status == 0 && Model.Post.PostId>0 ? "checked" : "") /><label for="chkStatus">草稿</label>
-    <input id="CommentStatus" type="checkbox" value="1"  checked="checked" name="CommentStatus" @(Model.Post.CommentStatus == 1 ? "checked" : "") /><label for="chkCommentStatus">允许评论</label>
-  <span title="不会出现在文章列表,常用于留言本,关于我的页面!"><input id="PostStatus" type="checkbox" name="PostStatus" @(Model.Post.PostStatus == 1 ? "checked" : "") /><label for="chkHideStatus">私有</label></span>
-  <span title="自动将远程图片保存到本地"><input id="chkSaveImage" type="checkbox" name="chkSaveImage" value="1"  /><label for="chkSaveImage">保存远程图片</label></span>
+                                        function showTag() {
+                                            if (document.getElementById('taglist').style.display == '') {
+                                                document.getElementById('taglist').style.display = 'none';
+                                            } else {
+                                                document.getElementById('taglist').style.display = '';
+                                            }
+                                        }
+                                    </script> 
+                           </div>
 
-</div>
-<div id="buttonwrap">
- <input type="submit" name="btnEdit" value="@(Model.Post.PostId > 0 ? "修改" : "发布")" onclick="return checkForm();" id="btnEdit" class="button" />
- <input class="button" type="button" value="返回" onclick="history.go(-1)" /> 
-</div>
+                           <div class="form-group">
+                                       <label>自定义地址</label>  
+                                          http://@(PressRequest.GetCurrentFullHost())/post/<input type="text" id="Slug" class="form-control input-medium" value="@(Model.Post.Slug)"  />
+                            </div>
+
+                           <div class="form-group">
+                               <input id="chkStatus" type="checkbox" name="chkStatus" value="1"   @(Model.Post.Status == 0 && Model.Post.PostId>0 ? "checked" : "") /><label for="chkStatus">草稿</label>
+                               <input id="CommentStatus" type="checkbox" value="1"  checked="checked" name="CommentStatus" @(Model.Post.CommentStatus == 1 ? "checked" : "") /><label for="chkCommentStatus">允许评论</label>
+                               <span title="不会出现在文章列表,常用于留言本,关于我的页面!"><input id="PostStatus" type="checkbox" name="PostStatus" @(Model.Post.PostStatus == 1 ? "checked" : "") /><label for="chkHideStatus">私有</label></span>
+                               <span title="自动将远程图片保存到本地"><input id="chkSaveImage" type="checkbox" name="chkSaveImage" value="1"  /><label for="chkSaveImage">保存远程图片</label></span>
+                           </div>
+                           
+
+                           <div class="form-group">
+                              <button type="submit" name="btnEdit"  onclick="return checkForm();" id="btnEdit" class="btn btn-primary" >@(Model.Post.PostId > 0 ? "修改" : "发布")</button>
+                              <button type="button" class="btn btn-default" onclick="history.go(-1)" >返回 </button>
+                           </div>
 
 
-</form>
-</div>  
+                        </div>
+                        
+                     </form>
+                  </div>
+
+                     <div id="picture" class="modal fade" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-header">
+                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                 <h4 class="modal-title">Responsive & Scrollable</h4>
+                              </div>
+                           <div class="modal-content">
+                                <iframe style="zoom: 0.6;" height="250" src="/admin/files/list" frameBorder="0" width="99.6%"></iframe> 
+                           </div>
+                           <div class="modal-footer">
+                                 <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                                 <button type="button" class="btn btn-success">Save changes</button>
+                              </div>
+
+                        </div>
+                     </div>
+
