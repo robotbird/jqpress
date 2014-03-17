@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Jqpress.Blog.Configuration;
+@{
+   var siteMap = new XmlSiteMap();
+    siteMap.LoadFrom("~/config/sitemap.config");
+}
+
+<!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
@@ -89,6 +95,22 @@
 
       <div class="page-sidebar navbar-collapse collapse">
          <!-- BEGIN SIDEBAR MENU -->        
+
+  @foreach (var item in siteMap.RootNode.ChildNodes.Where(x => x.Visible))
+    {
+        <li>@item.Title </li>
+         if (item.ChildNodes.Any(x => x.Visible)) 
+         {
+               foreach (var childItem in siteMap.RootNode.ChildNodes.Where(x => x.Visible))
+               {
+                 <li>@childItem.Title </li>
+      
+               }
+         }
+      
+    }
+
+
          <ul class="page-sidebar-menu">
            
             <li>
@@ -98,7 +120,7 @@
                <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
             </li>
             <li class="start active">
-               <a href="@Url.Action("index","home")">
+               <a href="@Url.Action("index", "home")">
                <i class="icon-home"></i> 
                <span class="title">控制台</span>
                <span class="selected"></span>
@@ -112,22 +134,22 @@
                </a>
                <ul class="sub-menu">
                   <li >
-                     <a href="@Url.Action("list","post")"> 文章列表</a>
+                     <a href="@Url.Action("list", "post")"> 文章列表</a>
                   </li>
                   <li >
                      <a href="@Url.Action("list", "post", new { poststatus = 1 })">  私有文章</a>
                   </li>
                   <li >
-                     <a href="@Url.Action("edit","post")">添加新文章</a>
+                     <a href="@Url.Action("edit", "post")">添加新文章</a>
                   </li>
                   <li >
-                     <a href="@Url.Action("list","category")">分类目录</a>
+                     <a href="@Url.Action("list", "category")">分类目录</a>
                   </li>
                   <li >
-                     <a href="@Url.Action("list","tag")">文章标签</a>
+                     <a href="@Url.Action("list", "tag")">文章标签</a>
                   </li>
                   <li >
-                     <a href="@Url.Action("list","comment")">文章评论</a>
+                     <a href="@Url.Action("list", "comment")">文章评论</a>
                   </li>
                   
                </ul>
@@ -155,7 +177,7 @@
                </a>
                <ul class="sub-menu">
                   <li >
-                     <a href="@Url.Action("list","user")">用户列表</a>
+                     <a href="@Url.Action("list", "user")">用户列表</a>
                   </li>
                   
                </ul>
@@ -183,7 +205,7 @@
                </a>
                <ul class="sub-menu">
                   <li >
-                    <a href="@Url.Action("list","files")" >文件管理</a>
+                    <a href="@Url.Action("list", "files")" >文件管理</a>
                   </li>
                   <li >
                      <a href="#">数据库备份</a>

@@ -85,7 +85,9 @@
     <Compile Include="Common\EmailHelper.cs" />
     <Compile Include="Common\Pager.cs" />
     <Compile Include="Common\PagerControl.cs" />
+    <Compile Include="Configuration\SiteMapNode.cs" />
     <Compile Include="Configuration\BlogConfig.cs" />
+    <Compile Include="Configuration\XmlSiteMap.cs" />
     <Compile Include="Domain\ArchiveInfo.cs" />
     <Compile Include="Domain\BlogConfigInfo.cs" />
     <Compile Include="Domain\CategoryInfo.cs" />
