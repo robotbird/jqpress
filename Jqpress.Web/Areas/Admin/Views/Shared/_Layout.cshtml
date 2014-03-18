@@ -1,6 +1,6 @@
 ﻿@using Jqpress.Blog.Configuration;
 @{
-   var siteMap = new XmlSiteMap();
+    var siteMap = new XmlSiteMap();
     siteMap.LoadFrom("~/config/sitemap.config");
 }
 
@@ -46,7 +46,7 @@
       <!-- BEGIN TOP NAVIGATION BAR -->
       <div class="header-inner">
          <!-- BEGIN LOGO -->  
-         <a class="navbar-brand" href="@Url.Action("index","home")">
+         <a class="navbar-brand" href="@Url.Action("index", "home")">
           @Jqpress.Blog.Configuration.BlogConfig.GetSetting().SiteName
          </a>
          
@@ -96,21 +96,6 @@
       <div class="page-sidebar navbar-collapse collapse">
          <!-- BEGIN SIDEBAR MENU -->        
 
-  @foreach (var item in siteMap.RootNode.ChildNodes.Where(x => x.Visible))
-    {
-        <li>@item.Title </li>
-         if (item.ChildNodes.Any(x => x.Visible)) 
-         {
-               foreach (var childItem in siteMap.RootNode.ChildNodes.Where(x => x.Visible))
-               {
-                 <li>@childItem.Title </li>
-      
-               }
-         }
-      
-    }
-
-
          <ul class="page-sidebar-menu">
            
             <li>
@@ -119,101 +104,60 @@
                <div class="clearfix"></div>
                <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
             </li>
-            <li class="start active">
-               <a href="@Url.Action("index", "home")">
-               <i class="icon-home"></i> 
-               <span class="title">控制台</span>
-               <span class="selected"></span>
+
+
+    @foreach (var item in siteMap.RootNode.ChildNodes.Where(x => x.Visible))
+    {
+        var liclass = "";
+        if (item.ActionName.ToLower() == "index" && item.ControllerName.ToLower() == "home")
+        {
+            liclass = "start";
+        }
+        if (item.ControllerName == ViewContext.RouteData.Values["controller"].ToString().ToLower() && item.ActionName == ViewContext.RouteData.Values["action"].ToString().ToLower())
+        {
+            liclass += " active";
+        }
+        var url = "";
+        if (item.ChildNodes.Any(x => x.Visible))
+        {
+            url = "javascript:;";
+        }
+        else {
+            url = Url.Action(item.ActionName, item.ControllerName);
+        }
+          <li class="@liclass">
+
+               <a href="@url">
+               <i class="@item.Icon"></i> 
+               <span class="title">@item.Title</span>
+                @if (item.ControllerName == ViewContext.RouteData.Values["controller"].ToString().ToLower() && item.ActionName == ViewContext.RouteData.Values["action"].ToString().ToLower())
+                {
+                    <span class="selected"></span>     
+                }
+                @if (item.ChildNodes.Any(x => x.Visible)) 
+                {
+                   <span class="arrow "></span>                
+                }
                </a>
-            </li>
-            <li class="">
-               <a href="javascript:;">
-               <i class="icon-cogs"></i> 
-               <span class="title">文章</span>
-               <span class="arrow "></span>
-               </a>
-               <ul class="sub-menu">
-                  <li >
-                     <a href="@Url.Action("list", "post")"> 文章列表</a>
-                  </li>
-                  <li >
-                     <a href="@Url.Action("list", "post", new { poststatus = 1 })">  私有文章</a>
-                  </li>
-                  <li >
-                     <a href="@Url.Action("edit", "post")">添加新文章</a>
-                  </li>
-                  <li >
-                     <a href="@Url.Action("list", "category")">分类目录</a>
-                  </li>
-                  <li >
-                     <a href="@Url.Action("list", "tag")">文章标签</a>
-                  </li>
-                  <li >
-                     <a href="@Url.Action("list", "comment")">文章评论</a>
-                  </li>
-                  
+               @if (item.ChildNodes.Any(x => x.Visible))
+               {
+                <ul class="sub-menu">
+                   @foreach (var childitem in item.ChildNodes)
+                {
+                    url = Url.Action(childitem.ActionName, childitem.ControllerName);
+                    <li><a href="@url">@childitem.Title</a></li>
+                    
+                    if (childitem.ControllerName == ViewContext.RouteData.Values["controller"].ToString().ToLower() && childitem.ActionName == ViewContext.RouteData.Values["action"].ToString().ToLower())
+                    {
+                      <span class="selected"></span>     
+                    }
+
+                }
                </ul>
-            </li>
-            <li class="">
-               <a href="javascript:;">
-               <i class="icon-bookmark-empty"></i> 
-               <span class="title">页面管理</span>
-               <span class="arrow "></span>
-               </a>
-               <ul class="sub-menu">
-                  <li >
-                     <a href="#">页面列表</a>
-                  </li>
-                  <li >
-                     <a href="#">添加页面</a>
-                  </li>
-               </ul>
-            </li>
-            <li class="">
-               <a href="javascript:;">
-               <i class="icon-table"></i> 
-               <span class="title">用户管理</span>
-               <span class="arrow "></span>
-               </a>
-               <ul class="sub-menu">
-                  <li >
-                     <a href="@Url.Action("list", "user")">用户列表</a>
-                  </li>
-                  
-               </ul>
-            </li>
-            <li class="">
-               <a href="javascript:;">
-               <i class="icon-sitemap"></i> 
-               <span class="title">设置</span>
-               <span class="arrow "></span>
-               </a>
-               <ul class="sub-menu">
-                  <li >
-                     <a href="page_portfolio.html">站点设置</a>
-                  </li>
-                  <li >
-                     <a href="page_blog.html">主题设置</a>
-                  </li>
-                 
-               </ul>
-            </li>
-            <li class="">
-               <a href="javascript:;">
-               <i class="icon-th"></i> 
-               <span class="title">工具</span>
-               </a>
-               <ul class="sub-menu">
-                  <li >
-                    <a href="@Url.Action("list", "files")" >文件管理</a>
-                  </li>
-                  <li >
-                     <a href="#">数据库备份</a>
-                  </li>
-                  
-               </ul>
-            </li>
-           
+               }
+          </li>
+    }
+
         
          </ul>
          <!-- END SIDEBAR MENU -->
@@ -260,32 +204,6 @@
    <!-- END PAGE LEVEL PLUGINS -->
    <!-- BEGIN PAGE LEVEL SCRIPTS -->
    <script type="text/javascript" src="/assets/scripts/app.js"></script>
-   <script type="text/javascript">
-       jQuery(document).ready(function () {
-           App.init();
-
-           setTimeout(function () {
-               var url = document.location.href;
-               var menu = $(".page-sidebar-menu li");
-               $.each(menu, function (i, n) {
-                   var aa = $(n).find("a");
-                   var arrow = $(n).find(".arrow");
-                   if (url.indexOf($(aa).attr("href")) > -1) {
-                       debugger;
-                       $(n).addClass("active");
-                       $(arrow).addClass("open");
-                       $(aa).append('<span class="selected"></span>');
-                   } else {
-                       $(n).removeClass("active");
-                   }
-               });
-           }, 1000);
-
-
-       });
-
-          
-   </script>
 </body>
 <!-- END BODY -->
 </html>
