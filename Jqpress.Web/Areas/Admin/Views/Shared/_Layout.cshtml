@@ -111,22 +111,23 @@
         var liclass = "";
         if (item.ActionName.ToLower() == "index" && item.ControllerName.ToLower() == "home")
         {
-            liclass = "start";
+            liclass = "start ";
         }
-        if (item.ControllerName == ViewContext.RouteData.Values["controller"].ToString().ToLower() && item.ActionName == ViewContext.RouteData.Values["action"].ToString().ToLower())
+        if (item.ControllerName == ViewContext.RouteData.Values["controller"].ToString().ToLower())
         {
-            liclass += " active";
+            liclass += "active";
         }
+        liclass = liclass.Trim();
         var url = "";
         if (item.ChildNodes.Any(x => x.Visible))
         {
             url = "javascript:;";
         }
-        else {
+        else
+        {
             url = Url.Action(item.ActionName, item.ControllerName);
         }
-          <li class="@liclass">
-
+        <li class="@liclass">
                <a href="@url">
                <i class="@item.Icon"></i> 
                <span class="title">@item.Title</span>
@@ -145,17 +146,18 @@
                    @foreach (var childitem in item.ChildNodes)
                 {
                     url = Url.Action(childitem.ActionName, childitem.ControllerName);
-                    <li><a href="@url">@childitem.Title</a></li>
-                    
+                    var childliclass = "";
                     if (childitem.ControllerName == ViewContext.RouteData.Values["controller"].ToString().ToLower() && childitem.ActionName == ViewContext.RouteData.Values["action"].ToString().ToLower())
                     {
-                      <span class="selected"></span>     
+                        childliclass = "class=active";  
                     }
+                       
+                   <li @childliclass><a href="@url">@childitem.Title</a></li>
 
                 }
                </ul>
                }
-          </li>
+         </li>
     }
 
         
@@ -204,6 +206,26 @@
    <!-- END PAGE LEVEL PLUGINS -->
    <!-- BEGIN PAGE LEVEL SCRIPTS -->
    <script type="text/javascript" src="/assets/scripts/app.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            App.init();
+              setTimeout(function () {
+               var url = document.location.href;
+               var menu = $(".page-sidebar-menu li");
+               $.each(menu, function (i, n) {
+                   var aa = $(n).find("ul .sub-menu li");
+                   if ($(aa).attr("class") =="active") {
+                       $(n).addClass("active");
+                       $(n).append('<span class="selected"></span>');
+                   } 
+               });
+           }, 1000);
+
+
+        });
+
+          
+   </script>
 </body>
 <!-- END BODY -->
 </html>
