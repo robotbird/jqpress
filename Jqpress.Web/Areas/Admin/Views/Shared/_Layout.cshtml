@@ -105,8 +105,7 @@
                <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
             </li>
 
-
-    @foreach (var item in siteMap.RootNode.ChildNodes.Where(x => x.Visible))
+            @foreach (var item in siteMap.RootNode.ChildNodes.Where(x => x.Visible))
     {
         var liclass = "";
         if (item.ActionName.ToLower() == "index" && item.ControllerName.ToLower() == "home")
@@ -139,29 +138,34 @@
                 }
                 @if (item.ChildNodes.Any(x => x.Visible)) 
                 {
-                   <span class="arrow "></span>                
+                    if (liclass.IndexOf("active")>-1)
+                    {
+                     <span class="arrow open"></span>                                    
+                    }
+                    else {
+                     <span class="arrow"></span>                                    
+                    }
                 }
                </a>
                @if (item.ChildNodes.Any(x => x.Visible))
                {
                 <ul class="sub-menu">
                    @foreach (var childitem in item.ChildNodes)
-                {
-                    url = Url.Action(childitem.ActionName, childitem.ControllerName);
-                    var childliclass = "";
-                    if (childitem.ControllerName == ViewContext.RouteData.Values["controller"].ToString().ToLower() && childitem.ActionName == ViewContext.RouteData.Values["action"].ToString().ToLower())
-                    {
-                        childliclass = "class=active";  
-                    }
+                   {
+                       url = Url.Action(childitem.ActionName, childitem.ControllerName);
+                       var childliclass = "";
+                       if (childitem.ControllerName == ViewContext.RouteData.Values["controller"].ToString().ToLower() && childitem.ActionName == ViewContext.RouteData.Values["action"].ToString().ToLower())
+                       {
+                           childliclass = "class=active";
+                       }
                        
                    <li @childliclass><a href="@url">@childitem.Title</a></li>
 
-                }
+                   }
                </ul>
                }
          </li>
     }
-
         
          </ul>
          <!-- END SIDEBAR MENU -->
