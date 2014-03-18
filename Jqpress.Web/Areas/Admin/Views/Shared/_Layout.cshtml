@@ -215,19 +215,6 @@
     <script type="text/javascript">
         jQuery(document).ready(function () {
             App.init();
-              setTimeout(function () {
-               var url = document.location.href;
-               var menu = $(".page-sidebar-menu li");
-               $.each(menu, function (i, n) {
-                   var aa = $(n).find("ul .sub-menu li");
-                   if ($(aa).attr("class") =="active") {
-                       $(n).addClass("active");
-                       $(n).append('<span class="selected"></span>');
-                   } 
-               });
-           }, 1000);
-
-
         });
 
           
