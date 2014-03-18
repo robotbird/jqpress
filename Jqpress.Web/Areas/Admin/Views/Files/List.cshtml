@@ -1,7 +1,11 @@
 ﻿@using Jqpress.Framework.Mvc
 @model Jqpress.Web.Areas.Admin.Models.FilesModel
 @{
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var from = HttpContext.Current.Request["from"];
+    if(string.IsNullOrEmpty(from))
+    {
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";    
+    }
     ViewBag.Title = "文件管理 - 管理中心 - Powered by Jqpress";
     }
     <link href="@Url.Content("~/Administration/Content/layout.css")" rel="stylesheet" type="text/css" />
