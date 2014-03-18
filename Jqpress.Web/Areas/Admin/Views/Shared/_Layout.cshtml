@@ -113,7 +113,9 @@
         {
             liclass = "start ";
         }
-        if (item.ControllerName == ViewContext.RouteData.Values["controller"].ToString().ToLower())
+        var controller = ViewContext.RouteData.Values["controller"].ToString().ToLower();
+        controller = (controller == "category" || controller == "tag") ? "post" : controller;
+        if (item.ControllerName == controller)
         {
             liclass += "active";
         }
