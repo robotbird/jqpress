@@ -28,7 +28,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         public ActionResult List()
         {
             int pageIndex = PressRequest.GetQueryInt("page", 1);
-            int pageSize = 30;
+            int pageSize = 50;
             if (string.IsNullOrEmpty(urlpath))
             {
                 urlpath = rootpath;
@@ -83,8 +83,17 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                 }
                 var savepath = Server.MapPath(urlpath + "/" + file.FileName);
                 file.SaveAs(savepath);
+
+                //return Content("alert('上传成功！');", "text/javascript");
+                return JavaScript("alert('上传成功！')"); 
+
+                //return JavaScript("window.parent.test();"); 
+                //Response.Write("<script type='text/javascript' type='language'>parent.test();</script>");
+               // return JavaScript("alert('上传成功！');");
+
             }
-            return RedirectToAction("list", new { path = urlpath });
+            return JavaScript("window.parent.test('上传失败');");
+            //return RedirectToAction("list", new { path = urlpath });
         }
 
         /// <summary>
@@ -173,7 +182,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                 {
                     continue;
                 }
-                pathLink += string.Format("/<a href='{2}?path={0}'>{1}</a>", temp, tempPath[i], FileName);
+                pathLink += string.Format("/<a target='ifrmfile' href='/admin/files/{2}?path={0}'>{1}</a>", temp, tempPath[i], FileName);
             }
             return pathLink.Replace("//", "");
         }

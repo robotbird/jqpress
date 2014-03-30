@@ -1,46 +1,15 @@
 ﻿@using Jqpress.Framework.Mvc
 @model Jqpress.Web.Areas.Admin.Models.FilesModel
 @{
-    var from = HttpContext.Current.Request["from"];
-    if(string.IsNullOrEmpty(from))
-    {
-        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";    
-    }
     ViewBag.Title = "文件管理 - 管理中心 - Powered by Jqpress";
-    }
-    <link href="@Url.Content("~/Administration/Content/layout.css")" rel="stylesheet" type="text/css" />
-<style type="text/css">
- .imgright{ width:200px;  float:right; border:0px solid gray;  margin-top:0px;  }
- .imgright p{ margin:10px 0 0 10px;  }
- .imgleft{ _float:left; margin-right:200px !important;  _margin-right:-10px; } 
-
-.upfile li{  float:left;  margin:5px 3px 25px 0;    width:90px; height:88px; border:0px solid #ccc; text-align:center;}
-.upfile .current{   background:#f3f9f5;}
-.upfile p{ margin:3px 0; overflow:hidden;text-overflow:ellipsis; white-space:nowrap; line-height:150%; }
-.upfile a{   width:48px; height:48px;   }
-.upfile img{ border:0px solid #ccc; }
-.upfile .delete{position:relative;  width:20px; height:20px;   top:-92px;   right:-40px;  border:0px solid gray; color:Gray; font-size:10px; }
+  }
+<style type="text/css">  
+ body{color:#000;font-family:'微软雅黑',sans-serif;padding:0px !important;margin:0px !important;font-size:13px;direction:ltr;}a{text-shadow:none !important;color:#0d638f;}a{color:#428bca;text-decoration:none;}a,a:focus,a:hover,a:active{outline:0;}.imgright{width:200px;float:right;border:0px solid gray;margin-top:0px;}.imgright p{margin:10px 0 0 10px;}.imgleft{float:left;}.upfile{margin:0px;padding:0px}.upfile li{float:left;margin:5px 3px 25px 0;width:90px;height:88px;border:0px solid #ccc;text-align:center;}.upfile .current{background:#f3f9f5;}.upfile p{margin:3px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:150%;}.upfile a{width:48px;height:48px;}.upfile img{border:0px solid #ccc;}.upfile .delete{position:relative;width:20px;height:20px;top:-92px;right:-40px;border:0px solid gray;color:Gray;font-size:10px;}
 </style>
- <form name="aspnetForm" action="@Url.Action("Upload", "Files", new { path = ViewBag.path })" method="post"  id="aspnetForm" enctype="multipart/form-data">
-<div  class="imgright">   
-    
-    <h4>上传附件</h4>
-    <p>当前路径：</p>
-    <p><input type="file" id="FileUpload" name="FileUpload" style="width:180px" /> </p>
-    <p><input type="checkbox" id="chkWatermark"  checked="true" />加水印(图片) <a href="blog_set.aspx#watermarks" class="small">水印详细设置</a> </p>
-    <p>存在同名文件时:</p>
-    <p> 
-        <input type="radio" name="uploadtype" value="1" />跳过
-        <input type="radio" name="uploadtype" value="2" />重命名
-        <input type="radio" name="uploadtype" value="3" />覆盖
-    </p>
-    <p><input type="submit" value="上传" class="button" /> </p>
-    <p class="notice" style=" word-wrap : break-word ;word-break : break-all ;overflow:auto;" title="@Model.AllowFileExtension">允许格式:<br />@Model.AllowFileExtension .</p>
-  
-</div>
+
+ <input type="hidden" id="hidposition" value="@Model.PathUrl" />
 
 <div class="imgleft" >
-    <h4>当前位置:  @Html.Raw(Model.PathUrl)</h4>
     <ul class="upfile">
         @foreach (var d in Model.FoldList)
         {
@@ -76,15 +45,17 @@
     @if (Model.FileList.Count == 0 && Model.FoldList.Count ==0)
     { <p>还没有上传任何附件!</p> }
     </ul>
-    <div style="clear:both;text-align:center;">
-@if (Model.FileList.Count == 0)
-{
-  @Html.Pager(Model.FoldPageList)
-} 
-  </div>
+ 
+         <div style="clear:both;text-align:center;">
+        @if (Model.FileList.Count == 0)
+        {
+          @Html.Pager(Model.FoldPageList)
+        } 
+          </div>
 </div>
 
-  </form>
+  
+   <script src="/assets/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 
@@ -101,5 +72,12 @@
     }
 
 }
+(function ($) {
+    $(document).ready(function () {
+        //给父页面路径赋值
+        $("#position", parent.document).html("@Html.Raw(Model.PathUrl)");
+
+    });
+})(jQuery);
 </script>
 

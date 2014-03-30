@@ -671,7 +671,9 @@
     <None Include="common\syntaxhighlighter\tests\webrick.rb" />
     <None Include="common\syntaxhighlighter\tests\webrick.sh" />
     <Content Include="Themes\prowerV5\Views\List.cshtml" />
-    <Content Include="Config\sitemap.config" />
+    <Content Include="Config\sitemap.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
