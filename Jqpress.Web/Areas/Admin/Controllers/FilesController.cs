@@ -83,17 +83,9 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                 }
                 var savepath = Server.MapPath(urlpath + "/" + file.FileName);
                 file.SaveAs(savepath);
-
-                //return Content("alert('上传成功！');", "text/javascript");
-                return JavaScript("alert('上传成功！')"); 
-
-                //return JavaScript("window.parent.test();"); 
-                //Response.Write("<script type='text/javascript' type='language'>parent.test();</script>");
-               // return JavaScript("alert('上传成功！');");
-
+                return Content("<script>location.href=\"/admin/files/list?path="+urlpath+"\"; </script>");
             }
-            return JavaScript("window.parent.test('上传失败');");
-            //return RedirectToAction("list", new { path = urlpath });
+            return JavaScript("<script>alert('上传失败');</script>");
         }
 
         /// <summary>

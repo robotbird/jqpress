@@ -8,8 +8,7 @@
 
 
  <link rel="stylesheet" href="/common/styles/thickbox.css" type="text/css" media="screen" />
-  <link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css" />
-  <link rel="stylesheet" type="text/css" href="/assets/plugins/jquery-multi-select/css/multi-select.css" />
+ 
 <script type="text/javascript" src="/common/scripts/jquery.tagto.js"></script>
 <script type="text/javascript" src="/common/scripts/thickbox.js"></script>
 
@@ -208,45 +207,26 @@
                         
                      </form>
 
-                      
-
                      <div id="filemodal" class="modal fade" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog" style="width:80%!important;">
                            <div class="modal-content">
                               <div class="modal-header">
-                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                 <h6>当前位置：<span id="position"></span> </h6>
+                                 <button type="button" id="file-close" class="close" data-dismiss="modal" aria-hidden="true"></button>
                               </div>
                               <div class="modal-body">
-                                 <div class="scroller" style="height:50%; width:100%" data-always-visible="1" data-rail-visible1="1">
-                                    <iframe style="zoom: 0.6;" height="50%" id="ifrmfile"  src="/admin/files/list" frameBorder="0" width="99.6%"></iframe> 
-                                    
+                                 <div class="scroller" style="height:80%; width:100%" data-always-visible="1" data-rail-visible1="1">
+                                    <iframe style="zoom: 0.6;" height="80%" id="ifrmfile"  src="/admin/files/list" frameBorder="0" width="99.6%"></iframe> 
                                  </div>
                               </div>
-                             <div class="modal-footer">
-                          
-                             <form name="fileForm"  target="ajaxUpload"  action="@Url.Action("Upload", "Files", new { path = ViewBag.path })" method="post"  id="fileForm" enctype="multipart/form-data">
-                                
-                                <div class="fileupload fileupload-new" data-provides="fileupload" style="float:left">
-                                <iframe name="ajaxUpload" style="display:none" ></iframe>
-                                    <span class="btn btn-default btn-file">
-                                    <span class="fileupload-new"><i class="icon-paper-clip"></i> 选择文件</span>
-                                    <span class="fileupload-exists"><i class="icon-undo"></i> 重新选择</span>
-                                    <input type="file" class="default" name="FileUpload" />
-                                    </span>
-                                    <span class="fileupload-preview" style="margin-left:5px;"></span>
-                                    <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a>
-                                 </div>
-                                 <button type="submit" name="btnEdit"  class="btn btn-primary" style="float:left" >上传</button>
-                                 <button type="button" data-dismiss="modal" class="btn btn-default">关闭</button>
-                                 </form>
-                              </div>
+                             
                            </div>
                         </div>
                      </div>
 
-                     
-
                   </div>
-                  <script type="text/javascript" src="/assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js"></script>
-                 
+                 <script type="text/javascript">
+                     function modalClose() {
+                         $("#file-close").click();
+                     }
+
+                 </script>
