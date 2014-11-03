@@ -18,7 +18,7 @@ namespace Jqpress.Framework.Configuration
             {
                 if (string.IsNullOrEmpty(_siteprefix))
                 {
-                    _siteprefix = GetValue("blog_siteprefix");
+                    _siteprefix = GetValue("jqpress_siteprefix");
                 }
                 return _siteprefix;
             }
@@ -35,7 +35,7 @@ namespace Jqpress.Framework.Configuration
             {
                 if (string.IsNullOrEmpty(_sitepath))
                 {
-                    _sitepath = GetValue("blog_sitepath");
+                    _sitepath = GetValue("jqpress_sitepath");
                     if (_sitepath!=null)
                     {
                         if (!_sitepath.EndsWith("/"))
@@ -53,8 +53,7 @@ namespace Jqpress.Framework.Configuration
         private static string _siteurl;
 
         /// <summary>
-        /// 程序Url
-        /// 未考虑https://;存在多个域名指向时，有BUG，因为静态变量已存在，如www.blog.com,blog.com
+        /// Url
         /// </summary>
         public static string SiteUrl
         {
@@ -83,7 +82,7 @@ namespace Jqpress.Framework.Configuration
             {
                 if (string.IsNullOrEmpty(_dbconnection))
                 {
-                    _dbconnection = GetValue("blog_dbconnection");
+                    _dbconnection = GetValue("jqpress_dbconnection");
                 }
                 return _dbconnection;
             }

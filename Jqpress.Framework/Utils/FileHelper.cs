@@ -141,7 +141,12 @@ namespace Jqpress.Framework.Utils
         /// <returns></returns>
         public static bool CreateDir(string name)
         {
-            return MakeSureDirectoryPathExists(name);
+            if (!Directory.Exists(name))
+            {
+                Directory.CreateDirectory(name);
+                return true;
+            }
+            return false;
         }
         /// <summary>
         /// 返回文件是否存在

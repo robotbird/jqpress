@@ -492,7 +492,7 @@ namespace Jqpress.Framework.Utils
         /// <returns></returns>
         public static string RemoveHtml(string content)
         {
-            return Regex.Replace(content, @"<[^>]*>", string.Empty, RegexOptions.IgnoreCase);
+            return Regex.Replace(content, @"<[^>]*>", string.Empty, RegexOptions.IgnoreCase).Replace("&nbsp;","");
         }
 
         /// <summary>
@@ -651,12 +651,12 @@ namespace Jqpress.Framework.Utils
         /// 仅留下字母,中文,数字,连字符
         /// 纯数字或NULL为自动处理,
         /// </summary>
-        /// <param name="slug">别名</param>
+        /// <param name="pagename">别名</param>
         /// <param name="prefix">纯数字时的前缀</param>
         /// <returns></returns>
-        public static string FilterSlug(string slug, string prefix)
+        public static string FilterPageName(string pagename, string prefix)
         {
-            return FilterSlug(slug, prefix, false);
+            return FilterPageName(pagename, prefix, false);
         }
 
         /// <summary>
@@ -664,30 +664,31 @@ namespace Jqpress.Framework.Utils
         /// 仅留下字母,中文,数字,连字符
         /// 纯数字或NULL为自动处理,
         /// </summary>
-        /// <param name="slug">别名</param>
+        /// <param name="pagename">别名</param>
         /// <param name="prefix">纯数字时的前缀</param>
         /// <param name="allowEmpty">允许为空</param>
         /// <returns></returns>
-        public static string FilterSlug(string slug, string prefix, bool allowEmpty)
+        public static string FilterPageName(string pagename, string prefix, bool allowEmpty)
         {
-            slug = System.Text.RegularExpressions.Regex.Replace(slug, "[^A-Za-z0-9\u4e00-\u9fa5-]", "");
+            if (pagename==null) pagename ="";
+            pagename = System.Text.RegularExpressions.Regex.Replace(pagename, "[^A-Za-z0-9\u4e00-\u9fa5-]", "");
 
-            if (string.IsNullOrEmpty(slug) && allowEmpty == true)
+            if (string.IsNullOrEmpty(pagename) && allowEmpty == true)
             {
                 return string.Empty;
             }
 
-            if (string.IsNullOrEmpty(slug))
+            if (string.IsNullOrEmpty(pagename))
             {
-                slug = prefix + new Random().Next(10000, 99999);
+                pagename = prefix + new Random().Next(10000, 99999);
             }
 
-            if (Jqpress.Framework.Utils.Validate.IsInt(slug))
+            if (Jqpress.Framework.Utils.Validate.IsInt(pagename))
             {
-                slug = prefix + slug;
+                pagename = prefix + pagename;
             }
 
-            return slug;
+            return pagename;
         }
 
     }
