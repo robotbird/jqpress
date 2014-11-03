@@ -112,7 +112,11 @@ namespace Jqpress.Blog.Data.Access
             string cmdText = string.Format(@"update [{0}posts] set  
                                        [CategoryId]=@CategoryId,
                                        [Title]=@Title,
+<<<<<<< HEAD
                                        [Summary]=@Summary,
+=======
+                                      [Summary]=@Summary,
+>>>>>>> cf8bd7579e37be52deb2a0faf9f75ac6e8c5204b
                                        [PostContent]=@PostContent,
                                        [Slug]=@Slug,
                                        [UserId]=@UserId,
@@ -126,10 +130,15 @@ namespace Jqpress.Blog.Data.Access
                                        [Status]=@Status,
                                        [TopStatus]=@TopStatus,
                                        [HomeStatus]=@HomeStatus,
+<<<<<<< HEAD
+=======
+                                       [HideStatus]=@HideStatus,
+>>>>>>> cf8bd7579e37be52deb2a0faf9f75ac6e8c5204b
                                        [PostTime]=@PostTime,
                                        [UpdateTime]=@UpdateTime
                                    where [PostId]=@PostId", ConfigHelper.Tableprefix);
 
+<<<<<<< HEAD
            
               using (var conn=dapper.OpenConnection())
               {
@@ -156,6 +165,34 @@ namespace Jqpress.Blog.Data.Access
                       PostId = post.PostId
                   });
               }
+=======
+            OleDbParameter[] prams = { 
+								
+                                OleDbHelper.MakeInParam("@CategoryId",OleDbType.Integer,4,postinfo.CategoryId),
+								OleDbHelper.MakeInParam("@Title",OleDbType.VarWChar,255,postinfo.Title),
+								OleDbHelper.MakeInParam("@Summary",OleDbType.VarWChar,0,postinfo.Summary),
+								OleDbHelper.MakeInParam("@PostContent",OleDbType.VarWChar,0,postinfo.PostContent),
+								OleDbHelper.MakeInParam("@Slug",OleDbType.VarWChar,255,postinfo.Slug),
+								OleDbHelper.MakeInParam("@UserId",OleDbType.Integer,4,postinfo.UserId),
+								OleDbHelper.MakeInParam("@CommentStatus",OleDbType.Integer,1,postinfo.CommentStatus),
+								OleDbHelper.MakeInParam("@CommentCount",OleDbType.Integer,4,postinfo.CommentCount),
+								OleDbHelper.MakeInParam("@ViewCount",OleDbType.Integer,4,postinfo.ViewCount),
+								OleDbHelper.MakeInParam("@Tag",OleDbType.VarWChar,255,postinfo.Tag),
+                                OleDbHelper.MakeInParam("@UrlFormat",OleDbType.Integer,1,postinfo.UrlFormat),
+                                OleDbHelper.MakeInParam("@Template",OleDbType.VarChar,50,postinfo.Template ),
+                                OleDbHelper.MakeInParam("@Recommend",OleDbType.Integer,1,postinfo.Recommend),
+								OleDbHelper.MakeInParam("@Status",OleDbType.Integer,1,postinfo.Status),
+                                OleDbHelper.MakeInParam("@TopStatus",OleDbType.Integer,1,postinfo.TopStatus),
+                                OleDbHelper.MakeInParam("@HomeStatus",OleDbType.Integer,1,postinfo.HomeStatus),
+                                OleDbHelper.MakeInParam("@HideStatus",OleDbType.Integer,1,postinfo.HideStatus),
+								OleDbHelper.MakeInParam("@PostTime",OleDbType.Date,8,postinfo.PostTime),
+								OleDbHelper.MakeInParam("@UpdateTime",OleDbType.Date,8,postinfo.UpdateTime),
+                                OleDbHelper.MakeInParam("@PostId",OleDbType.Integer,4,postinfo.PostId)
+
+							};
+           int cnt= OleDbHelper.ExecuteNonQuery(CommandType.Text, cmdText, prams);
+           return cnt;
+>>>>>>> cf8bd7579e37be52deb2a0faf9f75ac6e8c5204b
         }
 
         /// <summary>
