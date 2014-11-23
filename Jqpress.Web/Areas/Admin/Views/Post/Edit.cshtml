@@ -7,7 +7,7 @@
 }
 
 
- 
+   <script type="text/javascript" src="/assets/plugins/select2/select2.min.js"></script> 
 
 <style type="text/css">
 /*tag choose*/
@@ -139,30 +139,22 @@
         </div>
 
         <div class="form-group">
-            <label for="CategoryId">分类：&nbsp;</label>
-            @Html.DropDownList("CategoryId", Model.CateSelectItem, new { @class = "form-control input-medium" })
-        </div>
-
-
-        <div class="form-group">
-            <label  class="control-label" for="TitlePic">缩略图:</label> 
-            <div class=""> 
-            <input type="file" id="TitlePic" name="TitlePic" value="@Model.Post.TitlePic"   onchange="checkSize(this)" />
-
-            @if(!string.IsNullOrEmpty(Model.Post.TitlePic))
-            {
-                <img src="@Model.Post.TitlePic"  style="border:0px; width:120px; height:90px;"  />                                
-            }
-            </div>
-        </div>
-
-        <div class="form-group">
          <div class="col-md-4">
             <a href="#filemodal" title="插入图片/文件"  data-toggle="modal" >插入图片/文件</a>
             </div>
             <textarea name="PostContent" rows="2" cols="20" id="PostContent" style="height:400px;width:95%;">@Model.Post.PostContent</textarea>
         </div>
                          
+          <div class="form-group">
+            <label for="CategoryId">分类：&nbsp;</label>
+            @Html.DropDownList("CategoryId", Model.CateSelectItem, new { @class = "form-control input-medium" })
+        </div>
+
+
+         <div class="form-group">
+            <label for="tags">标签：&nbsp;</label>
+                <input type="hidden" class="form-control input-tags" value="@Model.Post.Tag" style="width:240px">
+          </div>
 
         <div class="form-group">
 
@@ -221,5 +213,9 @@
             $(file).val("");
         }
     }
+
+    $(".input-tags").select2({
+        tags: [@Html.Raw(Model.TagJson)]
+    });
 </script>
 

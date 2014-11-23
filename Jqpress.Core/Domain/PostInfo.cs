@@ -206,6 +206,7 @@ namespace Jqpress.Core.Domain
         {
             get
             {
+                if (this.Tag == null) return null;
                 string temptags = this.Tag.Replace("{", "").Replace("}", ",");
 
                 if (temptags.Length > 0)

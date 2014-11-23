@@ -120,6 +120,11 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             var catelist = _categoryService.GetCategoryTreeList();
             model.TagList = _tagService.GetTagList();
 
+            //tags: ["red", "green", "blue", "yellow", "pink"]
+            if (model.TagList != null) 
+            {
+                model.TagJson = model.TagList.Aggregate(string.Empty, (current, t) => current + ("\"" + t.CateName + "\",")).TrimEnd(',');            
+            }
             if (postid > 0)
             {
                 model.Post = _postService.GetPost(postid);
