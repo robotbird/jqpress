@@ -134,8 +134,7 @@
     <div class="form-body">
                            
         <div class="form-group">
-            <label for="Title">标题：&nbsp;</label>
-            <input type="text" id="Title" name="Title" value="@Model.Post.Title" class="form-control" style="width:30%;" />
+            <input type="text" placeholder="标题不能为空" id="Title" name="Title" value="@Model.Post.Title" class="form-control" style="width:40%;" /> 
         </div>
 
         <div class="form-group">
@@ -153,16 +152,16 @@
 
          <div class="form-group">
             <label for="tags">标签：&nbsp;</label>
-                <input type="hidden" class="form-control input-tags" value="@Model.Post.Tag" style="width:240px">
+                <input type="hidden" name="Tag" class="form-control input-tags" value="@Model.Post.Tag" style="width:240px" />
           </div>
 
         <div class="form-group">
 
-        <label for="CategoryId">首页显示</label>
-          @if(Model.Post.HomeStatus ==1){
-              <input type="checkbox" name="HomeStatus" id="HomeStatus"  value="1" checked="checked" />
+        <label for="CategoryId">允许评论</label>
+          @if(Model.Post.CommentStatus ==1){
+              <input type="checkbox" name="CommentStatus" id="CommentStatus"  value="1" checked="checked" />
           } else{
-              <input type="checkbox" name="HomeStatus" id="HomeStatus"  value="1" />          
+              <input type="checkbox" name="CommentStatus" id="CommentStatus"  value="1" />          
           }
           &nbsp;&nbsp;
 

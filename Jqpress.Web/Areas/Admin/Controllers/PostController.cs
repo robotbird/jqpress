@@ -155,30 +155,8 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             p.Summary = TypeConverter.ObjectToString(p.Summary);
             p.Status = PressRequest.GetFormInt("chkStatus", 1);
 
-            var rootpath = "/upfiles/titlepic";
-             var file = Request.Files["TitlePic"];
              var action = "edit";
              if (p.PostId > 0) action += "?id=" + p.PostId;
-            if (!string.IsNullOrEmpty(file.FileName))
-            {
-                var orignpath = rootpath + "/" + file.FileName;
-                var savepath = Server.MapPath(orignpath);
-                var ext = FileHelper.GetFileExtName(file.FileName);
-                var thumbnail = orignpath.Replace(ext, "_270X200" + ext);
-                file.SaveAs(savepath);
-                try
-                {
-                    FileHelper.MakeThumbnail(savepath, Server.MapPath(thumbnail), 270, 200, "HW", 0);
-                    p.TitlePic = thumbnail;
-                }
-                catch(Exception e) 
-                {
-                    ErrorNotification("标题图片格式有错误");
-                    return Redirect(action);
-                }
-               
-            }
-
             
             if (string.IsNullOrEmpty(p.Title))
             {
@@ -202,11 +180,7 @@ namespace Jqpress.Web.Areas.Admin.Controllers
                 p.ViewCount = post.ViewCount;
                 p.CommentCount = post.CommentCount;
                 p.PostTime = post.PostTime;
-                if (string.IsNullOrEmpty(file.FileName))
-                {
-                    p.TitlePic = post.TitlePic;
-                }
-
+             
                 _postService.UpdatePost(p);
                 string url = "http://" + PressRequest.GetCurrentFullHost() + "/post/" + (!string.IsNullOrEmpty(p.PageName) ? p.PageName : p.PostId.ToString());
                 SuccessNotification("修改成功。<a href=\"" + url + "\">查看文章</a> ");
