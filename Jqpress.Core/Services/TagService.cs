@@ -266,7 +266,7 @@ namespace Jqpress.Core.Services
         /// <summary>
         /// 由标签名称列表返回标签ID列表,带{},新标签自动添加
         /// </summary>
-        /// <param name="tagNameList"></param>
+        /// <param name="tagNames"></param>
         /// <returns></returns>
         public  string GetTagIdList(string tagNames)
         {
