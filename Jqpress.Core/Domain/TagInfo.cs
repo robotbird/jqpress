@@ -58,9 +58,15 @@ namespace Jqpress.Core.Domain
 
 
         /// <summary>
-        /// ID
+        /// ID(非标字段)
         /// </summary>
         public int TagId { get; set; }
+        /// <summary>
+        /// 表字段
+        /// </summary>
+        public int CategoryId {
+            set { TagId = value; }
+        }
 
         /// <summary>
         /// 名称
