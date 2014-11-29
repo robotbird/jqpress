@@ -66,6 +66,32 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         {
         }
 
+
+        /// <summary>
+        /// Called after the action method is invoked.
+        /// </summary>
+        /// <param name="filterContext">Information about the current request and action.</param>
+        protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+
+            var servicename = string.Empty;
+
+            foreach (var value in filterContext.RequestContext.RouteData.Values)
+            {
+                if (value.Key.ToLower() == "controller")  //获取当前的Controller
+                {
+                    servicename += value.Value.ToString() + "---";
+                }
+                else if (value.Key.ToLower() == "action")//获取当前的ActionName
+                {
+                    servicename += value.Value.ToString();
+                }
+            }
+            //LogWriter.Debug(servicename);记录日志
+            base.OnActionExecuted(filterContext);
+        } 
+
+
         /// <summary>
         /// On action executing
         /// </summary>
