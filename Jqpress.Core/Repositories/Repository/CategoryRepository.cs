@@ -38,7 +38,7 @@ namespace Jqpress.Core.Repositories.Repository
                     SortNum = category.SortNum,
                     PostCount = category.PostCount,
                     CreateTime = category.CreateTime.ToString(),
-                    Type = category.Type
+                    Type = (int)CategoryType.Category
                 });
                 return conn.Query<int>(string.Format("select top 1 [categoryid] from [{0}category] order by [categoryid] desc", ConfigHelper.Tableprefix), null).First();
             }
@@ -73,7 +73,7 @@ namespace Jqpress.Core.Repositories.Repository
                     SortNum = category.SortNum,
                     PostCount = category.PostCount,
                     CreateTime = category.CreateTime.ToString(),
-                    Type = category.Type,
+                    Type = (int)CategoryType.Category,
                     categoryid = category.CategoryId
                 });
             }
@@ -133,7 +133,9 @@ namespace Jqpress.Core.Repositories.Repository
         {
             get
             {
-                string cmdText = string.Format("select * from [{0}category]  order by [SortNum] asc,[categoryid] asc", ConfigHelper.Tableprefix);
+                string condition = " [type]=" + (int)CategoryType.Category;
+
+                string cmdText = string.Format("select * from [{0}category] where " + condition + " order by [categoryid] asc", ConfigHelper.Tableprefix);
                 using (var conn = new DapperHelper().OpenConnection())
                 {
                     var list = conn.Query<CategoryInfo>(cmdText, null);

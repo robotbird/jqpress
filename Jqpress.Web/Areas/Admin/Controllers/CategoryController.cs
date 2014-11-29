@@ -45,17 +45,10 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             model.CateList = catelist;
             catelist.Add(new CategoryInfo() { CateName = "作为一级分类", CategoryId = 0 });
 
-            model.CateType.Clear();
-            model.CateType.Add(new SelectListItem { Text = "产品列表页", Value = "1", Selected = model.Category.Type == (int)Jqpress.Core.Domain.Enum.CateType.ProList});
-            model.CateType.Add(new SelectListItem { Text = "信息列表页", Value = "2", Selected = model.Category.Type == (int)Jqpress.Core.Domain.Enum.CateType.ItemList});
-            model.CateType.Add(new SelectListItem { Text = "单页面", Value = "3", Selected = model.Category.Type == (int)Jqpress.Core.Domain.Enum.CateType.Page});
-
-
-            
             model.CateSelectItem.Clear();
             model.CateSelectItem = catelist.ConvertAll(c => new SelectListItem { Text = c.TreeChar + c.CateName, Value = c.CategoryId.ToString(), Selected = c.CategoryId == model.Category.ParentId });
-            
-            return View(model);
+
+            return Json(model.Category, JsonRequestBehavior.AllowGet);
         }
         /// <summary>
         /// delete categroy by id
@@ -72,8 +65,8 @@ namespace Jqpress.Web.Areas.Admin.Controllers
         /// </summary>
         /// <param name="cat"></param>
         /// <returns></returns>
-        [HttpPost, ActionName("Save"), ValidateInput(false)]        
-        public ActionResult Save(CategoryInfo cat)
+        [HttpPost, ActionName("Save"), ValidateInput(false)]
+        public JsonResult Save(CategoryInfo cat)
         {
 
             if (string.IsNullOrEmpty(cat.PageName))
@@ -82,26 +75,23 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             }
 
             cat.PageName = HttpHelper.HtmlEncode(StringHelper.FilterPageName(cat.PageName, "cate"));
-            cat.SortNum = TypeConverter.StrToInt(cat.SortNum, 1000);
+
             if (cat.CategoryId > 0)
             {
                 var  oldcat = _categoryService.GetCategory(cat.CategoryId);
                 cat.CreateTime = oldcat.CreateTime;
                 cat.PostCount = oldcat.PostCount;
                 _categoryService.UpdateCategory(cat);
-                SuccessNotification("修改成功");
             }
             else 
             {
                 cat.CreateTime = DateTime.Now;
                 cat.PostCount = 0;
                 cat.CategoryId = _categoryService.InsertCategory(cat);
-                SuccessNotification("添加成功");
-
             }
             cat.TreeChar = _categoryService.GetCategoryTreeList().Find(c => c.CategoryId == cat.CategoryId).TreeChar;
 
-            return Redirect("edit?id=" + cat.CategoryId );
+            return Json(cat, JsonRequestBehavior.AllowGet);
 
         }
 

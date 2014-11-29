@@ -142,7 +142,7 @@ namespace Jqpress.Core.Repositories.Repository
             {
                 string condition = " [type]=" + (int)CategoryType.Tag;
 
-                string cmdText = string.Format("select * from [{0}category] where " + condition + " order by [SortNum] asc,[categoryid] asc", ConfigHelper.Tableprefix);
+                string cmdText = string.Format("select * from [{0}category] where " + condition + " order by [categoryid] asc", ConfigHelper.Tableprefix);
                 using (var conn = new DapperHelper().OpenConnection())
                 {
                     var list = conn.Query<TagInfo>(cmdText, null);
