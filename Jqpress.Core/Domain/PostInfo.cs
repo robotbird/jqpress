@@ -17,17 +17,10 @@ namespace Jqpress.Core.Domain
     /// 是否要加个图片URL字段
     /// </summary>
     [Table("jq_post")]
-    public class PostInfo : IComparable<PostInfo>
+    public class PostInfo 
     {
-        public int CompareTo(PostInfo other)
-        {
-
-            return other.PostId.CompareTo(this.PostId);
-        }
-
         private int _urltype;
         private int _commentstatus;
-        private string _template = "post.cshtml";
         #region 非字段
 
         private string _url;
@@ -346,11 +339,7 @@ namespace Jqpress.Core.Domain
         /// <summary>
         /// 模板
         /// </summary>
-        public string Template
-        {
-            get { return _template; }
-            set { _template = value; }
-        }
+        public string Template { get; set; }
         /// <summary>
         /// 用户ID
         /// </summary>
