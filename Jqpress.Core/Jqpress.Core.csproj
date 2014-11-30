@@ -49,7 +49,6 @@
     </Compile>
     <Compile Include="Common\EmailHelper.cs" />
     <Compile Include="Common\Pager.cs" />
-    <Compile Include="Common\PagerControl.cs" />
     <Compile Include="Configuration\SiteConfig.cs" />
     <Compile Include="Configuration\SiteMapNode.cs" />
     <Compile Include="Configuration\XmlSiteMap.cs" />
