@@ -93,6 +93,7 @@
     <Compile Include="Areas\Admin\Models\IndexModel.cs" />
     <Compile Include="Areas\Admin\Models\PostListModel.cs" />
     <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\IndexModel.cs" />
     <Compile Include="Models\InstallModel.cs" />
     <Compile Include="Models\PageModel.cs" />
     <Compile Include="Models\PostListModel.cs" />

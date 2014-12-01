@@ -38,26 +38,34 @@ namespace Jqpress.Web.Controllers
             {
                return RedirectToAction("Index", "Install");
             }
-            if (!string.IsNullOrEmpty(pagename))
-            {
-                var cate = _categoryService.GetCategory(pagename);
-                if (cate.Type == (int)CateType.Page)
-                {
-                    return Page(pagename);
-                }
-                else if (cate.Type == (int)CateType.ItemList || cate.Type == (int)CateType.ProList)
-                {
-                    return Category(pagename);
-                }
-                else
-                {
-                    return View();
-                }
-            }
-            else
-            {
-                return View();
-            }
+
+            var model = new IndexModel();
+
+            model.SiteName = SiteConfig.GetSetting().SiteName;
+            model.PageTitle = SiteConfig.GetSetting().SiteName;
+            model.ThemeName = SiteConfig.GetSetting().Theme;
+            model.SiteUrl = ConfigHelper.SiteUrl;
+            model.MetaKeywords = SiteConfig.GetSetting().MetaKeywords;
+            model.MetaDescription = SiteConfig.GetSetting().MetaDescription;
+            model.SiteDescription = SiteConfig.GetSetting().SiteDescription;
+            model.NavLinks = _linkService.GetLinkList((int)LinkPosition.Navigation, 1);
+            model.RecentTags = _tagService.GetTagList(SiteConfig.GetSetting().SidebarTagCount);
+            model.FooterHtml = SiteConfig.GetSetting().FooterHtml;
+            model.GeneralLinks = _linkService.GetLinkList((int)LinkPosition.General, 1);
+
+
+            const int pageSize = 10;
+            int count = 0;
+            int pageIndex = PressRequest.GetInt("page", 1);
+            var cateid = PressRequest.GetQueryString("cateid");//todo:获取分类的名称或者编号
+            int tagid = PressRequest.GetQueryInt("tagid", -1);
+            //if (cateid > 0)
+            //    pageIndex = pageIndex + 1;
+            var postlist = _postService.GetPostPageList(pageSize, pageIndex, out count, cateid, tagid, -1, -1, -1, -1, -1, "", "", "");
+            model.PageList.LoadPagedList(postlist);
+            model.PostList = (List<PostInfo>)postlist;
+            return View(model);
+            
         }
 
         public ActionResult Post(int id) 
