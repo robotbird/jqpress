@@ -93,6 +93,8 @@
     <Compile Include="Areas\Admin\Models\IndexModel.cs" />
     <Compile Include="Areas\Admin\Models\PostListModel.cs" />
     <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\FootModel.cs" />
+    <Compile Include="Models\HeadModel.cs" />
     <Compile Include="Models\IndexModel.cs" />
     <Compile Include="Models\InstallModel.cs" />
     <Compile Include="Models\PageModel.cs" />
@@ -2389,6 +2391,10 @@
     <Content Include="Views\Install\_Layout.cshtml" />
     <Content Include="Views\Install\Success.cshtml" />
     <Content Include="Views\Install\Setup.cshtml" />
+    <Content Include="Themes\prowerV5\Views\SiderBar.cshtml" />
+    <Content Include="Themes\prowerV5\Views\Footer.cshtml" />
+    <Content Include="Themes\prowerV5\Views\Comment.cshtml" />
+    <Content Include="Themes\prowerV5\Views\Header.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />

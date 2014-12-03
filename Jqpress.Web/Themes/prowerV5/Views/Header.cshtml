@@ -1,0 +1,16 @@
+﻿@using Jqpress.Core.Template;
+@Model Jqpress.Web.Models.HeadModel
+@{
+    Layout = null;
+}
+ <nav id="menu">
+        <ul id="menu-header" class="nav">
+	
+
+            @foreach (var item in Model.NavLinks)
+            {
+                <li id="menu-item-2179" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2179"><a href="@item.LinkUrl" title="@item.Description" target="@item.Target">@item.LinkName</a></li>
+            }
+
+
+        </ul>    </nav>

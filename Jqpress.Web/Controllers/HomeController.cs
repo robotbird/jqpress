@@ -40,19 +40,8 @@ namespace Jqpress.Web.Controllers
             }
 
             var model = new IndexModel();
-
-            model.SiteName = SiteConfig.GetSetting().SiteName;
-            model.PageTitle = SiteConfig.GetSetting().SiteName;
-            model.ThemeName = SiteConfig.GetSetting().Theme;
-            model.SiteUrl = ConfigHelper.SiteUrl;
-            model.MetaKeywords = SiteConfig.GetSetting().MetaKeywords;
-            model.MetaDescription = SiteConfig.GetSetting().MetaDescription;
-            model.SiteDescription = SiteConfig.GetSetting().SiteDescription;
+  
             model.NavLinks = _linkService.GetLinkList((int)LinkPosition.Navigation, 1);
-            model.RecentTags = _tagService.GetTagList(SiteConfig.GetSetting().SidebarTagCount);
-            model.FooterHtml = SiteConfig.GetSetting().FooterHtml;
-            model.GeneralLinks = _linkService.GetLinkList((int)LinkPosition.General, 1);
-
 
             const int pageSize = 10;
             int count = 0;
@@ -71,6 +60,7 @@ namespace Jqpress.Web.Controllers
         public ActionResult Post(int id) 
         {
             var model = new PostModel();
+         
 
 
             int postId = id;
@@ -242,16 +232,9 @@ namespace Jqpress.Web.Controllers
         [ChildActionOnly]
         public ActionResult Header() 
         {
-            return PartialView();
-        }
-        /// <summary>
-        /// 顶部banner
-        /// </summary>
-        /// <returns></returns>
-        [ChildActionOnly]
-        public ActionResult TopBanner()
-        {
-            return PartialView();
+            var model = new HeadModel();
+            model.NavLinks = _linkService.GetLinkList((int)LinkPosition.Navigation, 1);
+            return PartialView(model);
         }
         /// <summary>
         /// 侧栏
@@ -267,9 +250,12 @@ namespace Jqpress.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [ChildActionOnly]
-        public ActionResult Footer() 
+        public ActionResult Footer()
         {
-            return PartialView();
+            var model = new FootModel();
+            model.RecentTags = _tagService.GetTagList(SiteConfig.GetSetting().SidebarTagCount);
+            model.GeneralLinks = _linkService.GetLinkList((int)LinkPosition.General, 1);
+            return PartialView(model);
         }
         #endregion
     }
