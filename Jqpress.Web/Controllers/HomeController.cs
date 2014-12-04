@@ -40,8 +40,6 @@ namespace Jqpress.Web.Controllers
             }
 
             var model = new IndexModel();
-  
-            model.NavLinks = _linkService.GetLinkList((int)LinkPosition.Navigation, 1);
 
             const int pageSize = 10;
             int count = 0;
@@ -60,15 +58,11 @@ namespace Jqpress.Web.Controllers
         public ActionResult Post(int id) 
         {
             var model = new PostModel();
-         
-
-
-            int postId = id;
             PostInfo post = null;
 
-            string name = Jqpress.Framework.Web.PressRequest.GetQueryString("name");
+            string name = PressRequest.GetQueryString("name");
 
-            if (!Jqpress.Framework.Utils.Validate.IsInt(name))
+            if (!Validate.IsInt(name))
             {
                 post = _postService.GetPostByPageName(StringHelper.SqlEncode(name));
             }
@@ -80,16 +74,10 @@ namespace Jqpress.Web.Controllers
             if (post == null)
             {
                 return View("404",model);
-                //BasePage.ResponseError("文章未找到", "囧！没有找到此文章！", 404);
-            }
-
-            if (post.Status == (int)PostStatus.Draft)
-            {
-               // BasePage.ResponseError("文章未发布", "囧！此文章未发布！");
             }
 
             string cookie = "isviewpost" + post.PostId;
-            int isview = Jqpress.Framework.Utils.TypeConverter.StrToInt(Jqpress.Framework.Web.PressRequest.GetCookie(cookie), 0);
+            int isview = TypeConverter.StrToInt(PressRequest.GetCookie(cookie), 0);
             //未访问或按刷新统计
             if (isview == 0 || SiteConfig.GetSetting().SiteTotalType == 1)
             {
@@ -98,7 +86,7 @@ namespace Jqpress.Web.Controllers
             //未访问
             if (isview == 0 && SiteConfig.GetSetting().SiteTotalType == 2)
             {
-                Jqpress.Framework.Web.PressRequest.WriteCookie(cookie, "1", 1440);
+                PressRequest.WriteCookie(cookie, "1", 1440);
             }
 
             model.Post = post;
@@ -149,7 +137,7 @@ namespace Jqpress.Web.Controllers
                 model.MetaKeywords = cate.CateName;
                 model.MetaDescription = cate.Description;
                 ViewBag.Title = cate.CateName;
-                model.Url = ConfigHelper.SiteUrl + "category/" + Jqpress.Framework.Utils.StringHelper.SqlEncode(pagename) + "/page/{0}";
+                model.Url = ConfigHelper.SiteUrl + "category/" + StringHelper.SqlEncode(pagename) + "/page/{0}";
 
                 const int pageSize = 10;
                 int count = 0;
