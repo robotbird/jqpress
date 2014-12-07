@@ -8,18 +8,40 @@ namespace Jqpress.Web.Models
 {
     public class PostModel:BaseModel
     {
+        public PostModel() 
+        {
+
+            Post = new PostInfo();
+            Previous = new PostInfo();
+            RelatedPosts = new List<PostInfo>();
+            Tags = new List<TagInfo>();
+
+        ///// <summary>
+        ///// 下一篇文章
+        ///// </summary>
+        //public PostInfo Next { get; set; }
+
+        ///// <summary>
+        ///// 作者
+        ///// </summary>
+        //public UserInfo Author { get; set; }
+
+        ///// <summary>
+        ///// 所属分类
+        ///// </summary>
+        //public CategoryInfo Category { get; set; }
+        ///// <summary>
+        ///// 评论列表
+        ///// </summary>
+        //public List<CommentInfo> Comments { get; set; }
+
+
+        }
         /// <summary>
         /// 是否开启验证码
         /// </summary>
         public int EnableVerifyCode { get; set; }
-        /// <summary>
-        /// 文章
-        /// </summary>
-        public PostInfo Post { get; set; }
-        /// <summary>
-        /// 评论列表
-        /// </summary>
-        public List<CommentInfo> Comments { get; set; }
+
         /// <summary>
         /// 分页字符串
         /// </summary>
@@ -28,5 +50,45 @@ namespace Jqpress.Web.Models
         /// 当前页
         /// </summary>
         public int PageIndex { get; set; }
+
+
+        /// <summary>
+        /// 文章
+        /// </summary>
+        public PostInfo Post { get; set; }
+        /// <summary>
+        /// 上一篇文章
+        /// </summary>
+        public PostInfo Previous { get; set; }
+
+        /// <summary>
+        /// 相关文章
+        /// </summary>
+        public List<PostInfo> RelatedPosts { get; set; }
+
+        /// <summary>
+        /// 对应标签
+        /// </summary>
+        public List<TagInfo> Tags { get; set; }
+
+        /// <summary>
+        /// 下一篇文章
+        /// </summary>
+        public PostInfo Next { get; set; }
+
+        /// <summary>
+        /// 作者
+        /// </summary>
+        public UserInfo Author { get; set; }
+
+        /// <summary>
+        /// 所属分类
+        /// </summary>
+        public CategoryInfo Category { get; set; }
+        /// <summary>
+        /// 评论列表
+        /// </summary>
+        public List<CommentInfo> Comments { get; set; }
+
     }
 }

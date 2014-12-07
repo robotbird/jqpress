@@ -81,31 +81,17 @@ namespace Jqpress.Web.Models
 
         #region 头部
         /// <summary>
-        /// 标题
-        /// </summary>
-        public string PageTitle { get; set; }
-
-
-        /// <summary>
         /// 关键词
         /// </summary>
-        private string _metaKeywords;
-        public string MetaKeywords
-        {
-            get { return _metaKeywords ?? (_metaKeywords =""); }
-            set { _metaKeywords = value; }
-        }
-
-
+        public string MetaKeywords { get; set; }
         /// <summary>
         /// 描述
         /// </summary>
-        private string _metaDescription;
-        public string MetaDescription
-        {
-            get { return _metaDescription ?? (_metaDescription =""); }
-            set { _metaDescription = value; }
-        }
+        public string MetaDescription { get; set; }
+        /// <summary>
+        /// 标题
+        /// </summary>
+        public string MetaTitle { get; set; }
         /// <summary>
         /// 头部wlwmanifest
         /// </summary>
@@ -138,20 +124,7 @@ namespace Jqpress.Web.Models
         public string Version { get; set; }
         #endregion
 
-        /// <summary>
-        /// 导航
-        /// </summary>
-        public List<LinkInfo> NavLinks { get; set; }
 
-        /// <summary>
-        /// 标签
-        /// </summary>
-        public List<TagInfo> RecentTags { get; set; }
-
-        /// <summary>
-        /// 普通链接
-        /// </summary>
-        public List<LinkInfo> GeneralLinks { get; set; }
 
     }
 }
