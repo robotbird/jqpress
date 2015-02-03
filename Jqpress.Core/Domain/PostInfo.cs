@@ -162,125 +162,12 @@ namespace Jqpress.Core.Domain
         /// <summary>
         /// 作者
         /// </summary>
-        public UserInfo Author
-        {
-            get
-            {
-                UserInfo user = (new UserService()).GetUser(this.UserId);
-                if (user != null)
-                {
-                    return user;
-                }
-                return new UserInfo();
-
-            }
-        }
+        public UserInfo Author { get; set; }
 
         /// <summary>
         /// 所属分类
         /// </summary>
-        public CategoryInfo Category
-        {
-            get
-            {
-                CategoryInfo category = new Jqpress.Core.Services.CategoryService().GetCategory(this.CategoryId);
-                if (category != null)
-                {
-                    return category;
-                }
-                return new CategoryInfo();
-            }
-        }
-
-        /// <summary>
-        /// 对应标签
-        /// </summary>
-        public List<TagInfo> Tags
-        {
-            get
-            {
-                if (this.Tag == null) return null;
-                string temptags = this.Tag.Replace("{", "").Replace("}", ",");
-
-                if (temptags.Length > 0)
-                {
-                    temptags = temptags.TrimEnd(',');
-                }
-                return (new TagService()).GetTagList(temptags);
-            }
-        }
-
-        /// <summary>
-        /// 下一篇文章
-        /// </summary>
-        public PostInfo Next
-        {
-            get
-            {
-                List<PostInfo> list = (new PostService()).GetPostList();
-                PostInfo post = list.Find(p => p.PostStatus == 0 && p.Status == 1 && p.PostId > this.PostId);
-                return post != null ? post : new PostInfo();
-            }
-        }
-
-        /// <summary>
-        /// 上一篇文章
-        /// </summary>
-        public PostInfo Previous
-        {
-            get
-            {
-
-                List<PostInfo> list = (new PostService()).GetPostList();
-
-                PostInfo post = list.Find(p => p.PostStatus == 0 && p.Status == 1 && p.PostId < this.PostId);
-
-                return post != null ? post : new PostInfo();
-            }
-        }
-
-        /// <summary>
-        /// 相关文章
-        /// </summary>
-        public List<PostInfo> RelatedPosts
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(this.Tag))
-                {
-                    return new List<PostInfo>();
-                }
-
-                List<PostInfo> list = (new PostService()).GetPostList().FindAll(p => p.PostStatus == 0 && p.Status == 1);
-                string tags = this.Tag.Replace("}", "},");
-                tags = tags.TrimEnd(',');
-
-                string[] temparray = tags.Split(',');
-
-                int num = 0;
-                List<PostInfo> list2 = list.FindAll(p =>
-                {
-                    if (num >= SiteConfig.GetSetting().PostRelatedCount)
-                    {
-                        return false;
-                    }
-
-                    foreach (string tag in temparray)
-                    {
-                        if (p.Tag.IndexOf(tag) != -1 && p.PostId != this.PostId)
-                        {
-                            num++;
-                            return true;
-                        }
-                    }
-                    return false;
-
-                });
-
-
-                return list2;
-            }
-        }
+        public CategoryInfo Category { get; set; }
 
         /// <summary>
         /// draft
@@ -380,7 +267,7 @@ namespace Jqpress.Core.Domain
         public int UrlFormat
         {
             set { _urltype = value; }
-            get { return Jqpress.Core.Configuration.SiteConfig.GetSetting().UrlFormatType; }
+            get { return SiteConfig.GetSetting().UrlFormatType; }
         }
 
         /// <summary>

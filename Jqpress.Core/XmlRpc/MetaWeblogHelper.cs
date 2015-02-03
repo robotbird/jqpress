@@ -325,12 +325,12 @@ namespace Jqpress.Core.XmlRpc
             cats.Add(Jqpress.Framework.Web.HttpHelper.HtmlDecode(post.Category.CateName));
             sendPost.categories = cats;
 
-            List<string> tags = new List<string>();
-            for (int i = 0; i < post.Tags.Count; i++)
-            {
-                tags.Add(Jqpress.Framework.Web.HttpHelper.HtmlDecode(post.Tags[i].CateName));
-            }
-            sendPost.tags = tags;
+            //List<string> tags = new List<string>();
+            //for (int i = 0; i < post.Tags.Count; i++)
+            //{
+            //    tags.Add(Jqpress.Framework.Web.HttpHelper.HtmlDecode(post.Tags[i].CateName));
+            //}
+            //sendPost.tags = tags;
 
             return sendPost;
         }
@@ -485,11 +485,11 @@ namespace Jqpress.Core.XmlRpc
                 tempCats.Add(Jqpress.Framework.Web.HttpHelper.HtmlDecode(post.Category.CateName));
                 tempPost.categories = tempCats;
 
-                for (int i = 0; i < post.Tags.Count; i++)
-                {
-                    tempTags.Add(Jqpress.Framework.Web.HttpHelper.HtmlDecode(post.Tags[i].CateName));
-                }
-                tempPost.tags = tempTags;
+                //for (int i = 0; i < post.Tags.Count; i++)
+                //{
+                //    tempTags.Add(Jqpress.Framework.Web.HttpHelper.HtmlDecode(post.Tags[i].CateName));
+                //}
+                //tempPost.tags = tempTags;
 
                 sendPosts.Add(tempPost);
             }

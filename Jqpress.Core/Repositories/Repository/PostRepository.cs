@@ -135,12 +135,22 @@ namespace Jqpress.Core.Repositories.Repository
         /// <returns></returns>
         public virtual PostInfo GetById(object id) 
         {
-            string cmdText = string.Format("select top 1 * from [{0}posts] where [PostId] = @PostId", ConfigHelper.Tableprefix);
+            string cmdText = string.Format("select top 1 p.PostId,u.UserId,u.UserName,c.CategoryId,c.CateName from [{0}posts] p,[{0}Users] u,[{0}category] c where p.UserId=u.UserId and p.CategoryId=c.CategoryId", ConfigHelper.Tableprefix);
             using (var conn = new DapperHelper().OpenConnection())
             {
-                var list = conn.Query<PostInfo>(cmdText, new { PostId = (int)id });
-                return list.ToList().Count > 0 ? list.ToList()[0] : null;
+               // var list = conn.Query<PostInfo>(cmdText, new { PostId = (int)id });
+               // return list.Any() ? list.ToList()[0] : null;
+                var list = conn.Query<PostInfo, UserInfo, CategoryInfo, PostInfo>(cmdText, (post, user, cate) =>
+                {
+                    post.Author = user;
+                    post.Category = cate;
+                    return post;
+                },  splitOn: "UserId,CategoryId");
+                return list.Any() ? list.ToList()[0] : null;
             }
+
+
+
         }
         /// <summary>
         /// 获取所有文章

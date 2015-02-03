@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Jqpress.Core.Configuration;
 using Jqpress.Framework.Configuration;
+using Jqpress.Framework.DbProvider;
 using Jqpress.Framework.Utils;
 
 namespace Jqpress.Core.Domain
@@ -73,6 +74,7 @@ namespace Jqpress.Core.Domain
         /// <summary>
         ///  用户ID
         /// </summary>
+        [Key]
         public int UserId { get; set; }
         /// <summary>
         /// 用户角色 

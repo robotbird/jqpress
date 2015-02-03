@@ -28,6 +28,8 @@ namespace Jqpress.Web.Areas.Admin.Models
         /// tag list
         /// </summary>
         public List<TagInfo> TagList { get; set; }
+
+  
         /// <summary>
         /// 标签json串
         /// </summary>

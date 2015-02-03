@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Jqpress.Core.Configuration;
 using Jqpress.Framework.Configuration;
+using Jqpress.Framework.DbProvider;
 using Jqpress.Framework.Utils;
 
 namespace Jqpress.Core.Domain
@@ -110,9 +111,7 @@ namespace Jqpress.Core.Domain
         #endregion
 
 
-        /// <summary>
-        /// ID
-        /// </summary>
+        [Key]
         public int CategoryId { get; set; }
         /// <summary>
         /// 父类id

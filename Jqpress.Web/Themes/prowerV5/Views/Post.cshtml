@@ -62,7 +62,7 @@
 				<div class="meta">
 				作者：@(new HtmlString(Model.Post.Author.Link)), 分类：@(new HtmlString(Model.Post.Category.Link)) 
 				标签：
-				@foreach(var item in Model.Post.Tags){
+				@foreach(var item in Model.Tags){
 				<a href="@item.Url">@item.CateName</a>
                }
 				,
@@ -70,14 +70,14 @@
 				</div>
 			</div>
          <div>
-            @if (Model.Post.Previous.PostId > 0)  {<span>上一篇:</span>@(new HtmlString(Model.Post.Previous.Link))}
+            @if (Model.Previous.PostId > 0)  {<span>上一篇:</span>@(new HtmlString(Model.Previous.Link))}
             <br />
-             @if (Model.Post.Next.PostId > 0)  { <span>下一篇:</span> @(new HtmlString(Model.Post.Next.Link))}
+             @if (Model.Next.PostId > 0)  { <span>下一篇:</span> @(new HtmlString(Model.Next.Link))}
         </div>
         
          <h3>相关文章</h3>
         <ul class="post-related">
-            @foreach(var item in Model.Post.RelatedPosts){
+            @foreach(var item in Model.RelatedPosts){
             <li><a href="@item.Url">@item.Title</a>(@item.ViewCount)</li>
             }
         </ul>

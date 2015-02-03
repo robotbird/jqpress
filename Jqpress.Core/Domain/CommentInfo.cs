@@ -39,19 +39,7 @@ namespace Jqpress.Core.Domain
         /// <summary>
         /// 地址(还没考虑分页)
         /// </summary>
-        public string Url
-        {
-            // set { _url = value; }
-            get
-            {
-                PostInfo post = (new PostService()).GetPost(this.PostId);
-                if (post != null)
-                {
-                    return string.Format("{0}#comment-{1}", post.Url, this.CommentId);
-                }
-                return "###";
-            }
-        }
+        public string Url { get; set; }
 
         /// <summary>
         /// 评论连接
@@ -70,27 +58,7 @@ namespace Jqpress.Core.Domain
         /// <summary>
         /// 作者连接
         /// </summary>
-        public string AuthorLink
-        {
-            //   set { _authorlink = value; }
-            get
-            {
-                if (this.UserId > 0)
-                {
-                    UserInfo user = (new UserService()).GetUser(this.UserId);
-                    if (user != null)
-                    {
-                        return user.Link;
-                    }
-
-                }
-                else if (Jqpress.Framework.Utils.Validate.IsHttpUrl(this.AuthorUrl))
-                {
-                    return string.Format("<a href=\"{0}\" target=\"_blank\" title=\"{1}\">{1}</a>", this.AuthorUrl, this.Author);
-                }
-                return this.Author;
-            }
-        }
+        public string AuthorLink { get; set; }
 
         /// <summary>
         /// 层次
@@ -116,18 +84,7 @@ namespace Jqpress.Core.Domain
         /// <summary>
         /// 评论对应文章
         /// </summary>
-        public PostInfo Post
-        {
-            get
-            {
-                PostInfo post = (new PostService()).GetPost(this.PostId);
-                if (post != null)
-                {
-                    return post;
-                }
-                return new PostInfo();
-            }
-        }
+        public PostInfo Post { get; set; }
 
         #endregion
 

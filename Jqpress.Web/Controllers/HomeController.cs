@@ -93,10 +93,14 @@ namespace Jqpress.Web.Controllers
             ViewBag.Title = post.Title;
 
             string metaKeywords = string.Empty;
-            foreach (TagInfo tag in post.Tags)
+
+            model.Tags = _tagService.GetTagList(post.Tag);
+            if (model.Tags != null)
             {
-                metaKeywords += tag.CateName + ",";
+                metaKeywords = model.Tags.Aggregate(metaKeywords, (current, tag) => current + (tag.CateName + ","));
             }
+
+ 
             if (metaKeywords.Length > 0)
             {
                 metaKeywords = metaKeywords.TrimEnd(',');

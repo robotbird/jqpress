@@ -128,7 +128,11 @@ namespace Jqpress.Web.Areas.Admin.Controllers
             if (postid > 0)
             {
                 model.Post = _postService.GetPost(postid);
-                model.Post.Tag = model.Post.Tags.Aggregate(string.Empty, (current, t) => current + (t.CateName + ",")).TrimEnd(',');
+                model.TagList = _tagService.GetTagList(model.Post.Tag);
+                if (model.TagList!=null)
+                {
+                    model.Post.Tag = model.TagList.Aggregate(string.Empty, (current, t) => current + (t.CateName + ",")).TrimEnd(',');                    
+                }
                 model.CateSelectItem = catelist.ConvertAll(c => new SelectListItem { Text =c.TreeChar + c.CateName, Value = c.CategoryId.ToString(), Selected = c.CategoryId == model.Post.CategoryId });
             }
             else
