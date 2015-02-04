@@ -40,6 +40,13 @@ namespace Jqpress.Web.Controllers
             }
 
             var model = new IndexModel();
+            if (string.IsNullOrEmpty(pagename))
+            {
+                model.MetaTitle = config.SiteName;
+                model.MetaKeywords = config.MetaKeywords;
+                model.MetaDescription = config.MetaDescription;
+            }
+            
 
             const int pageSize = 10;
             int count = 0;
@@ -90,7 +97,7 @@ namespace Jqpress.Web.Controllers
             }
 
             model.Post = post;
-            ViewBag.Title = post.Title;
+            model.MetaTitle = post.Title;
 
             string metaKeywords = string.Empty;
 
@@ -182,22 +189,19 @@ namespace Jqpress.Web.Controllers
             var model = new PostListModel();
             model.SiteName = SiteConfig.GetSetting().SiteName;
             model.ThemeName = "printV1";
-            model.PageTitle = SiteConfig.GetSetting().SiteName;
+            model.MetaTitle = SiteConfig.GetSetting().SiteName;
             model.SiteUrl = ConfigHelper.SiteUrl;
             model.MetaKeywords = SiteConfig.GetSetting().MetaKeywords;
             model.MetaDescription = SiteConfig.GetSetting().MetaDescription;
             model.SiteDescription = SiteConfig.GetSetting().SiteDescription;
-            model.NavLinks = _linkService.GetLinkList((int)LinkPosition.Navigation, 1);
-            model.RecentTags = _tagService.GetTagList(SiteConfig.GetSetting().SidebarTagCount);
             model.FooterHtml = SiteConfig.GetSetting().FooterHtml;
-            model.GeneralLinks = _linkService.GetLinkList((int)LinkPosition.General, 1);
             TagInfo tag = _tagService.GetTagByPageName(pagename);
             if (tag != null)
             {
                 int tagId = tag.TagId;
                 model.MetaKeywords = tag.CateName;
                 model.MetaDescription = tag.Description;
-                model.PageTitle = tag.CateName;
+                model.MetaTitle = tag.CateName;
                 model.PostMessage = string.Format("<h2 class=\"post-message\">标签:{0}</h2>", tag.CateName);
                 model.Url = ConfigHelper.SiteUrl + "tag/" + Jqpress.Framework.Utils.StringHelper.SqlEncode(pagename) + "/page/{0}";
                 const int pageSize = 10;

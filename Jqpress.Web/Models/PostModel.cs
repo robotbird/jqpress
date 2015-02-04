@@ -8,6 +8,7 @@ namespace Jqpress.Web.Models
 {
     public class PostModel:BaseModel
     {
+
         public PostModel()
         {
             Tags = new List<TagInfo>();
@@ -20,20 +21,28 @@ namespace Jqpress.Web.Models
         /// 是否开启验证码
         /// </summary>
         public int EnableVerifyCode { get; set; }
+
+        /// <summary>
+        /// 分页字符串
+        /// </summary>
+        public string Pager { get; set; }
+
         /// <summary>
         /// 文章
         /// </summary>
         public PostInfo Post { get; set; }
         /// <summary>
-        /// 评论列表
+        /// 上一篇文章
         /// </summary>
-        public List<CommentInfo> Comments { get; set; }
+        public PostInfo Previous { get; set; }
+
         /// <summary>
-        /// 分页字符串
+        /// 相关文章
         /// </summary>
-        public string Pager { get; set; }
+        public List<PostInfo> RelatedPosts { get; set; }
+
         /// <summary>
-        /// 当前页
+        /// 对应标签
         /// </summary>
         public int PageIndex { get; set; }
 
@@ -42,24 +51,24 @@ namespace Jqpress.Web.Models
         /// </summary>
         public List<TagInfo> Tags { get; set; }
 
-
         /// <summary>
         /// 下一篇文章
         /// </summary>
         public PostInfo Next { get; set; }
 
+        /// <summary>
+        /// 作者
+        /// </summary>
+        public UserInfo Author { get; set; }
 
         /// <summary>
-        /// 上一篇文章
+        /// 所属分类
         /// </summary>
-        public PostInfo Previous { get; set; }
-
-
+        public CategoryInfo Category { get; set; }
         /// <summary>
-        /// 相关文章
+        /// 评论列表
         /// </summary>
-        public List<PostInfo> RelatedPosts { get; set; }
-
+        public List<CommentInfo> Comments { get; set; }
 
     }
 }
