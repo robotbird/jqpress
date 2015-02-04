@@ -1665,7 +1665,7 @@ namespace Jqpress.Framework.DbProvider
                     }
                 }
             }
-           // if (props == null) props = propsArr.OrderBy(x => x.Name);//comment by yepeng 20140216
+            // if (props == null) props = propsArr.OrderBy(x => x.Name);//comment by yepeng 20140216
             if (props == null) props = propsArr.OrderBy(x => x.Name);// add by yepeng 20140216
             if (filterParams)
             {

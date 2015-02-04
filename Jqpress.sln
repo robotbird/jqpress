@@ -7,7 +7,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jqpress.Framework", "Jqpres
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jqpress.Core", "Jqpress.Core\Jqpress.Core.csproj", "{28A3A37D-886F-45DA-B8A7-6272FFCFFC6A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestJqpress", "TestJqpress\TestJqpress.csproj", "{D87C8139-DCF2-47F6-B367-BA076644EC94}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FFD85879-E86F-4B1B-B9AE-69B0E6ECE71D}"
+	ProjectSection(SolutionItems) = preProject
+		Jqpress.vsmdi = Jqpress.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Jqpress.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -25,6 +37,10 @@ Global
 		{28A3A37D-886F-45DA-B8A7-6272FFCFFC6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28A3A37D-886F-45DA-B8A7-6272FFCFFC6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28A3A37D-886F-45DA-B8A7-6272FFCFFC6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D87C8139-DCF2-47F6-B367-BA076644EC94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D87C8139-DCF2-47F6-B367-BA076644EC94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D87C8139-DCF2-47F6-B367-BA076644EC94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D87C8139-DCF2-47F6-B367-BA076644EC94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

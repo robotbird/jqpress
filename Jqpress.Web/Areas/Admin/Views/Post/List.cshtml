@@ -69,7 +69,6 @@
 			                <th>评论/浏览</th>
 			                <th>日期</th>
 			                <th>分类</th>
-			                <th>标签</th>
 			                <th>操作</th>
                            </tr>
                         </thead>
@@ -88,7 +87,6 @@
 			                            <td>@item.CommentCount/@item.ViewCount</td>
 			                            <td class="center">@item.PostTime.ToString("yyyy-MM-dd")</td>
 			                            <td>@(new HtmlString(item.Category.Link))</td>
-			                            <td>@(new HtmlString(item.Tags.Aggregate(string.Empty, (current, t) => current + (t.Link + ",")).TrimEnd(',')))</td>
 			                            <td>
 			  	                            <span><a href="edit?id=@item.PostId"> 编辑 </a></span>
 				                            <span><a onclick="return confirm('删除文章同时会删除该文章的相关评论,确定要删除吗?');" href="delete?id=@item.PostId"> 删除</a></span>

@@ -27,7 +27,12 @@ namespace Jqpress.Framework.DbProvider
              conn.Open();
              return conn;
         }
-
+        public OleDbConnection OpenConnection(string connectionString)
+        {
+            OleDbConnection conn = new OleDbConnection(connectionString);
+            conn.Open();
+            return conn;
+        }
         //public OleDbConnection OpenSqliteConnection()
         //{
         //    SQLiteConnection conn = new SQLiteConnection(ConnectionString);
@@ -42,6 +47,12 @@ namespace Jqpress.Framework.DbProvider
             return connection;
         }
 
+        public SqlConnection OpenConnectionSql(string Sqlconnection)
+        {
+            SqlConnection connection = new SqlConnection(Sqlconnection);
+            connection.Open();
+            return connection;
+        }
         /// <summary>
         /// 获取分页Sql
         /// </summary>
