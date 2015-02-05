@@ -13,8 +13,9 @@ namespace TestJqpress
     [TestClass]
     public class UnitTest1
     {
-        public static string ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=Jqpress.mdb";
+        //public static string ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=Jqpress.mdb";
         private readonly string sqlconnection = ConfigurationManager.ConnectionStrings["Ems_Connection"].ConnectionString;
+        public static string ConnectionString = string.Format("Data Source=Jqpress.db;Pooling=true;FailIfMissing=false");//for windows
 
         [TestMethod]
         public void TestMethod1()
@@ -34,9 +35,9 @@ namespace TestJqpress
             //connection.Close();
 
 
-            string cmdText = string.Format("select p.*,u.UserId,u.UserName,u.Role,u.NickName from [{0}posts] p,[{0}Users] u where p.UserId=u.UserId ", ConfigHelper.Tableprefix);
-           // using (var conn = new DapperHelper().OpenConnection(ConnectionString))
-            using (var conn = new DapperHelper().OpenConnectionSql(sqlconnection))
+            string cmdText = string.Format("select p.*,u.UserId,u.UserName,u.NickName from [{0}posts] p,[{0}Users] u where p.UserId=u.UserId ", ConfigHelper.Tableprefix);
+            // using (var conn = new DapperHelper().OpenConnection(ConnectionString))
+            using (var conn = new DapperHelper().OpenConnection(ConnectionString))
             {
                 // var list = conn.Query<PostInfo>(cmdText, new { PostId = (int)id });
                 // return list.Any() ? list.ToList()[0] : null;
@@ -48,7 +49,7 @@ namespace TestJqpress
 
                 foreach (var postInfo in list)
                 {
-                    Console.WriteLine(postInfo.PostId+"  "+postInfo.Title);
+                    Console.WriteLine(postInfo.PostId + "  " + postInfo.Title);
                 }
             }
 
