@@ -54,7 +54,7 @@ namespace Jqpress.Core.Repositories.Repository
                     PostTime = post.PostTime.ToString(),
                     UpdateTime = post.UpdateTime.ToString()
                 });
-                return conn.Query<int>(string.Format("select top 1 [PostId] from [{0}Posts] order by [PostId] desc", ConfigHelper.Tableprefix),null).First();
+                return conn.Query<int>(string.Format("select  [PostId] from [{0}Posts] order by [PostId] desc limit 1", ConfigHelper.Tableprefix), null).First();
             }
         }
         /// <summary>
@@ -135,35 +135,33 @@ namespace Jqpress.Core.Repositories.Repository
         /// <returns></returns>
         public virtual PostInfo GetById(object id) 
         {
-            string cmdText = string.Format("select top 1 p.PostId as Id,p.Title,p.CategoryId,p.TitlePic,p.PageName,u.UserId,u.UserName,u.Role,u.NickName from [{0}posts] p,[{0}Users] u where p.UserId=u.UserId ", ConfigHelper.Tableprefix);
+            //string cmdText = string.Format("select  p.PostId as Id,p.Title,p.CategoryId,p.TitlePic,p.PageName,u.UserId,u.UserName,u.Role,u.NickName from [{0}posts] p,[{0}Users] u where p.UserId=u.UserId limit 1", ConfigHelper.Tableprefix);
+            //using (var conn = new DapperHelper().OpenConnection())
+            //{
+            //   // var list = conn.Query<PostInfo>(cmdText, new { PostId = (int)id });
+            //   // return list.Any() ? list.ToList()[0] : null;
+            //    var list = conn.Query<PostInfo, UserInfo, PostInfo>(cmdText, (post, user) =>
+            //    {
+            //        post.Author = user;
+            //        return post;
+            //    }, splitOn: "UserId");
+
+            //    return list.Any() ? list.ToList()[0] : null;
+            //}
+
+            
+             string cmdText = string.Format("select  p.*,u.UserId,u.UserName,c.CategoryId,c.CateName from [{0}posts] p,[{0}Users] u,[{0}category] c where p.PostId=@PostId and p.UserId=u.UserId and p.CategoryId=c.CategoryId", ConfigHelper.Tableprefix);
             using (var conn = new DapperHelper().OpenConnection())
             {
-               // var list = conn.Query<PostInfo>(cmdText, new { PostId = (int)id });
-               // return list.Any() ? list.ToList()[0] : null;
-                var list = conn.Query<PostInfo, UserInfo, PostInfo>(cmdText, (post, user) =>
-                {
-                    post.Author = user;
-                    return post;
-                }, splitOn: "UserId");
-
-                return list.Any() ? list.ToList()[0] : null;
-            }
-
-            /*
-                string cmdText = string.Format("select top 1 p.PostId as Id,u.UserId,u.UserName,c.CategoryId,c.CateName from [{0}posts] p,[{0}Users] u,[{0}category] c where p.UserId=u.UserId and p.CategoryId=c.CategoryId", ConfigHelper.Tableprefix);
-            using (var conn = new DapperHelper().OpenConnection())
-            {
-               // var list = conn.Query<PostInfo>(cmdText, new { PostId = (int)id });
-               // return list.Any() ? list.ToList()[0] : null;
                 var list = conn.Query<PostInfo, UserInfo, CategoryInfo, PostInfo>(cmdText, (post, user, cate) =>
                 {
                     post.Author = user;
                     post.Category = cate;
                     return post;
-                }, splitOn: "UserId,CategoryId");
+                }, new { PostId = (int)id }, splitOn: "UserId,CategoryId");
                 return list.Any() ? list.ToList()[0] : null;
             }
-             */
+            
 
         }
         /// <summary>
@@ -189,7 +187,7 @@ namespace Jqpress.Core.Repositories.Repository
         /// <returns></returns>
         public virtual PostInfo GetPostbyPageName(string pagename)
         {
-            string cmdText = string.Format("select top 1 * from [{0}posts] where [pagename] = @_pagename", ConfigHelper.Tableprefix);
+            string cmdText = string.Format("select  * from [{0}posts] where [pagename] = @_pagename limit 1", ConfigHelper.Tableprefix);
 
             using (var conn = new DapperHelper().OpenConnection())
             {
@@ -296,7 +294,7 @@ namespace Jqpress.Core.Repositories.Repository
                 string where = idList.Where(tagId => !string.IsNullOrEmpty(tagId)).Aggregate(" (", (current, tagId) => current + string.Format("  [tags] like '%{0}%' or ", tagId));
                 where += " 1=2 ) and [status]=1 and [postid]<>" + postId;
 
-                string cmdText = string.Format("select top {0} * from [{2}posts] where {1} order by [postid] desc", rowCount, where, ConfigHelper.Tableprefix);
+                string cmdText = string.Format("select  * from [{2}posts] where {1} order by [postid] desc limit {0}", rowCount, where, ConfigHelper.Tableprefix);
 
                 using (var conn = new DapperHelper().OpenConnection())
                 {

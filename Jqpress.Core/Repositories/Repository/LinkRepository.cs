@@ -43,7 +43,7 @@ namespace Jqpress.Core.Repositories.Repository
                     Status = link.Status,
                     CreateTime = link.CreateTime.ToString()
                 });
-                return conn.Query<int>(string.Format("select top 1 [linkid] from [{0}links]  order by [linkid] desc", ConfigHelper.Tableprefix), null).First();
+                return conn.Query<int>(string.Format("select [linkid] from [{0}links]  order by [linkid] desc  limit 1", ConfigHelper.Tableprefix), null).First();
             }
 
         }

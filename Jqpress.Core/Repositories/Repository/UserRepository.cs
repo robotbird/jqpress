@@ -42,7 +42,7 @@ namespace Jqpress.Core.Repositories.Repository
                     CommentCount = userinfo.CommentCount,
                     CreateTime = userinfo.CreateTime.ToString()
                 });
-                return conn.Query<int>(string.Format("select top 1 [UserId] from [{0}users]  order by [UserId] desc", ConfigHelper.Tableprefix), null).First();
+                return conn.Query<int>(string.Format("select  [UserId] from [{0}users]  order by [UserId] desc limit 1", ConfigHelper.Tableprefix), null).First();
             }
         }
 

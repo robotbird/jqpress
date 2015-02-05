@@ -39,7 +39,7 @@ namespace Jqpress.Core.Repositories.Repository
        /// <returns></returns>
         public StatisticsInfo GetStatistics()
         {
-            string cmdText = string.Format("select top 1 * from [{0}sites]", ConfigHelper.Tableprefix);
+            string cmdText = string.Format("select  * from [{0}sites] limit 1", ConfigHelper.Tableprefix);
             string insertText = string.Format("insert into [{0}sites] ([PostCount],[CommentCount],[VisitCount],[TagCount]) values ( '0','0','0','0')", ConfigHelper.Tableprefix);
             using(var conn = new DapperHelper().OpenConnection())
             {

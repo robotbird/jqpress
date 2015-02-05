@@ -39,7 +39,7 @@ namespace Jqpress.Core.Repositories.Repository
                     CreateTime = comment.CreateTime.ToString(),
                     Approved = comment.Approved
                 });
-                return conn.Query<int>(string.Format("select top 1 [CommentId] from [{0}comments]  order by [CommentId] desc", ConfigHelper.Tableprefix), null).First();
+                return conn.Query<int>(string.Format("select  [CommentId] from [{0}comments]  order by [CommentId] desc limit 1", ConfigHelper.Tableprefix), null).First();
             }
 
         }

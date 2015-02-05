@@ -40,7 +40,7 @@ namespace Jqpress.Core.Repositories.Repository
                     CreateTime = category.CreateTime.ToString(),
                     Type = (int)CategoryType.Category
                 });
-                return conn.Query<int>(string.Format("select top 1 [categoryid] from [{0}category] order by [categoryid] desc", ConfigHelper.Tableprefix), null).First();
+                return conn.Query<int>(string.Format("select  [categoryid] from [{0}category] order by [categoryid] desc limit 1", ConfigHelper.Tableprefix), null).First();
             }
         }
         /// <summary>

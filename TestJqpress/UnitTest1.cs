@@ -35,17 +35,20 @@ namespace TestJqpress
             //connection.Close();
 
 
-            string cmdText = string.Format("select p.*,u.UserId,u.UserName,u.NickName from [{0}posts] p,[{0}Users] u where p.UserId=u.UserId ", ConfigHelper.Tableprefix);
+           // string cmdText = string.Format("select p.*,u.UserId,u.UserName,u.NickName from [{0}posts] p,[{0}Users] u where p.UserId=u.UserId ", ConfigHelper.Tableprefix);
             // using (var conn = new DapperHelper().OpenConnection(ConnectionString))
+            string cmdText = string.Format("select  p.*,u.UserId,u.UserName,c.CategoryId,c.CateName from [{0}posts] p,[{0}Users] u,[{0}category] c where p.PostId=@PostId and p.UserId=u.UserId and p.CategoryId=c.CategoryId", ConfigHelper.Tableprefix);
+           
             using (var conn = new DapperHelper().OpenConnection(ConnectionString))
             {
                 // var list = conn.Query<PostInfo>(cmdText, new { PostId = (int)id });
                 // return list.Any() ? list.ToList()[0] : null;
-                var list = conn.Query<PostInfo, UserInfo, PostInfo>(cmdText, (post, user) =>
+                var list = conn.Query<PostInfo, UserInfo, CategoryInfo, PostInfo>(cmdText, (post, user, cate) =>
                 {
                     post.Author = user;
+                    post.Category = cate;
                     return post;
-                }, splitOn: "userid,postid");
+                }, new { PostId = 384 }, splitOn: "UserId,CategoryId");
 
                 foreach (var postInfo in list)
                 {
