@@ -41,7 +41,7 @@ namespace Jqpress.Core.Repositories.Repository
                     Description = link.Description,
                     SortNum = link.SortNum,
                     Status = link.Status,
-                    CreateTime = link.CreateTime.ToString()
+                    CreateTime = link.CreateTime
                 });
                 return conn.Query<int>(string.Format("select [linkid] from [{0}links]  order by [linkid] desc  limit 1", ConfigHelper.Tableprefix), null).First();
             }
@@ -77,7 +77,7 @@ namespace Jqpress.Core.Repositories.Repository
                     Description = link.Description,
                     SortNum = link.SortNum,
                     Status = link.Status,
-                    CreateTime = link.CreateTime.ToString(),
+                    CreateTime = link.CreateTime,
                     Linkid = link.LinkId
                 });
             }

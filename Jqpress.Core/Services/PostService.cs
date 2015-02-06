@@ -321,6 +321,37 @@ namespace Jqpress.Core.Services
        
         }
 
+        /// <summary>
+        /// 获取相关文章 需要改进
+        /// </summary>
+        /// <param name="post"></param>
+        /// <returns></returns>
+        public List<PostInfo> GetRelatedPosts(PostInfo post)
+        {
+            List<PostInfo> list = GetPostList().FindAll(p => p.PostStatus == 0 && p.Status == 1);
+            string tags = post.Tag.Replace("}", "},");
+            tags = tags.TrimEnd(',');
+
+            string[] temparray = tags.Split(',');
+
+            int num = 0;
+            var list2 = list.FindAll(p =>
+            {
+                if (num >= SiteConfig.GetSetting().PostRelatedCount)
+                {
+                    return false;
+                }
+
+                if (temparray.Any(tag => p.Tag.IndexOf(tag) != -1 && p.PostId != post.PostId))
+                {
+                    num++;
+                    return true;
+                }
+                return false;
+
+            });
+            return list2;
+        }
 
         /// <summary>
         /// 更新点击数

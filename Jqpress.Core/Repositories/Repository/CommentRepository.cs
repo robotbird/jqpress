@@ -36,7 +36,7 @@ namespace Jqpress.Core.Repositories.Repository
                     Contents = comment.Contents,
                     EmailNotify = comment.EmailNotify,
                     IpAddress = comment.IpAddress,
-                    CreateTime = comment.CreateTime.ToString(),
+                    CreateTime = comment.CreateTime,
                     Approved = comment.Approved
                 });
                 return conn.Query<int>(string.Format("select  [CommentId] from [{0}comments]  order by [CommentId] desc limit 1", ConfigHelper.Tableprefix), null).First();
@@ -78,7 +78,7 @@ namespace Jqpress.Core.Repositories.Repository
                     Contents = comment.Contents,
                     EmailNotify = comment.EmailNotify,
                     IpAddress = comment.IpAddress,
-                    CreateTime = comment.CreateTime.ToString(),
+                    CreateTime = comment.CreateTime,
                     Approved = comment.Approved,
                     CommentId = comment.CommentId
                 });

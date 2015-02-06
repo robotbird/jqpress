@@ -51,8 +51,8 @@ namespace Jqpress.Core.Repositories.Repository
                     Status = post.Status,
                     TopStatus = post.TopStatus,
                     HomeStatus = post.HomeStatus,
-                    PostTime = post.PostTime.ToString(),
-                    UpdateTime = post.UpdateTime.ToString()
+                    PostTime = post.PostTime,
+                    UpdateTime = post.UpdateTime
                 });
                 return conn.Query<int>(string.Format("select  [PostId] from [{0}Posts] order by [PostId] desc limit 1", ConfigHelper.Tableprefix), null).First();
             }
@@ -107,8 +107,8 @@ namespace Jqpress.Core.Repositories.Repository
                     Status = post.Status,
                     TopStatus = post.TopStatus,
                     HomeStatus = post.HomeStatus,
-                    PostTime = post.PostTime.ToString(),
-                    UpdateTime = post.UpdateTime.ToString(),
+                    PostTime = post.PostTime,
+                    UpdateTime = post.UpdateTime,
                     PostId = post.PostId
                 });
             }

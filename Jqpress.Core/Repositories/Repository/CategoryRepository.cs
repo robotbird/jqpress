@@ -37,7 +37,7 @@ namespace Jqpress.Core.Repositories.Repository
                     Description = category.Description,
                     SortNum = category.SortNum,
                     PostCount = category.PostCount,
-                    CreateTime = category.CreateTime.ToString(),
+                    CreateTime = category.CreateTime,
                     Type = (int)CategoryType.Category
                 });
                 return conn.Query<int>(string.Format("select  [categoryid] from [{0}category] order by [categoryid] desc limit 1", ConfigHelper.Tableprefix), null).First();
@@ -72,7 +72,7 @@ namespace Jqpress.Core.Repositories.Repository
                     Description = category.Description,
                     SortNum = category.SortNum,
                     PostCount = category.PostCount,
-                    CreateTime = category.CreateTime.ToString(),
+                    CreateTime = category.CreateTime,
                     Type = (int)CategoryType.Category,
                     categoryid = category.CategoryId
                 });

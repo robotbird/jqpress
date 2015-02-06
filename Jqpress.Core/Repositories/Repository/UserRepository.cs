@@ -40,7 +40,7 @@ namespace Jqpress.Core.Repositories.Repository
                     Status = userinfo.Status,
                     PostCount = userinfo.PostCount,
                     CommentCount = userinfo.CommentCount,
-                    CreateTime = userinfo.CreateTime.ToString()
+                    CreateTime = userinfo.CreateTime
                 });
                 return conn.Query<int>(string.Format("select  [UserId] from [{0}users]  order by [UserId] desc limit 1", ConfigHelper.Tableprefix), null).First();
             }
@@ -82,7 +82,7 @@ namespace Jqpress.Core.Repositories.Repository
                    Status = userinfo.Status,
                    PostCount = userinfo.PostCount,
                    CommentCount = userinfo.CommentCount,
-                   CreateTime = userinfo.CreateTime.ToString(),
+                   CreateTime = userinfo.CreateTime,
                    UserId = userinfo.UserId
                });
            }

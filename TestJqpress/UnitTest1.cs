@@ -15,9 +15,8 @@ namespace TestJqpress
     {
         //public static string ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=Jqpress.mdb";
         private readonly string sqlconnection = ConfigurationManager.ConnectionStrings["Ems_Connection"].ConnectionString;
-        public static string ConnectionString = string.Format("Data Source=Jqpress.db;Pooling=true;FailIfMissing=false");//for windows
+        public static string ConnectionString = string.Format(@"Data Source=E:\f\gitcode\donet\jqpress\Jqpress.Web\App_Data\Jqpress.db;Pooling=true;FailIfMissing=false");//for windows
 
-        [TestMethod]
         public void TestMethod1()
         {
             //var connection = new DapperHelper().OpenConnection();
@@ -54,6 +53,21 @@ namespace TestJqpress
                 {
                     Console.WriteLine(postInfo.PostId + "  " + postInfo.Title);
                 }
+            }
+
+        }
+
+        [TestMethod]
+        public void TestMethod2()
+        {
+
+            string cmdText = "select  p.*  from [jq_posts] p  where  postid=340";
+
+            using (var conn = new DapperHelper().OpenConnection(ConnectionString))
+            {
+                var post = conn.Query<PostInfo>(cmdText).First();
+
+                conn.Execute("update jq_posts set updatetime =@updatetime where postid=340",new{updatetime = DateTime.Now.ToString()});
             }
 
         }

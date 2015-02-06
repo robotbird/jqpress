@@ -37,11 +37,11 @@ namespace Jqpress.Core.Domain
             //get { return _url; }
             get
             {
-                string url = string.Format("{0}{1}", ConfigHelper.SiteUrl, this.CategoryId);
+                string url = string.Format("{0}category/{1}", ConfigHelper.SiteUrl, this.CategoryId);
                
                 if (!string.IsNullOrEmpty(this.PageName))
                 {
-                    url = string.Format("{0}{1}", ConfigHelper.SiteUrl, Jqpress.Framework.Web.HttpHelper.UrlEncode(this.PageName));
+                    url = string.Format("{0}category/{1}", ConfigHelper.SiteUrl, Jqpress.Framework.Web.HttpHelper.UrlEncode(this.PageName));
                 }
                 return url;
             }
@@ -98,14 +98,7 @@ namespace Jqpress.Core.Domain
         { 
             get
             {
-
-                if (this.Type == (int)Jqpress.Core.Domain.Enum.CateType.ProList)
-                    return "ProList"; 
-                if (this.Type == (int)Jqpress.Core.Domain.Enum.CateType.ItemList)
-                    return "ItemList"; 
-                if (this.Type == (int)Jqpress.Core.Domain.Enum.CateType.Page)
-                    return "Page";
-                return "Page";
+                return "List";
              } 
         }
         #endregion

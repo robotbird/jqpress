@@ -102,7 +102,20 @@ namespace Jqpress.Web.Controllers
 
             string metaKeywords = string.Empty;
 
-            model.Tags = _tagService.GetTagList(post.Tag);
+
+            if (post.Tag != null)
+            {
+                string temptags = post.Tag.Replace("{", "").Replace("}", ",");
+                if (temptags.Length > 0)
+                {
+                    temptags = temptags.TrimEnd(',');
+                }
+                model.Tags = _tagService.GetTagList(temptags);
+
+                _postService.GetRelatedPosts(post);
+            }
+
+
             if (model.Tags != null)
             {
                 metaKeywords = model.Tags.Aggregate(metaKeywords, (current, tag) => current + (tag.CateName + ","));
@@ -122,6 +135,9 @@ namespace Jqpress.Web.Controllers
             }
             model.MetaDescription = StringHelper.CutString(StringHelper.RemoveHtml(metaDescription), 50).Replace("\n", "");
 
+            
+            //model.RelatedPosts =
+
             int recordCount = 0;
            // model.Comments = CommentService.GetCommentList(SiteConfig.GetSetting().PageSizeCommentCount, Pager.PageIndex, out recordCount, SiteConfig.GetSetting().CommentOrder, -1, post.PostId, 0, -1, -1, null);
             //model.Pager = Pager.CreateHtml(SiteConfig.GetSetting().PageSizeCommentCount, recordCount, post.PageUrl + "#comments");
@@ -138,10 +154,10 @@ namespace Jqpress.Web.Controllers
             return View(model);
         }
 
-        public ActionResult Category(string pagename) 
+        public ActionResult Category(string slug) 
         {
             var model = new PostListModel();
-            CategoryInfo cate = _categoryService.GetCategory(pagename);
+            CategoryInfo cate = _categoryService.GetCategory(slug);
             model.Category = cate;
             if (cate != null)
             {
@@ -149,7 +165,7 @@ namespace Jqpress.Web.Controllers
                 model.MetaKeywords = cate.CateName;
                 model.MetaDescription = cate.Description;
                 ViewBag.Title = cate.CateName;
-                model.Url = ConfigHelper.SiteUrl + "category/" + StringHelper.SqlEncode(pagename) + "/page/{0}";
+                model.Url = ConfigHelper.SiteUrl + "category/" + StringHelper.SqlEncode(slug) + "/page/{0}";
 
                 const int pageSize = 10;
                 int count = 0;
