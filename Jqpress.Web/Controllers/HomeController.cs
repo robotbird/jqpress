@@ -23,6 +23,7 @@ namespace Jqpress.Web.Controllers
         private LinkService _linkService = new LinkService();
         private TagService _tagService = new TagService();
         private ThemeService _themeService = new ThemeService();
+        private UserService _userService = new UserService();
         #endregion;
 
         public HomeController() 
@@ -218,6 +219,45 @@ namespace Jqpress.Web.Controllers
             }
             model.IsDefault = 0;
             return View("List",model);
+        }
+
+        /// <summary>
+        /// 作者
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public ActionResult Author(string username)
+        {
+            var model = new PostListModel();
+            model.SiteName = SiteConfig.GetSetting().SiteName;
+            model.MetaTitle = SiteConfig.GetSetting().SiteName;
+            model.SiteUrl = ConfigHelper.SiteUrl;
+            model.MetaKeywords = SiteConfig.GetSetting().MetaKeywords;
+            model.MetaDescription = SiteConfig.GetSetting().MetaDescription;
+            model.SiteDescription = SiteConfig.GetSetting().SiteDescription;
+            model.FooterHtml = SiteConfig.GetSetting().FooterHtml;
+            UserInfo user = _userService.GetUser(username);
+            if (user != null)
+            {
+                int userId = user.UserId;
+                model.MetaKeywords = user.NickName;
+                model.MetaDescription = user.Description;
+                model.MetaTitle = user.NickName;
+                model.PostMessage = string.Format("<h2 class=\"post-message\">标签:{0}</h2>", user.NickName);
+                model.Url = ConfigHelper.SiteUrl + "author/" + Jqpress.Framework.Utils.StringHelper.SqlEncode(username) + "/page/{0}";
+                const int pageSize = 10;
+                int count = 0;
+                int pageIndex = PressRequest.GetInt("page", 1);
+                int cateid = PressRequest.GetQueryInt("cateid", -1);
+                if (cateid > 0)
+                    pageIndex = pageIndex + 1;
+                var postlist = _postService.GetPostPageList(pageSize, pageIndex, out count, cateid.ToString(), 0, userId, -1, -1, -1, -1, "", "", "");
+                model.PageList.LoadPagedList(postlist);
+                model.PostList = (List<PostInfo>)postlist;
+
+            }
+            model.IsDefault = 0;
+            return View("List", model);
         }
 
         #region 公共部分

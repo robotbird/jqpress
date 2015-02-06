@@ -150,7 +150,7 @@ namespace Jqpress.Core.Repositories.Repository
             //}
 
             
-             string cmdText = string.Format("select  p.*,u.UserId,u.UserName,c.CategoryId,c.CateName from [{0}posts] p,[{0}Users] u,[{0}category] c where p.PostId=@PostId and p.UserId=u.UserId and p.CategoryId=c.CategoryId", ConfigHelper.Tableprefix);
+             string cmdText = string.Format("select  p.*,u.*,c.* from [{0}posts] p,[{0}Users] u,[{0}category] c where p.PostId=@PostId and p.UserId=u.UserId and p.CategoryId=c.CategoryId", ConfigHelper.Tableprefix);
             using (var conn = new DapperHelper().OpenConnection())
             {
                 var list = conn.Query<PostInfo, UserInfo, CategoryInfo, PostInfo>(cmdText, (post, user, cate) =>

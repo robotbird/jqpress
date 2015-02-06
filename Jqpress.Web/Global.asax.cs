@@ -60,6 +60,13 @@ namespace Jqpress.Web
            );
 
             routes.MapRoute(
+            name: "Author",
+            url: "author/{username}",
+            defaults: new { controller = "Home", action = "Author", username = UrlParameter.Optional },
+            namespaces: new[] { "Jqpress.Web.Controllers" }
+            );
+
+            routes.MapRoute(
                 name: "Install",
                 url: "install/{action}/{id}",
                 defaults: new { controller = "Install", action = "Index", id = UrlParameter.Optional },
