@@ -32,28 +32,7 @@ namespace Jqpress.Core.Repositories.Repository
 
             using(var conn = new DapperHelper().OpenConnection())
             {
-                conn.Execute(cmdText, new
-                {
-                    CategoryId = post.CategoryId,
-                    TitlePic = post.TitlePic,
-                    Title = post.Title,
-                    Summary = post.Summary,
-                    PostContent = post.PostContent,
-                    PageName = post.PageName,
-                    UserId = post.UserId,
-                    CommentStatus = post.CommentStatus,
-                    CommentCount = post.CommentCount,
-                    ViewCount = post.ViewCount,
-                    Tag = post.Tag,
-                    UrlFormat = post.UrlFormat,
-                    Template = post.Template,
-                    Recommend = post.Recommend,
-                    Status = post.Status,
-                    TopStatus = post.TopStatus,
-                    HomeStatus = post.HomeStatus,
-                    PostTime = post.PostTime,
-                    UpdateTime = post.UpdateTime
-                });
+                conn.Execute(cmdText, post);
                 return conn.Query<int>(string.Format("select  [PostId] from [{0}Posts] order by [PostId] desc limit 1", ConfigHelper.Tableprefix), null).First();
             }
         }
@@ -88,29 +67,7 @@ namespace Jqpress.Core.Repositories.Repository
 
             using (var conn = new DapperHelper().OpenConnection())
             {
-               return conn.Execute(cmdText, new
-                {
-                    CategoryId = post.CategoryId,
-                    TitlePic = post.TitlePic,
-                    Title = post.Title,
-                    Summary = post.Summary,
-                    PostContent = post.PostContent,
-                    PageName = post.PageName,
-                    UserId = post.UserId,
-                    CommentStatus = post.CommentStatus,
-                    CommentCount = post.CommentCount,
-                    ViewCount = post.ViewCount,
-                    Tag = post.Tag,
-                    UrlFormat = post.UrlFormat,
-                    Template = post.Template,
-                    Recommend = post.Recommend,
-                    Status = post.Status,
-                    TopStatus = post.TopStatus,
-                    HomeStatus = post.HomeStatus,
-                    PostTime = post.PostTime,
-                    UpdateTime = post.UpdateTime,
-                    PostId = post.PostId
-                });
+               return conn.Execute(cmdText, post);
             }
         }
         /// <summary>

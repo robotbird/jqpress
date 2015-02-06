@@ -112,7 +112,7 @@ namespace Jqpress.Web.Controllers
                 }
                 model.Tags = _tagService.GetTagList(temptags);
 
-                _postService.GetRelatedPosts(post);
+               model.RelatedPosts = _postService.GetRelatedPosts(post);
             }
 
 
@@ -201,7 +201,7 @@ namespace Jqpress.Web.Controllers
         /// <summary>
         /// 标签
         /// </summary>
-        public ActionResult Tag(string pagename)
+        public ActionResult Tag(string slug)
         {
             var model = new PostListModel();
             model.SiteName = SiteConfig.GetSetting().SiteName;
@@ -212,7 +212,7 @@ namespace Jqpress.Web.Controllers
             model.MetaDescription = SiteConfig.GetSetting().MetaDescription;
             model.SiteDescription = SiteConfig.GetSetting().SiteDescription;
             model.FooterHtml = SiteConfig.GetSetting().FooterHtml;
-            TagInfo tag = _tagService.GetTagByPageName(pagename);
+            TagInfo tag = _tagService.GetTagByPageName(slug);
             if (tag != null)
             {
                 int tagId = tag.TagId;
@@ -220,7 +220,7 @@ namespace Jqpress.Web.Controllers
                 model.MetaDescription = tag.Description;
                 model.MetaTitle = tag.CateName;
                 model.PostMessage = string.Format("<h2 class=\"post-message\">标签:{0}</h2>", tag.CateName);
-                model.Url = ConfigHelper.SiteUrl + "tag/" + Jqpress.Framework.Utils.StringHelper.SqlEncode(pagename) + "/page/{0}";
+                model.Url = ConfigHelper.SiteUrl + "tag/" + Jqpress.Framework.Utils.StringHelper.SqlEncode(slug) + "/page/{0}";
                 const int pageSize = 10;
                 int count = 0;
                 int pageIndex = PressRequest.GetInt("page", 1);
