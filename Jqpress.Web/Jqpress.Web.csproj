@@ -85,6 +85,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Global.asax.cs">
@@ -93,6 +94,7 @@
     <Compile Include="Areas\Admin\Models\IndexModel.cs" />
     <Compile Include="Areas\Admin\Models\PostListModel.cs" />
     <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\CommentModel.cs" />
     <Compile Include="Models\FootModel.cs" />
     <Compile Include="Models\HeadModel.cs" />
     <Compile Include="Models\IndexModel.cs" />

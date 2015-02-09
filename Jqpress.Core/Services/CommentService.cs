@@ -152,6 +152,16 @@ namespace Jqpress.Core.Services
         }
 
         /// <summary>
+        /// 获取文章评论
+        /// </summary>
+        /// <param name="postid"></param>
+        /// <returns></returns>
+        public  List<CommentInfo> GetCommentsByPost(int postid)
+        {
+            return _commentRepository.GetCommentsByPost(postid);
+        }
+
+        /// <summary>
         /// 最近评论
         /// </summary>
         /// <param name="rowCount"></param>

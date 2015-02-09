@@ -37,5 +37,11 @@ namespace Jqpress.Core.Repositories.IRepository
         /// <param name="keyword"></param>
         /// <returns></returns>
         List<CommentInfo> GetCommentList(int pageSize, int pageIndex, out int totalRecord, int order, int userId, int postId, int parentId, int approved, int emailNotify, string keyword);
+        /// <summary>
+        /// 获取文章评论
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <returns></returns>
+        List<CommentInfo> GetCommentsByPost(int postId);
     }
 }

@@ -83,5 +83,5 @@
         </ul>
 		
 	
-		#parse("_comment.html")
+		@Html.Action("List","Comment",new{id=Model.Post.PostId})
 	</div>

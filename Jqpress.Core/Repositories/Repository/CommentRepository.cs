@@ -25,20 +25,7 @@ namespace Jqpress.Core.Repositories.Repository
                             @PostId, @ParentId,@UserId,@Author,@Email,@AuthorUrl,@Contents,@EmailNotify,@IpAddress,@CreateTime,@Approved)", ConfigHelper.Tableprefix);
             using (var conn = new DapperHelper().OpenConnection())
             {
-                conn.Execute(cmdText, new
-                {
-                    PostId = comment.ParentId,
-                    ParentId = comment.ParentId,
-                    UserId = comment.UserId,
-                    Author = comment.Author,
-                    Email = comment.Email,
-                    AuthorUrl = comment.AuthorUrl,
-                    Contents = comment.Contents,
-                    EmailNotify = comment.EmailNotify,
-                    IpAddress = comment.IpAddress,
-                    CreateTime = comment.CreateTime,
-                    Approved = comment.Approved
-                });
+                conn.Execute(cmdText, comment);
                 return conn.Query<int>(string.Format("select  [CommentId] from [{0}comments]  order by [CommentId] desc limit 1", ConfigHelper.Tableprefix), null).First();
             }
 
@@ -67,21 +54,7 @@ namespace Jqpress.Core.Repositories.Repository
 
             using (var conn = new DapperHelper().OpenConnection())
             {
-               return conn.Execute(cmdText, new
-                {
-                    PostId = comment.ParentId,
-                    ParentId = comment.ParentId,
-                    UserId = comment.UserId,
-                    Author = comment.Author,
-                    Email = comment.Email,
-                    AuthorUrl = comment.AuthorUrl,
-                    Contents = comment.Contents,
-                    EmailNotify = comment.EmailNotify,
-                    IpAddress = comment.IpAddress,
-                    CreateTime = comment.CreateTime,
-                    Approved = comment.Approved,
-                    CommentId = comment.CommentId
-                });
+               return conn.Execute(cmdText, comment);
             }
         }
 
@@ -120,7 +93,7 @@ namespace Jqpress.Core.Repositories.Repository
         {
             get
             {
-                string cmdText = string.Format("select * from [{0}comments] order by creattime desc", ConfigHelper.Tableprefix);
+                string cmdText = string.Format("select * from [{0}comments] order by createtime desc", ConfigHelper.Tableprefix);
                 using (var conn = new DapperHelper().OpenConnection())
                 {
                     var list = conn.Query<CommentInfo>(cmdText, null);
@@ -128,7 +101,20 @@ namespace Jqpress.Core.Repositories.Repository
                 }
             }
         }
-
+        /// <summary>
+        /// 获取文章评论
+        /// </summary>
+        /// <param name="postid"></param>
+        /// <returns></returns>
+        public virtual List<CommentInfo> GetCommentsByPost(int postid)
+        {
+            string cmdText = string.Format("select * from [{0}comments] where postid=@PostId order by createtime desc", ConfigHelper.Tableprefix);
+            using (var conn = new DapperHelper().OpenConnection())
+            {
+                var list = conn.Query<CommentInfo>(cmdText, new {PostId = postid});
+                return list!=null ? list.ToList() : null;
+            }
+        }
 
         /// <summary>
         /// 获取列表
