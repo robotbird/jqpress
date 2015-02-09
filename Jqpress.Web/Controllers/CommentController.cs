@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Jqpress.Web.Models;
+using Jqpress.Core.Domain;
 using Jqpress.Core.Services;
+using Jqpress.Web.Models;
 
 namespace Jqpress.Web.Controllers
 {
@@ -16,6 +17,13 @@ namespace Jqpress.Web.Controllers
             var model = new CommentModel();
             model.Comments = _commentService.GetCommentsByPost(id);
             return View("Comment",model);
+        }
+
+        [HttpPost]
+        public ActionResult Add(CommentInfo comment) 
+        {
+
+            return Content("success");
         }
 
     }

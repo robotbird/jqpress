@@ -14,5 +14,9 @@ namespace Jqpress.Web.Models
         }
 
         public List<CommentInfo> Comments { get; set; }
+
+        public int EnableVerifyCode { get; set; }
+
+        public int PostId { get; set; }
     }
 }

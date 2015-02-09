@@ -38,22 +38,22 @@
                 </h3>
         
        
-        <form id="commentform" method="post" action="${Model.url}#addcomment">
+        <form id="commentform" method="post" action="@Url.Action("Add","Comment")">
         <input type="hidden" id="ReplyToCommentId"  name="ReplyToCommentId"  value="0" />
 		<p class="comment-notes">电子邮件用于回复通知和<a href="http://www.gravatar.com/">avatar全球唯一头像</a>  <span class="required">*</span></p>
         
         <p class="comment-form-author"><label for="author">名称</label> <span class="required">*</span>
-        <input type="text" aria-required="true" size="30" name="commentauthor" id="commentauthor" >
+        <input type="text" aria-required="true" size="30" name="Author" id="Author" >
         </p>
         
         <p class="comment-form-email"><label for="email">电子邮件</label> <span class="required">*</span> 
-       <input type="text" aria-required="true" size="30" name="commentemail" id="commentemail" >
+       <input type="text" aria-required="true" size="30" name="Email" id="Email" >
         </p>
         
          <p class="comment-form-url"><label for="url">网站</label>
-         <input type="text" size="30"  name="commentsiteurl" id="commentsiteurl" >
+         <input type="text" size="30"  name="AuthorUrl" id="AuthorUrl" >
          </p>
-		 #if($Model.enableverifycode==1)
+		 @if(Model.EnableVerifyCode==1){
         <p  style="width:700px;">
             <label for="commentverifycode" style="float:left">验证码(*)</label>
            
@@ -61,7 +61,7 @@
             <input id="commentverifycode" size="4" style="width:80px;float:left; margin-left:70px;" name="commentverifycode"  type="text"  />
              <img align="absbottom" onclick="this.src='${Model.sitepath}common/verifycode.aspx?time=' + Math.random()" src="${Model.sitepath}common/verifycode.aspx" style="cursor: pointer; height:28px" alt="点击刷新"/>
         </p>
-         #end
+       }
 			
          <p class="comment-form-comment"><label for="comment">评论</label>
           <textarea aria-required="true" name="commentcontent" id="commentcontent" cols="65" rows="8" style="margin-right:500px;"  ></textarea>
@@ -72,16 +72,15 @@
          <p class="form-submit">
 		<input type="button" value="发表评论" id="submit" name="submit" onclick="PressComment.doComment();" />
      
-        <input type="hidden" id="postid" name="postid" value="${Model.post.postid}" />
-        <input type="hidden" id="enableverifycode" value="${Model.enableverifycode}" />
+        <input type="hidden" id="postid" name="postid" value="@Model.PostId" />
 		  </p>
 		</form>
 			</div>
-         #end
+         
             <!-- #respond -->
 	</div>
 	
-	<script type="text/javascript" src="${Model.siteurl}common/scripts/comment.js"></script>
+	<script type="text/javascript" src="/common/scripts/comment.js"></script>
     
     
     
