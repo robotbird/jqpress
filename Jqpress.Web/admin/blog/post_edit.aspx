@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" ValidateRequest="false" Language="C#" MasterPageFile="~/admin/Blog.Master" AutoEventWireup="true" CodeBehind="post_edit.aspx.cs" Inherits="Jqpress.Web.admin.blog.post_edit" %>
+﻿<%@ Page Title="" ValidateRequest="false"  EnableEventValidation="false"  Language="C#" MasterPageFile="~/admin/Blog.Master" AutoEventWireup="true" CodeBehind="post_edit.aspx.cs" Inherits="Jqpress.Web.admin.blog.post_edit" %>
 <%@ Import Namespace="Jqpress.Blog.Entity" %>
 <%@ Import Namespace="Jqpress.Blog.Services" %>
 <%@ Import Namespace="Jqpress.Framework.Configuration" %>
